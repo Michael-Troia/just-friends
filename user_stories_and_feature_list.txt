@@ -1,0 +1,42 @@
+User Stories
+
+As a visitor
+I want to see what the website is about and a form to register my own account.
+
+As a new user,
+I want to create and view a profile with some of my personal details, a profile picture, etc.
+
+As an established user,
+I want to be able to edit my profile page.
+I want to add my friends and be able to be added myself
+I want my friends and friends of my friends only to see who is on my friends list.
+I want only my friends to see my profile page, and I want to be able to see their profile.
+    This profile page will have the name, profile picture, friendlist, contact information, image gallery, and recent status updates of the user.
+I want to be able to upload my own and see the image galleries of my friends.
+I want to be able to comment on these photos
+I want to be able to create status updates.
+I want friends to be able to comment on these updates
+I want to be able to create or join a group that creates a private view for approved group members
+
+As a group member,
+I want to see the posts of only group members on the group page.
+I want to see the location (Google Maps) of other users if they share
+
+As a group owner,
+I want to control who is in the group and
+set properties for the group such as the group name.
+I want to see a chronological feed of recent uploads and posts of my friends or groups.
+I want to be able to choose to accept email notifications for important events like friend requests or comments and turn this off.
+
+
+
+Feature List
+User Profiles - (including new user registration) with a featured image/avatar.
+Image Galleries - to allow users to show off their photos.
+Friends - Users should be able to friend each other, and display a list of their friends.
+Friends of your friends should be able to see your friend list, but others should not.
+Groups - Users should be able to join groups, create pages which display information on their group—including a Google Map with their location—and allow only other registered users to join the group.
+User Homepages - should display their info, along with their friends, groups, and a few recent images.
+Status Updates - users should be able to post new statuses.
+Comments - users should be able to comment on their friends statuses.
+eMail Updates - users should be able to toggle eMail notifications for events; like new friend requests, comments on their statuses, etc.
