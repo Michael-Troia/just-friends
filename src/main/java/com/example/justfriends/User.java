@@ -52,4 +52,44 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Picture> pictures;
+
+
+
+    public User(){}
+
+    public User(String aboutMe, Date birthday, String email, String firstName,
+                String lastName, String job, String profile_picture_url, String username,
+                List<UserFriend> userFriends, List<Group> groupsOwned, List<Group> groupsAMemberOf, List<Picture> pictures){
+        this.birthday = birthday;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.profile_picture_url = profile_picture_url;
+        this.groupsAMemberOf = groupsAMemberOf;
+        this.groupsOwned = groupsOwned;
+        this.userFriends = userFriends;
+        this.job = job;
+        this.username = username;
+        this.pictures = pictures;
+    }
+
+    public User(long id, String aboutMe, Date birthday, String email, String firstName,
+                String lastName, String job, String profile_picture_url, String username,
+                List<UserFriend> userFriends, List<Group> groupsOwned, List<Group> groupsAMemberOf, List<Picture> pictures){
+        this.aboutMe = aboutMe;
+        this.birthday = birthday;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.profile_picture_url = profile_picture_url;
+        this.groupsAMemberOf = groupsAMemberOf;
+        this.groupsOwned = groupsOwned;
+        this.userFriends = userFriends;
+        this.job = job;
+        this.username = username;
+        this.pictures = pictures;
+        this.id = id;
+    }
+
+
 }
