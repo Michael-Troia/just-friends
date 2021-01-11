@@ -31,12 +31,21 @@ I want to be able to choose to accept email notifications for important events l
 
 
 Feature List
-User Profiles - (including new user registration) with a featured image/avatar.
-Image Galleries - to allow users to show off their photos.
+Landing page
+    Shows off what the site does, links to register/login
+Create a User Profile
+    Contains personal info, displays public info
+    Filestack api for profile photo
+    can be edited
+Homepage - displays recent posts from friends list, from groups
+Navbar - Home page/landing page, login/logout, search functionality
+Search - Search for users by name/username
+Groups - displays a sample feed of all groups, links to individual group pages one is a member of
+Create Group - set name and details of a group.
+Group Page - Shows relevant information about a specific group, such as a sign-up or a view of recent group posts
+Image Galleries - upload and group photos into different albums for display with comment capabilities.
 Friends - Users should be able to friend each other, and display a list of their friends.
 Friends of your friends should be able to see your friend list, but others should not.
-Groups - Users should be able to join groups, create pages which display information on their group—including a Google Map with their location—and allow only other registered users to join the group.
-User Homepages - should display their info, along with their friends, groups, and a few recent images.
-Status Updates - users should be able to post new statuses.
-Comments - users should be able to comment on their friends statuses.
+Posts - create post, upload picture, edit post, delete post.
+Comments - posts that are linked to other posts.
 eMail Updates - users should be able to toggle eMail notifications for events; like new friend requests, comments on their statuses, etc.
