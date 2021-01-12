@@ -42,6 +42,9 @@ Navbar - Home page/landing page, login/logout, search functionality
 Search - Search for users by name/username
 Groups - displays a sample feed of all groups, links to individual group pages one is a member of
 Create Group - set name and details of a group.
+Admin Group - accept/reject users into group, remove posts
+Join Group
+Leave Group
 Group Page - Shows relevant information about a specific group, such as a sign-up or a view of recent group posts
 Image Galleries - upload and group photos into different albums for display with comment capabilities.
 Friends - Users should be able to friend each other, and display a list of their friends.
