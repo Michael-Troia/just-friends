@@ -1,7 +1,8 @@
 package com.example.justfriends.Controllers;
 
 import com.example.justfriends.Models.User;
-import com.example.justfriends.UserRepo;
+import com.example.justfriends.Repositories.UserRepo;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +15,11 @@ public class UserController {
 
     public UserRepo userRepo;
 
-    public UserController(UserRepo userRepo){
+    private final PasswordEncoder passwordEncoder;
+
+    public UserController(UserRepo userRepo, PasswordEncoder passwordEncoder){
         this.userRepo = userRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/sign-up")
@@ -27,8 +31,12 @@ public class UserController {
     @PostMapping("/sign-up")
     public String registerUser(@ModelAttribute User user,
                                Model viewModel){
+        String hash = passwordEncoder.encode(user.getPassword());
+        user.setPassword(hash);
+
         User dbUser = userRepo.save(user);
         viewModel.addAttribute("user", dbUser);
+//        return "register";
         return  "redirect:/show/"+dbUser.getId();
     }
 

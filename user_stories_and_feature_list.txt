@@ -16,19 +16,9 @@ I want to be able to upload my own and see the image galleries of my friends.
 I want to be able to comment on these photos
 I want to be able to create status updates.
 I want friends to be able to comment on these updates
-I want to be able to create or join a group that creates a private view for approved group members
 
-As a group member,
-I want to see the posts of only group members on the group page.
-I want to see the location (Google Maps) of other users if they share
-
-As a group owner,
-I want to control who is in the group and
-set properties for the group such as the group name.
-I want to see a chronological feed of recent uploads and posts of my friends or groups.
+I want to see a chronological feed of recent uploads and posts of my friends.
 I want to be able to choose to accept email notifications for important events like friend requests or comments and turn this off.
-
-
 
 Feature List
 Landing page
@@ -40,12 +30,7 @@ Create a User Profile
 Homepage - displays recent posts from friends list, from groups
 Navbar - Home page/landing page, login/logout, search functionality
 Search - Search for users by name/username
-Groups - displays a sample feed of all groups, links to individual group pages one is a member of
-Create Group - set name and details of a group.
-Admin Group - accept/reject users into group, remove posts
-Join Group
-Leave Group
-Group Page - Shows relevant information about a specific group, such as a sign-up or a view of recent group posts
+
 Image Galleries - upload and group photos into different albums for display with comment capabilities.
 Friends - Users should be able to friend each other, and display a list of their friends.
 Friends of your friends should be able to see your friend list, but others should not.
