@@ -30,6 +30,7 @@ Create a User Profile
 Homepage - displays recent posts from friends list, from groups
 Navbar - Home page/landing page, login/logout, search functionality
 Search - Search for users by name/username
+
 Image Galleries - upload and group photos into different albums for display with comment capabilities.
 Friends - Users should be able to friend each other, and display a list of their friends.
 Friends of your friends should be able to see your friend list, but others should not.
