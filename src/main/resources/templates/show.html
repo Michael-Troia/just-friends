@@ -5,9 +5,15 @@
     <title>Title</title>
 </head>
 <body>
-<div th:each="item : ${user}">
-    <p th:text="${user.username}">username</p>
-</div>
+Username:
+<p th:text="${user.username}"></p>
+First Name:
+<p th:text="${user.firstName}"></p>
+Email:
+<p th:text="${user.email}"></p>
+<br><br><br>
+My Friends:
+<p th:text="${friendsList}"></p>
 
 </body>
 </html>
