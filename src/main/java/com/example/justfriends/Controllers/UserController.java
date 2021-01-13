@@ -1,13 +1,7 @@
 package com.example.justfriends.Controllers;
 
-import com.example.justfriends.Models.Comment;
-import com.example.justfriends.Models.Post;
-import com.example.justfriends.Models.User;
-import com.example.justfriends.Models.UserFriend;
-import com.example.justfriends.Repositories.CommentRepo;
-import com.example.justfriends.Repositories.PostRepo;
-import com.example.justfriends.Repositories.UserFriendRepo;
-import com.example.justfriends.Repositories.UserRepo;
+import com.example.justfriends.Models.*;
+import com.example.justfriends.Repositories.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.swing.plaf.metal.MetalIconFactory;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,14 +22,19 @@ public class UserController {
     public UserFriendRepo userFriendRepo;
     public PostRepo postRepo;
     public CommentRepo commentRepo;
+    public PictureRepo pictureRepo;
+    public GalleryRepo galleryRepo;
 
     public UserController(UserRepo userRepo, PasswordEncoder passwordEncoder,
-                          UserFriendRepo userFriendRepo, PostRepo postRepo, CommentRepo commentRepo){
+                          UserFriendRepo userFriendRepo, PostRepo postRepo, CommentRepo commentRepo,
+                          PictureRepo pictureRepo, GalleryRepo galleryRepo) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
         this.userFriendRepo = userFriendRepo;
         this.postRepo = postRepo;
         this.commentRepo = commentRepo;
+        this.galleryRepo = galleryRepo;
+        this.pictureRepo = pictureRepo;
     }
 
     @GetMapping("/sign-up")
@@ -58,9 +58,10 @@ public class UserController {
     @GetMapping("/show/{id}")
     public String showUser(Model model,
                            @PathVariable long id){
+
+        //test: display the friend list of user_id=1
         List<UserFriend> friendList = userFriendRepo.findAllByUserId(id);
         ArrayList<String> displayFriends = new ArrayList<>();
-
         for (UserFriend friend: friendList){
             String name = friend.getFriend().getUsername();
             displayFriends.add(name);
@@ -78,6 +79,7 @@ public class UserController {
         //test: comments from user with ID 3, linked to post_Id 1
         Comment comment_userId_3 = commentRepo.findById(2L);
         model.addAttribute("commentsFromUser3", comment_userId_3);
+
 
         model.addAttribute(userRepo.getOne(id));
         return "show";

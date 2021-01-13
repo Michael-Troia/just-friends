@@ -14,6 +14,9 @@ public class Gallery {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "gallery")
     List<Picture> pictures;
 
+    @OneToOne
+    User user;
+
     @Column(nullable = false)
     private Date createdDate;
 
