@@ -1,7 +1,11 @@
 package com.example.justfriends.Controllers;
 
+import com.example.justfriends.Models.Comment;
+import com.example.justfriends.Models.Post;
 import com.example.justfriends.Models.User;
 import com.example.justfriends.Models.UserFriend;
+import com.example.justfriends.Repositories.CommentRepo;
+import com.example.justfriends.Repositories.PostRepo;
 import com.example.justfriends.Repositories.UserFriendRepo;
 import com.example.justfriends.Repositories.UserRepo;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,11 +25,16 @@ public class UserController {
     public UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
     public UserFriendRepo userFriendRepo;
+    public PostRepo postRepo;
+    public CommentRepo commentRepo;
 
-    public UserController(UserRepo userRepo, PasswordEncoder passwordEncoder, UserFriendRepo userFriendRepo){
+    public UserController(UserRepo userRepo, PasswordEncoder passwordEncoder,
+                          UserFriendRepo userFriendRepo, PostRepo postRepo, CommentRepo commentRepo){
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
         this.userFriendRepo = userFriendRepo;
+        this.postRepo = postRepo;
+        this.commentRepo = commentRepo;
     }
 
     @GetMapping("/sign-up")
@@ -56,7 +65,20 @@ public class UserController {
             String name = friend.getFriend().getUsername();
             displayFriends.add(name);
         }
+
+
+        //test: display friends usernames of user with Id 1
         model.addAttribute("friendsList", displayFriends);
+        //test: post with ID of 1, linked to user with ID 1
+        Post post = postRepo.findById(1L);
+        model.addAttribute("post", post.getBody());
+        //test: comments from user with ID 2, linked to post_Id 1
+        Comment comment_userId_2 = commentRepo.findById(1L);
+        model.addAttribute("commentsFromUser2", comment_userId_2);
+        //test: comments from user with ID 3, linked to post_Id 1
+        Comment comment_userId_3 = commentRepo.findById(2L);
+        model.addAttribute("commentsFromUser3", comment_userId_3);
+
         model.addAttribute(userRepo.getOne(id));
         return "show";
     }
