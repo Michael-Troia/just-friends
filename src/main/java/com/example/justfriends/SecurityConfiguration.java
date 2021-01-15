@@ -36,7 +36,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 /* Login configuration */
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/sign-up") // Sending the user to the after login
+                .defaultSuccessUrl("/{username}") // Sending the user to the after login
                 .permitAll() // Anyone can go to the login page
                 /* Logout configuration */
                 .and()
@@ -46,14 +46,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
 
-                .antMatchers("/") // anyone can see the home page
+                .antMatchers("/","/sign-up") // anyone can see the home page
                 .permitAll()
                 /* Pages that require authentication */
                 .and()
                 .authorizeRequests()
                 .antMatchers(
                         // Pages only for authenticated users
-                        "/home"
+                        "/{username}"
                 )
 
                 .authenticated();

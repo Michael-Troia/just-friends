@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Navbar</title>
+</head>
+<body>
+<nav th:fragment="navbar" class="navbar navbar-light bg-light">
+    <a class="navbar-brand" href="/"><em>justfriends</em></a>
+        <div class="navbar-nav">
+            <div sec:authorize="isAnonymous()" class="d-flex navbar-nav">
+                <div class="nav-item">
+                    <a class="nav-link" href="/login">Login</a>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" href="/sign-up">Register</a>
+                </div>
+            </div>
+            <div sec:authorize="isAuthenticated()" class="navbar-nav">
+                <div class="nav-item">
+                    <a class="nav-link" th:href="@{/profile-page/{username}(username=${#authentication.principal.username})}"></a>
+                </div>
+                <div class="nav-item">
+                    <form th:action="@{/logout}" th:method="post">
+                        <button class="nav-link">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

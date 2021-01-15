@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="partials/head :: head('Friends list')">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<nav th:replace="partials/navbar :: navbar"></nav>
+
+<h3>Status of user1's friendships with user2 and user3</h3>
+<p th:text="${user1friends}"></p>
+
+<br><br><br>
+
+<footer th:replace="partials/footer :: footer"></footer>
+</body>
+</html>

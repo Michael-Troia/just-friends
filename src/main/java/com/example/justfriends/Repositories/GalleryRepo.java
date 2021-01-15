@@ -1,4 +1,4 @@
-package com.example.justfriends.Controllers;
+package com.example.justfriends.Repositories;
 
 import com.example.justfriends.Models.Gallery;
 import org.springframework.data.jpa.repository.JpaRepository;
