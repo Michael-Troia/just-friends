@@ -21,7 +21,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column()
+    @Column(columnDefinition = "TEXT")
     private String aboutMe;
 
     @Column(nullable = false, unique = true)
@@ -38,6 +38,7 @@ public class User {
 
     @Column()
     private String password;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "friend")
     private List<UserFriend> userFriends;
 
@@ -48,7 +49,7 @@ public class User {
 
     public User(String aboutMe, Date birthday, String email, String firstName, String password,
                 String lastName, String job, String profile_picture_url, String username,
-                List<UserFriend> userFriends, List<Picture> pictures){
+                List<UserFriend> userFriends,  List<Picture> pictures){
         this.birthday = birthday;
         this.email = email;
         this.firstName = firstName;
@@ -64,7 +65,7 @@ public class User {
 
     public User(long id, String aboutMe, Date birthday, String email, String firstName, String password,
                 String lastName, String job, String profile_picture_url, String username,
-                List<UserFriend> userFriends, List<Picture> pictures){
+                List<UserFriend> userFriends, List <Picture> pictures){
         this.aboutMe = aboutMe;
         this.birthday = birthday;
         this.email = email;

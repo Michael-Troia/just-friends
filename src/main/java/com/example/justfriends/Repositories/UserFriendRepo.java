@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface UserFriendRepo extends JpaRepository <UserFriend, Long> {
     public List<UserFriend> findAllByUserId(long id);
+    public List<UserFriend> findByUserUsername(String username);
 }
