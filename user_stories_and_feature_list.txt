@@ -37,4 +37,3 @@ Friends of your friends should be able to see your friend list, but others shoul
 Posts - create post, upload picture, edit post, delete post.
 Comments - posts that are linked to other posts.
 eMail Updates - users should be able to toggle eMail notifications for events; like new friend requests, comments on their statuses, etc.
-test
