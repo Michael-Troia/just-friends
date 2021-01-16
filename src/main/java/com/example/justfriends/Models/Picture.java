@@ -16,8 +16,12 @@ public class Picture {
     private String comment;
 
     @ManyToOne
-    @JoinColumn(name = "user_photos")
+    @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "gallery_id")
+    private Gallery gallery;
 
     public Picture(){}
 
