@@ -2,6 +2,8 @@ package com.example.justfriends.Controllers;
 
 import com.example.justfriends.Models.*;
 import com.example.justfriends.Repositories.*;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +18,7 @@ import java.util.List;
 public class UserController {
 
     public UserRepo userRepo;
-    private final PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
     public UserFriendRepo userFriendRepo;
     public PostRepo postRepo;
     public CommentRepo commentRepo;
@@ -46,11 +48,19 @@ public class UserController {
                                Model viewModel) {
         String hash = passwordEncoder.encode(user.getPassword());
         user.setPassword(hash);
-
         User dbUser = userRepo.save(user);
         viewModel.addAttribute("user", dbUser);
+        System.out.println(dbUser.getUsername());
         return "redirect:/" + dbUser.getUsername();
     }
+
+//    todo THIS REQUEST IS BROKEN
+//    Show User Posts
+    @PostMapping("/posts/create/{username}")
+    public String showPosts(){
+        return "post/view";
+    }
+
 
     //Test: this test requires users, comments, userfriends, and post entries in database
     @GetMapping("/{username}")
@@ -66,7 +76,6 @@ public class UserController {
             String status = " , Status of that friendship: " + friend.getStatus() + " . ";
             displayFriends.add(status);
         }
-
         //test: display friends usernames of user with Id 1
         model.addAttribute("friendsList", displayFriends);
 
@@ -74,60 +83,15 @@ public class UserController {
         return "user/profile-page";
     }
 
+
+
     @GetMapping("/")
-    public String showTest(Model model) {
-        //todo Test: this code creates test entires in the database to test user/userfriend relationship
-        //note: after first build, database must be dropped or setters must be commented out
-//        User user1 = new User();
-//        user1.setPassword("1234");
-//        user1.setEmail("email1");
-//        user1.setFirstName("first1");
-//        user1.setLastName("last1");
-//        user1.setUsername("username1");
-//        userRepo.save(user1);
-//
-//        User user2 = new User();
-//        user2.setPassword("1234");
-//        user2.setEmail("email2");
-//        user2.setFirstName("first2");
-//        user2.setLastName("last2");
-//        user2.setUsername("username2");
-//        userRepo.save(user2);
-//
-//        User user3 = new User();
-//        user3.setPassword("1234");
-//        user3.setEmail("email3");
-//        user3.setFirstName("first3");
-//        user3.setLastName("last3");
-//        user3.setUsername("username3");
-//        userRepo.save(user3);
-//
-//        UserFriend userFriend1 = new UserFriend();
-//        userFriend1.setUser(user1);
-//        userFriend1.setFriend(user2);
-//        userFriend1.setStatus(Status.ACCEPTED);
-//        userFriendRepo.save(userFriend1);
-//
-//        UserFriend userFriend2 = new UserFriend();
-//        userFriend2.setUser(user1);
-//        userFriend2.setFriend(user3);
-//        userFriend2.setStatus(Status.PENDING);
-//        userFriendRepo.save(userFriend2);
+    public String showTest(Model model, @ModelAttribute User user) {
 
 
-        List<UserFriend> friendList = userFriendRepo.findAllByUserUsername("username1");
-        ArrayList<String> TestFriendsList = new ArrayList<>();
+        model.addAttribute("currentUser", user);
 
-        for (UserFriend friend : friendList) {
-            String name = (friend.getFriend().getUsername() +  " status: ");
-            String status = (friend.getStatus().toString());
-            TestFriendsList.add(name);
-            TestFriendsList.add(status);
-        }
-
-        model.addAttribute("user1friends", TestFriendsList);
-
-        return "user/friends-list";
+        return "user/home";
     }
 
 }

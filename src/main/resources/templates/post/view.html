@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="partials/head :: head('Profile')">
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="partials/head :: head('View Posts')">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
 <nav th:replace="partials/navbar :: navbar"></nav>
 
-profile page
-<p th:text="${user.getUsername()}"></p>
-<br><br><br>
-<p th:text="${username}"></p>
+<p th:text="${userPosts}"></p>
+
 
 <footer th:replace="partials/footer :: footer"></footer>
 </body>
