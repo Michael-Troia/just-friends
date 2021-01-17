@@ -50,11 +50,20 @@ public class PostController {
 
     @PostMapping("/posts/create/{username}")
     public String submitPostForm(@ModelAttribute Post post,
-                                 @ModelAttribute User currentUser){
-        post.setUser(currentUser);
-        post.setCreatedDate(new Date());
-        Post dbPost = postRepo.save(post);
-        return "redirect:/posts/view/" + dbPost.getUser().getUsername();
+                                 @ModelAttribute User currentUser,
+                                 @PathVariable String username,
+                                 Model model){
+        Post newPost = new Post();
+        User newUser = userRepo.findByUsername(username);
+        newPost.setUser(newUser);
+        newPost.setCreatedDate(new Date());
+        newPost.setBody(post.getBody());
+        Post dbPost = postRepo.save(newPost);
+
+        model.addAttribute("user", newUser);
+        model.addAttribute("post", dbPost);
+        System.out.println(newUser.getUsername());
+        return "redirect:/posts/view/" + newUser.getUsername();
     }
 
     @GetMapping("/posts/view/{username}")

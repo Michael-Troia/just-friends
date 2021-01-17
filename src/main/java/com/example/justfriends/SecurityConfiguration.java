@@ -46,7 +46,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
 
-                .antMatchers("/") // anyone can see the home page
+                .antMatchers("/", "/sign-up") // anyone can see the home page
                 .permitAll()
                 /* Pages that require authentication */
                 .and()

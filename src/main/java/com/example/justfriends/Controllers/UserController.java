@@ -54,12 +54,7 @@ public class UserController {
         return "redirect:/" + dbUser.getUsername();
     }
 
-//    todo THIS REQUEST IS BROKEN
-//    Show User Posts
-    @PostMapping("/posts/create/{username}")
-    public String showPosts(){
-        return "post/view";
-    }
+
 
 
     //Test: this test requires users, comments, userfriends, and post entries in database
