@@ -15,6 +15,10 @@ profile page
 Friends
 <p th:text="${friendsList}"></p>
 
+<form th:action="@{/edit/{username}(username=${#authentication.principal.username})}" method="GET" class="p-3">
+    <button type="submit" class="btn btn-primary">Update Profile Details</button>
+</form>
+
 <footer th:replace="partials/footer :: footer"></footer>
 </body>
 </html>
