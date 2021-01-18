@@ -8,9 +8,12 @@
 <nav th:replace="partials/navbar :: navbar"></nav>
 
 profile page
-<p th:text="${user.getUsername()}"></p>
+<p th:text="${user.getBirthday()}"></p>
+<p th:text="${user.username}"></p>
+
 <br><br><br>
-<p th:text="${username}"></p>
+Friends
+<p th:text="${friendsList}"></p>
 
 <footer th:replace="partials/footer :: footer"></footer>
 </body>

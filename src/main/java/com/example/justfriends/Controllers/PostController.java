@@ -82,6 +82,7 @@ public class PostController {
         return "post/view";
     }
 
+
     //test: post with ID of 1, linked to user with ID 1
 //    Post post = postRepo.findById(1L);
 //        model.addAttribute("post", post.getBody());

@@ -1,6 +1,8 @@
 package com.example.justfriends.Models;
 
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -11,6 +13,10 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdDate;
 
     @Column(nullable = false)
     private String firstName;
@@ -27,16 +33,18 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
-    @Column()
+    @Column
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
-    @Column()
+    @Column
     private String job;
 
-    @Column()
+    @Column
     private String profile_picture_url;
 
-    @Column()
+    @Column
     private String password;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "friend")
@@ -49,7 +57,7 @@ public class User {
 
     public User(String aboutMe, Date birthday, String email, String firstName, String password,
                 String lastName, String job, String profile_picture_url, String username,
-                List<UserFriend> userFriends,  List<Picture> pictures){
+                List<UserFriend> userFriends,  List<Picture> pictures, Date createdDate){
         this.birthday = birthday;
         this.email = email;
         this.firstName = firstName;
@@ -61,11 +69,12 @@ public class User {
         this.pictures = pictures;
         this.password = password;
         this.aboutMe = aboutMe;
+        this.createdDate = createdDate;
     }
 
     public User(long id, String aboutMe, Date birthday, String email, String firstName, String password,
                 String lastName, String job, String profile_picture_url, String username,
-                List<UserFriend> userFriends, List <Picture> pictures){
+                List<UserFriend> userFriends, List <Picture> pictures, Date createdDate){
         this.aboutMe = aboutMe;
         this.birthday = birthday;
         this.email = email;
@@ -78,6 +87,7 @@ public class User {
         this.pictures = pictures;
         this.id = id;
         this.password = password;
+        this.createdDate = createdDate;
     }
 
     public User(User copy) {
@@ -93,6 +103,7 @@ public class User {
         pictures = copy.pictures;
         id = copy.id;
         password = copy.password;
+        createdDate = copy.createdDate;
     }
 
     public long getId(){return id;}
@@ -107,6 +118,7 @@ public class User {
     public List<UserFriend> getUserFriends(){return userFriends;}
     public List<Picture> getPictures(){return pictures;}
     public String getPassword(){return password;}
+    public Date getCreatedDate(){return createdDate;}
 
     public void setId(long id){this.id = id;}
     public void setAboutMe(String aboutMe){this.aboutMe = aboutMe;}
@@ -120,4 +132,5 @@ public class User {
     public void setUserFriends(List<UserFriend> userFriends){this.userFriends = userFriends;}
     public void setPictures(List<Picture> pictures){this.pictures = pictures;}
     public void setPassword(String password){this.password = password;}
+    public void setCreatedDate(Date createdDate){this.createdDate = createdDate;}
 }
