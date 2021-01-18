@@ -7,17 +7,13 @@
 <body>
 <nav th:replace="partials/navbar :: navbar"></nav>
 
-Username:
+profile page
+<p th:text="${user.getBirthday()}"></p>
 <p th:text="${user.username}"></p>
-First Name:
-<p th:text="${user.firstName}"></p>
-Email:
-<p th:text="${user.email}"></p>
-<br><br><br>
-My Friends:
-<p th:text="${friendsList}"></p>
 
 <br><br><br>
+Friends
+<p th:text="${friendsList}"></p>
 
 <footer th:replace="partials/footer :: footer"></footer>
 </body>

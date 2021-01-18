@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="partials/head :: head('View Posts')">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<nav th:replace="partials/navbar :: navbar"></nav>
+
+<p th:text="${userPosts}"></p>
+
+<footer th:replace="partials/footer :: footer"></footer>
+</body>
+</html>

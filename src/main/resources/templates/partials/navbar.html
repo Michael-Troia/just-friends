@@ -7,7 +7,7 @@
 </head>
 <body>
 <nav th:fragment="navbar" class="navbar navbar-light bg-light">
-    <a class="navbar-brand" href="/"><em>justfriends</em></a>
+    <a class="navbar-brand" href="/">justfriends</a>
         <div class="navbar-nav">
             <div sec:authorize="isAnonymous()" class="d-flex navbar-nav">
                 <div class="nav-item">
@@ -20,6 +20,9 @@
             <div sec:authorize="isAuthenticated()" class="navbar-nav">
                 <div class="nav-item">
                     <a class="nav-link" th:href="@{/profile-page/{username}(username=${#authentication.principal.username})}"></a>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" th:href="@{/posts/create/{username}(username=${#authentication.principal.username})}">Create Post</a>
                 </div>
                 <div class="nav-item">
                     <form th:action="@{/logout}" th:method="post">
