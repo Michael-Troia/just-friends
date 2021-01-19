@@ -42,7 +42,7 @@ public class PostController {
 
 
     @GetMapping("/posts/create/{username}")
-    public String showCreatePostForm(Model model, @PathVariable String username){
+    public String showCreatePostForm(Model model, @PathVariable String username) {
         model.addAttribute("user", userRepo.findByUsername(username));
         model.addAttribute("post", new Post());
         return "post/create";
@@ -52,7 +52,7 @@ public class PostController {
     public String submitPostForm(@ModelAttribute Post post,
                                  @ModelAttribute User currentUser,
                                  @PathVariable String username,
-                                 Model model){
+                                 Model model) {
         Post newPost = new Post();
         User newUser = userRepo.findByUsername(username);
         newPost.setUser(newUser);
@@ -67,7 +67,8 @@ public class PostController {
     }
 
     @GetMapping("/posts/view/{username}")
-    public String showAllUserPosts(Model model, @PathVariable String username){
+    public String showAllUserPosts(Model model,
+                                   @PathVariable String username) {
         List<Post> postList = postRepo.findAllByUserUsername(username);
         ArrayList<String> displayPosts = new ArrayList<>();
         int i = 1;
@@ -82,6 +83,39 @@ public class PostController {
         return "post/view";
     }
 
+    //Edit Post
+    @GetMapping("/posts/edit/{username}/{id}")
+    public String viewEditPostForm(Model viewModel,
+                                   @PathVariable long id,
+                                   @PathVariable String username) {
+        Post post = postRepo.getOne(id);
+        User user = userRepo.findByUsername(username);
+
+        viewModel.addAttribute("post", post);
+        viewModel.addAttribute("user", user);
+
+        return "post/edit";
+    }
+
+    @PostMapping("/posts/edit/{username}/{id}")
+    public String editPost(
+            @ModelAttribute Post postToBeUpdated,
+            @PathVariable String username,
+            @PathVariable long id) {
+        Post post = postRepo.getOne(id);
+        Date editDate = new Date();
+
+        postToBeUpdated.setId(post.getId());
+        postToBeUpdated.setComments(post.getComments());
+        postToBeUpdated.setEditDate(editDate);
+        postToBeUpdated.setCreatedDate(post.getCreatedDate());
+        postToBeUpdated.setUser(post.getUser());
+
+        Post dbPost = postRepo.save(postToBeUpdated);
+        return "redirect:/posts/view/" + username;
+    }
+}
+
 
     //test: post with ID of 1, linked to user with ID 1
 //    Post post = postRepo.findById(1L);
@@ -93,4 +127,3 @@ public class PostController {
 //    Comment comment_userId_3 = commentRepo.findById(2L);
 //        model.addAttribute("commentsFromUser3", comment_userId_3);
 
-}
