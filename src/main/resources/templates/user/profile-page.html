@@ -8,7 +8,7 @@
 <body>
     <nav th:replace="partials/navbar :: navbar"></nav>
 
-    profile page
+    <h1>Profile Page</h1>
 
     <form th:action="@{/edit/{username}(username=${#authentication.principal.username})}" method="GET" class="p-3">
         <button type="submit" class="btn btn-primary">Update Profile Details</button>

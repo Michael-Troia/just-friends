@@ -7,7 +7,7 @@
 <body>
 <nav th:replace="partials/navbar :: navbar"></nav>
 
-<!--todo THIS REQUEST IS BROKEN-->
+<h1>Write a post</h1>
 <form th:action="@{/posts/create/{username}(username=${#authentication.principal.username})}" th:object="${post}" method="POST" class="p-3">
     <label for="postBody">Body</label>
     <textarea id="postBody" class="form-control" rows="4" cols="20" th:field="*{body}"></textarea>

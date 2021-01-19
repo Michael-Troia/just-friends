@@ -20,11 +20,15 @@
     </form>
 
     <form th:action="@{/edit/{username}(username=${#authentication.principal.username})}" method="GET" class="p-3">
-        <button type="submit" class="btn btn-primary">Update Profile Details</button>
+        <button type="submit" class="btn btn-primary">Update profile details</button>
     </form>
 
-    <form th:action="@{/posts/view/{username}(username=${#authentication.principal.username})}">
-        <button type="submit" class="btn btn-primary">View Your Posts</button>
+    <form th:action="@{/posts/view/{username}(username=${#authentication.principal.username})}" method="GET" class="p-3">
+        <button type="submit" class="btn btn-primary">View your posts</button>
+    </form>
+
+    <form th:action="@{/{username}/delete (username=${#authentication.principal.username})}" method="POST" class="p-3" >
+        <button type="submit" class="btn btn-warning">Delete your account</button>
     </form>
 </div>
 

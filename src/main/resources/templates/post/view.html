@@ -18,7 +18,7 @@
         <form th:action="@{/posts/delete/{username}/{id} (username=${username}, id = ${item.getId()})}" th:method="post" th:object="${userPosts}">
             <input type="submit" name="delete" VALUE="DELETE"/>
         </form>
-
+        <hr>
     </div>
 
 <footer th:replace="partials/footer :: footer"></footer>

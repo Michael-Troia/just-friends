@@ -8,6 +8,7 @@
 <body>
 <nav th:replace="partials/navbar :: navbar"></nav>
 
+<h1>Edit a post</h1>
 <form th:action="@{/posts/edit/{username}/{id} (username = ${user.username}, id = ${post.id} )}" th:object="${post}" method="POST" class="p-3">
     <label for="postBody">Body</label>
     <textarea id="postBody" class="form-control" rows="4" cols="20" th:field="*{body}"></textarea>
