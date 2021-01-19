@@ -101,18 +101,21 @@ public class PostController {
     public String editPost(
             @ModelAttribute Post postToBeUpdated,
             @PathVariable String username,
-            @PathVariable long id) {
-        Post post = postRepo.getOne(id);
+            @PathVariable long id,
+            @ModelAttribute User currentUser) {
+        Post post = postRepo.findById(id);
+        User user = userRepo.findByUsername(username);
         Date editDate = new Date();
 
+        postToBeUpdated.setEditDate(editDate);
         postToBeUpdated.setId(post.getId());
         postToBeUpdated.setComments(post.getComments());
-        postToBeUpdated.setEditDate(editDate);
         postToBeUpdated.setCreatedDate(post.getCreatedDate());
-        postToBeUpdated.setUser(post.getUser());
-
+        postToBeUpdated.setUser(user);
+        postToBeUpdated.setPhoto_url(post.getPhoto_url());
+        System.out.println(postToBeUpdated.getId());
         Post dbPost = postRepo.save(postToBeUpdated);
-        return "redirect:/posts/view/" + username;
+        return "redirect:/posts/view/" + dbPost.getUser().getUsername();
     }
 }
 

@@ -18,8 +18,7 @@ public class Post {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
 
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = true)
     private Date editDate;
 
     @Column(nullable = true)

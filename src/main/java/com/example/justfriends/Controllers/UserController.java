@@ -77,7 +77,7 @@ public class UserController {
         System.out.println(userToBeUpdated.getUsername());
         System.out.println(user.getUsername());
         System.out.println(userToBeUpdated.getJob());
-        User dbUser = userRepo.save(userToBeUpdated);
+        userRepo.save(userToBeUpdated);
         return "redirect:/" + userToBeUpdated.getUsername();
     }
 
