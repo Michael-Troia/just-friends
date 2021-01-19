@@ -6,8 +6,20 @@
 </head>
 <body>
 <nav th:replace="partials/navbar :: navbar"></nav>
+<h1>User Posts</h1>
 
-<p th:text="${userPosts}"></p>
+    <div th:each="item : ${postList}">
+        <p th:text="${item.getCreatedDate()}"></p>
+        <p th:text="${item.getBody()}"></p>
+        <p th:text="${item.getId()}"></p>
+        <form th:action="@{/posts/edit/{username}/{id} (username=${username}, id = ${item.getId()})}" th:method="get" th:object="${userPosts}">
+            <input type="submit" name="edit" value="EDIT"/>
+        </form>
+        <form th:action="@{/posts/delete/{username}/{id} (username=${username}, id = ${item.getId()})}" th:method="post" th:object="${userPosts}">
+            <input type="submit" name="delete" VALUE="DELETE"/>
+        </form>
+        <hr>
+    </div>
 
 <footer th:replace="partials/footer :: footer"></footer>
 </body>

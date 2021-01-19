@@ -24,9 +24,13 @@
                 <div class="nav-item">
                     <a class="nav-link" th:href="@{/posts/create/{username}(username=${#authentication.principal.username})}">Create Post</a>
                 </div>
+                <form th:action="@{/{username}(username=${#authentication.principal.username})}" method="GET" class="p-3">
+                    <button type="submit" class="btn btn-primary">Profile Page</button>
+                </form>
                 <div class="nav-item">
                     <form th:action="@{/logout}" th:method="post">
                         <button class="nav-link">Logout</button>
+
                     </form>
                 </div>
             </div>

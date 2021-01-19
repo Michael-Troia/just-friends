@@ -8,15 +8,6 @@
 <nav th:replace="partials/navbar :: navbar"></nav>
 
 <form th:action="@{/edit/{username} (username=${user.getUsername()})}" method="POST" th:object="${user}">
-<!--    <div class="form-group">-->
-<!--        <label for="username">Username</label>-->
-<!--        <input id="username" class="form-control" th:field="*{username}" />-->
-<!--    </div>-->
-
-<!--    <div class="form-group">-->
-<!--        <label for="email">Email</label>-->
-<!--        <input id="email" class="form-control" th:field="*{email}" />-->
-<!--    </div>-->
 
     <div class="form-group">
         <label for="first-name">First Name</label>
@@ -27,11 +18,6 @@
         <label for="last-name">Last Name</label>
         <input id="last-name" class="form-control" th:field="*{lastName}" />
     </div>
-
-<!--    <div class="form-group">-->
-<!--        <label for="password">Password</label>-->
-<!--        <input id="password" class="form-control" type="password" th:field="*{password}" />-->
-<!--    </div>-->
 
     <div class="form-group">
         <label for="aboutMe">About Me</label>
@@ -52,7 +38,6 @@
         <label for="profile-picture-url">Profile Picture URL</label>
         <input type="text" id="profile-picture-url" class="form-control" th:field="*{profile_picture_url}">
     </div>
-
 
     <button type="submit" class="btn btn-primary">Save Changes</button>
 </form>

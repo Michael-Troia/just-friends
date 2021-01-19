@@ -27,6 +27,10 @@ public class Comment {
     @OneToOne
     private Post parentPost;
 
+    @ManyToOne
+    @JoinColumn(name = "comment_id")
+    private Comment comment;
+
     public Comment(){}
 
     public Comment(String body, Date createdDate, String photo_url, User user, Post parentPost){

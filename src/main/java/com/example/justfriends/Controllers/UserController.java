@@ -77,7 +77,7 @@ public class UserController {
         System.out.println(userToBeUpdated.getUsername());
         System.out.println(user.getUsername());
         System.out.println(userToBeUpdated.getJob());
-        User dbUser = userRepo.save(userToBeUpdated);
+        userRepo.save(userToBeUpdated);
         return "redirect:/" + userToBeUpdated.getUsername();
     }
 
@@ -101,6 +101,16 @@ public class UserController {
         return "user/profile-page";
     }
 
+    @PostMapping("/{username}/delete")
+    public String deleteAccount(@PathVariable String username){
+        User user = userRepo.findByUsername(username);
+        List<Post> posts = postRepo.findAllByUserUsername(username);
+        for (Post post : posts){
+            postRepo.delete(post);
+        }
+        userRepo.delete(user);
+        return "redirect:/login?logout";
+    }
 
 
     @GetMapping("/")

@@ -1,20 +1,29 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="partials/head :: head('Profile')">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-<nav th:replace="partials/navbar :: navbar"></nav>
+    <nav th:replace="partials/navbar :: navbar"></nav>
 
-profile page
-<p th:text="${user.getBirthday()}"></p>
-<p th:text="${user.username}"></p>
+    <h1>Profile Page</h1>
 
-<br><br><br>
-Friends
-<p th:text="${friendsList}"></p>
+    <form th:action="@{/edit/{username}(username=${#authentication.principal.username})}" method="GET" class="p-3">
+        <button type="submit" class="btn btn-primary">Update Profile Details</button>
+    </form>
 
-<footer th:replace="partials/footer :: footer"></footer>
+    <div sec:authorize="isAuthenticated()" class="navbar-nav">
+        <p th:text="${#authentication.principal.username}"></p>
+
+        <br><br><br>
+        Friends
+        <p th:text="${friendsList}"></p>
+    </div>
+
+
+
+    <footer th:replace="partials/footer :: footer"></footer>
 </body>
 </html>

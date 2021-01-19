@@ -8,13 +8,27 @@
 <body>
 <nav th:replace="partials/navbar :: navbar"></nav>
 
+<h1>HomePage</h1>
 
 <div sec:authorize="isAuthenticated()">
-    <p th:text="${currentUser.getUsername()}"></p>
+    Username:
+    <p th:text="${#authentication.principal.username}"></p>
     This content is only shown to authenticated users.
 
     <form th:action="@{/posts/create/{username}(username=${#authentication.principal.username})}" method="GET" class="p-3">
         <button type="submit" class="btn btn-primary">Create a post</button>
+    </form>
+
+    <form th:action="@{/edit/{username}(username=${#authentication.principal.username})}" method="GET" class="p-3">
+        <button type="submit" class="btn btn-primary">Update profile details</button>
+    </form>
+
+    <form th:action="@{/posts/view/{username}(username=${#authentication.principal.username})}" method="GET" class="p-3">
+        <button type="submit" class="btn btn-primary">View your posts</button>
+    </form>
+
+    <form th:action="@{/{username}/delete (username=${#authentication.principal.username})}" method="POST" class="p-3" >
+        <button type="submit" class="btn btn-warning">Delete your account</button>
     </form>
 </div>
 
