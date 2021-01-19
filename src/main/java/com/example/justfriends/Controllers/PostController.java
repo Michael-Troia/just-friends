@@ -66,6 +66,7 @@ public class PostController {
         return "redirect:/posts/view/" + newUser.getUsername();
     }
 
+    //view posts
     @GetMapping("/posts/view/{username}")
     public String showAllUserPosts(Model model,
                                    @PathVariable String username) {
@@ -77,8 +78,10 @@ public class PostController {
             displayPosts.add(body);
             String date = " , that post was made: " + post.getCreatedDate() + " . ";
             displayPosts.add(date);
+            String id = "Post Id #:" + post.getId() + " .";
         }
         model.addAttribute("userPosts", displayPosts);
+        model.addAttribute("postList" , postList);
 
         return "post/view";
     }
@@ -116,6 +119,14 @@ public class PostController {
         System.out.println(postToBeUpdated.getId());
         Post dbPost = postRepo.save(postToBeUpdated);
         return "redirect:/posts/view/" + dbPost.getUser().getUsername();
+    }
+
+    @PostMapping("/posts/delete/{username}/{id}")
+    public String deletePost(@PathVariable String username,
+                             @PathVariable long id){
+        Post post = postRepo.getOne(id);
+        postRepo.delete(post);
+        return "redirect:/posts/view/"+ username;
     }
 }
 

@@ -22,6 +22,10 @@
     <form th:action="@{/edit/{username}(username=${#authentication.principal.username})}" method="GET" class="p-3">
         <button type="submit" class="btn btn-primary">Update Profile Details</button>
     </form>
+
+    <form th:action="@{/posts/view/{username}(username=${#authentication.principal.username})}">
+        <button type="submit" class="btn btn-primary">View Your Posts</button>
+    </form>
 </div>
 
 <br><br><br>
