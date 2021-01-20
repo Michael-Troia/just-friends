@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="partials/head :: head('Friend Requests')">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<nav th:replace="partials/navbar :: navbar"></nav>
+<h1>Friend Requests</h1>
+
+<div th:each="item : ${friendRequests}">
+    <p th:text="${item.getUser().username}"></p>
+    <p th:text="${item.getUser().firstName}"></p>
+    <p th:text="${item.getStatus()}"></p>
+    <form th:action="@{/{username}/{friendId}/accept (username=${#authentication.principal.username}, friendId = ${item.id})}" th:method="POST">
+        <input type="submit" name="accept" value="accept"/>
+    </form>
+    <form th:action="@{/{username}/{friendId}/reject (username=${#authentication.principal.username}, friendId = ${item.id})}" th:method="POST">
+        <input type="submit" name="reject" value="reject"/>
+    </form>
+    <hr>
+</div>
+
+<footer th:replace="partials/footer :: footer"></footer>
+</body>
+</html>

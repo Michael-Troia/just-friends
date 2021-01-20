@@ -37,7 +37,7 @@ public class UserFriendController {
         this.galleryRepo = galleryRepo;
         this.pictureRepo = pictureRepo;
     }
-    //create UserFriend
+    //List all users
     @GetMapping("/{username}/friends")
     public String showUsers(Model model,
                             @PathVariable String username) {
@@ -46,7 +46,7 @@ public class UserFriendController {
 
         return "userFriend/create";
     }
-
+    //start a new friend request
     @PostMapping("/{username}/{friendName}")
     public String addFriend(@PathVariable String username,
                             @PathVariable String friendName){
@@ -59,16 +59,18 @@ public class UserFriendController {
         return "redirect:/";
     }
 
+    //view friends
     @GetMapping("/{username}/friends/view")
     public String showFriendList(@PathVariable String username,
                                  Model model){
         User user = userRepo.findByUsername(username);
-        List<UserFriend> userFriends = userFriendRepo.findAllByUser(user);
+        List<UserFriend> userFriends = userFriendRepo.findAllByUser(user);//might need to include other people's requests
         model.addAttribute("friends" , userFriends);
 
         return "userFriend/view";
     }
 
+    //delete friendship
     @PostMapping("/{username}/{friendId}/delete")
     public String deleteFriend(@PathVariable String username,
                                @PathVariable long friendId){
@@ -78,5 +80,42 @@ public class UserFriendController {
         return "redirect:/"+username+"/friends/view";
     }
 
+    //view friend requests
+    @PostMapping("/{username}/friends/requests")
+    public String showFriendRequests(@PathVariable String username,
+                                     Model model){
+        User user = userRepo.findByUsername(username);
+        //returns a list of userFriends with the current user as the friend
+        List<UserFriend> userFriendRequests = userFriendRepo.findAllByFriendAndStatus(user, Status.PENDING);
+        model.addAttribute("friendRequests", userFriendRequests);
+
+        return "userFriend/friend-requests";
+    }
+
+    //reject friendship
+    @PostMapping("/{username}/{friendId}/reject")
+    public String rejectFriend(@PathVariable String username,
+                               @PathVariable long friendId){
+        UserFriend userFriend = userFriendRepo.findById(friendId);
+        userFriend.setStatus(Status.REJECTED);
+        userFriendRepo.save(userFriend);
+
+        return "redirect:/"+username+"/friends/view";
+    }
+    //accept friendship
+    @PostMapping("/{username}/{friendId}/accept")
+    public String acceptFriend(@PathVariable String username,
+                               @PathVariable long friendId){
+        UserFriend userFriendRequester = userFriendRepo.findById(friendId);
+        userFriendRequester.setStatus(Status.ACCEPTED);
+        userFriendRepo.save(userFriendRequester);
+
+        UserFriend newUserFriend = new UserFriend();
+        newUserFriend.setFriend(userFriendRequester.getUser());
+        newUserFriend.setStatus(Status.ACCEPTED);
+        newUserFriend.setUser(userRepo.findByUsername(username));
+        UserFriend db_NewUserFriend = userFriendRepo.save(newUserFriend);
+        return "redirect:/"+username+"/friends/view";
+    }
 
 }
