@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="partials/head :: head('Find a Friend')">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<nav th:replace="partials/navbar :: navbar"></nav>
+<h1>Find a Friend</h1>
+
+<div th:each="item : ${userList}">
+    username
+    <p th:text="${item.username}"></p>
+    first name
+    <p th:text="${item.firstName}"></p>
+    last name
+    <p th:text="${item.lastName}"></p>
+    <form th:action="@{/{username}/{friendName} (username=${#authentication.principal.username}, friendName = ${item.username})}" th:method="POST">
+        <input type="submit" name="befriend" value="Befriend"/>
+    </form>
+    <hr>
+</div>
+
+<footer th:replace="partials/footer :: footer"></footer>
+</body>
+</html>

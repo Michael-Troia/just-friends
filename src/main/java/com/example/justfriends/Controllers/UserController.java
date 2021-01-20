@@ -87,15 +87,17 @@ public class UserController {
                            @PathVariable String username) {
         User user = userRepo.findByUsername(username);
         List<UserFriend> friendList = userFriendRepo.findAllByUserUsername(username);
-        ArrayList<String> displayFriends = new ArrayList<>();
-        int i = 1;
-        for (UserFriend friend : friendList) {
-            String name = "Friend " + (i++) + ": " + friend.getFriend().getUsername();
-            displayFriends.add(name);
-            String status = " , Status of that friendship: " + friend.getStatus() + " . ";
-            displayFriends.add(status);
+        if (friendList != null) {
+            ArrayList<String> displayFriends = new ArrayList<>();
+            int i = 1;
+            for (UserFriend friend : friendList) {
+                String name = "Friend " + (i++) + ": " + friend.getFriend().getUsername();
+                displayFriends.add(name);
+                String status = " , Status of that friendship: " + friend.getStatus() + " . ";
+                displayFriends.add(status);
+            }
+            model.addAttribute("friendsList", displayFriends);
         }
-        model.addAttribute("friendsList", displayFriends);
 
         model.addAttribute("user", user);
         return "user/profile-page";
@@ -107,6 +109,10 @@ public class UserController {
         List<Post> posts = postRepo.findAllByUserUsername(username);
         for (Post post : posts){
             postRepo.delete(post);
+        }
+        List<UserFriend> userFriends = userFriendRepo.findAllByUser(user);
+        for (UserFriend userFriend : userFriends){
+            userFriendRepo.delete(userFriend);
         }
         userRepo.delete(user);
         return "redirect:/login?logout";
