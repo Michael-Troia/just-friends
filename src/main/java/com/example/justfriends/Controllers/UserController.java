@@ -110,6 +110,10 @@ public class UserController {
         for (Post post : posts){
             postRepo.delete(post);
         }
+        List<UserFriend> userFriends = userFriendRepo.findAllByUser(user);
+        for (UserFriend userFriend : userFriends){
+            userFriendRepo.delete(userFriend);
+        }
         userRepo.delete(user);
         return "redirect:/login?logout";
     }
