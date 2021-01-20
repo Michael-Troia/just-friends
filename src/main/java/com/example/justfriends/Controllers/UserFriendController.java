@@ -59,5 +59,24 @@ public class UserFriendController {
         return "redirect:/";
     }
 
+    @GetMapping("/{username}/friends/view")
+    public String showFriendList(@PathVariable String username,
+                                 Model model){
+        User user = userRepo.findByUsername(username);
+        List<UserFriend> userFriends = userFriendRepo.findAllByUser(user);
+        model.addAttribute("friends" , userFriends);
+
+        return "userFriend/view";
+    }
+
+    @PostMapping("/{username}/{friendId}/delete")
+    public String deleteFriend(@PathVariable String username,
+                               @PathVariable long friendId){
+        UserFriend userFriend = userFriendRepo.findById(friendId);
+        userFriendRepo.delete(userFriend);
+
+        return "redirect:/"+username+"/friends/view";
+    }
+
 
 }
