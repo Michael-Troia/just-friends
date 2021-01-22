@@ -129,4 +129,35 @@ public class PostController {
         postRepo.delete(post);
         return "redirect:/posts/view/"+ username;
     }
+
+    //comment
+    @GetMapping("/posts/create/{username}/{postId}/comment")
+    public String showCommentForm(@PathVariable String username,
+                                  @PathVariable long postId,
+                                  Model model){
+        model.addAttribute("user" , userRepo.findByUsername(username));
+        model.addAttribute("comment", new Comment());
+        model.addAttribute("post" , postRepo.findById(postId));
+        return "post/comment";
+    }
+
+    @PostMapping("/posts/create/{username}/{postId}/comment")
+    public String submitCommentForm(@ModelAttribute Comment comment,
+                                 @PathVariable long postId,
+                                 @PathVariable String username,
+                                 Model model) {
+        Post parentPost = postRepo.findById(postId);
+        Comment newComment = new Comment();
+        User newUser = userRepo.findByUsername(username);
+        newComment.setUser(newUser);
+        newComment.setCreatedDate(new Date());
+        newComment.setBody(comment.getBody());
+        newComment.setParentPost(parentPost);
+        Comment dbComment = commentRepo.save(newComment);
+
+        model.addAttribute("user", newUser);
+        model.addAttribute("comment", dbComment);
+        System.out.println(newUser.getUsername());
+        return "redirect:/posts/view/" + newUser.getUsername();
+    }
 }

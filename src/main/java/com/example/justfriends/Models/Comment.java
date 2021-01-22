@@ -24,12 +24,13 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "parentPost_id")
     private Post parentPost;
 
-    @ManyToOne
-    @JoinColumn(name = "comment_id")
-    private Comment comment;
+//    @ManyToOne
+//    @JoinColumn(name = "comment_id")
+//    private Comment comment;
 
     public Comment(){}
 
