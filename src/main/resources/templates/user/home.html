@@ -38,6 +38,10 @@
     <form th:action="@{/{username}/friends/view (username=${#authentication.principal.username})}" method="GET" class="p-3">
         <button type="submit" class="btn btn-primary">View your friends</button>
     </form>
+
+    <form th:action="@{/{username}/stories (username=${#authentication.principal.username})}" method="GET" class="p-3">
+        <button type="submit" class="btn btn-primary">View your friend's posts</button>
+    </form>
 </div>
 
 <br><br><br>

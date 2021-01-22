@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="partials/head :: head('NewsFeed')">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<nav th:replace="partials/navbar :: navbar"></nav>
+<h1>Friends</h1>
+
+<div th:each="item : ${posts}">
+    <p th:text="${item.getUser().username}"></p>
+    <p th:text="${item.body}"></p>
+    <p th:text="${item.getCreatedDate()}"></p>
+<!--    <form th:action="@{/{username}/{friendId}/delete (username=${#authentication.principal.username}, friendId = ${item.id})}" th:method="POST">-->
+<!--        <input type="submit" name="Unfriend" value="Unfriend"/>-->
+<!--    </form>-->
+    <hr>
+</div>
+
+<footer th:replace="partials/footer :: footer"></footer>
+</body>
+</html>

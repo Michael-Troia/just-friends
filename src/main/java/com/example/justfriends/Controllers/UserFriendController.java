@@ -118,4 +118,18 @@ public class UserFriendController {
         return "redirect:/"+username+"/friends/view";
     }
 
+    @GetMapping("/{username}/stories")
+    public String showNewsFeed(@PathVariable String username,
+                                     Model model){
+        User user = userRepo.findByUsername(username);
+        List<UserFriend> userFriends = userFriendRepo.findAllByUserAndStatus(user, Status.ACCEPTED);
+        List<Post> posts = new ArrayList<>();
+        for (UserFriend userFriend : userFriends){
+            posts.addAll(postRepo.findAllByUser(userFriend.getFriend()));
+        }
+
+        model.addAttribute("posts", posts);
+
+        return "userFriend/stories";
+    }
 }
