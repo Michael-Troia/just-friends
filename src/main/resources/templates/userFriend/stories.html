@@ -9,14 +9,28 @@
 <h1>Friends</h1>
 
 <div th:each="item : ${posts}">
-    <p th:text="${item.getUser().username}"></p>
-    <p th:text="${item.body}"></p>
-    <p th:text="${item.getCreatedDate()}"></p>
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${item.getUser().username}"></h5>
+            <h6 class="card-subtitle mb-2 text-muted" th:text="${item.getCreatedDate()}"></h6>
+            <p class="card-text" th:text="${item.getBody()}"></p>
+            <a th:href="@{/posts/create/{username}/{postId}/comment (username=${#authentication.principal.username}, postId = ${item.id})}" class="card-link">Comment</a>
+            <a href="#" class="card-link">Another link</a>
+        </div>
+    </div>
 <!--    <form th:action="@{/{username}/{friendId}/delete (username=${#authentication.principal.username}, friendId = ${item.id})}" th:method="POST">-->
 <!--        <input type="submit" name="Unfriend" value="Unfriend"/>-->
 <!--    </form>-->
-    <a th:href="@{/posts/create/{username}/{postId}/comment (username=${#authentication.principal.username}, postId = ${item.id})}">Comment</a>
-    <hr>
+    <div th:each="item : ${item.getComments()}">
+        <div class="card" style="width: 10rem;">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${item.getUser().username}"></h5>
+                <p class="card-text" th:text="${item.body}"></p>
+<!--                <a th:href="${/}"></a>-->
+            </div>
+        </div>
+    </div>
+    <br><br><br>
 </div>
 
 <footer th:replace="partials/footer :: footer"></footer>

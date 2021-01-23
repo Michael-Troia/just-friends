@@ -130,7 +130,7 @@ public class PostController {
         return "redirect:/posts/view/"+ username;
     }
 
-    //comment
+    //create comment
     @GetMapping("/posts/create/{username}/{postId}/comment")
     public String showCommentForm(@PathVariable String username,
                                   @PathVariable long postId,
@@ -158,6 +158,6 @@ public class PostController {
         model.addAttribute("user", newUser);
         model.addAttribute("comment", dbComment);
         System.out.println(newUser.getUsername());
-        return "redirect:/posts/view/" + newUser.getUsername();
+        return "redirect:/" + newUser.getUsername() + "/stories";
     }
 }

@@ -1,9 +1,6 @@
 package com.example.justfriends.Controllers;
 
-import com.example.justfriends.Models.Post;
-import com.example.justfriends.Models.Status;
-import com.example.justfriends.Models.User;
-import com.example.justfriends.Models.UserFriend;
+import com.example.justfriends.Models.*;
 import com.example.justfriends.Repositories.*;
 import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -127,7 +124,10 @@ public class UserFriendController {
         for (UserFriend userFriend : userFriends){
             posts.addAll(postRepo.findAllByUser(userFriend.getFriend()));
         }
-
+        List<Comment> comments = new ArrayList<>();
+        for (Post post : posts){
+            comments.addAll(post.getComments());
+        }
         model.addAttribute("posts", posts);
 
         return "userFriend/stories";
