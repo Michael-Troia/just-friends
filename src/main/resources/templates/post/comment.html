@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
-<head th:replace="partials/head :: head('Create a Post')">
+<head th:replace="partials/head :: head('Create a comment')">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
@@ -8,10 +8,10 @@
 <nav th:replace="partials/navbar :: navbar"></nav>
 
 <h1>comment</h1>
-<form th:action="@{/posts/create/{username}(username=${#authentication.principal.username})}" th:object="${post}" method="POST" class="p-3">
+<form th:action="@{/posts/create/{username}/{postId}/comment (username=${#authentication.principal.username}, postId=${post.getId()})}" th:object="${comment}" method="POST" class="p-3">
     <label for="postBody">Body</label>
     <textarea id="postBody" class="form-control" rows="4" cols="20" th:field="*{body}"></textarea>
-    <button type="submit" class="btn btn-primary">Submit Post</button>
+    <button type="submit" class="btn btn-primary">Submit comment</button>
 </form>
 
 <footer th:replace="partials/footer :: footer"></footer>

@@ -28,7 +28,7 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "comment")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "parentPost")
     private List<Comment> comments;
 
     public Post(){}

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="partials/head :: head('Edit Comment')">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<nav th:replace="partials/navbar :: navbar"></nav>
+
+<h1>Edit a Comment</h1>
+<form th:action="@{/comments/edit/{username}/{commentId} (username = ${user.username}, commentId = ${comment.id} )}" th:object="${comment}" method="POST" class="p-3">
+    <label for="postBody">Body</label>
+    <textarea id="postBody" class="form-control" rows="4" cols="20" th:field="*{body}"></textarea>
+    <button type="submit" class="btn btn-primary">Submit Comment</button>
+</form>
+
+<footer th:replace="partials/footer :: footer"></footer>
+</body>
+</html>

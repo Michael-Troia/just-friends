@@ -24,25 +24,31 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "parentPost_id")
     private Post parentPost;
 
-    @ManyToOne
-    @JoinColumn(name = "comment_id")
-    private Comment comment;
+    @Column(nullable = true)
+    private Date editDate;
+
+//    @ManyToOne
+//    @JoinColumn(name = "comment_id")
+//    private Comment comment;
 
     public Comment(){}
 
-    public Comment(String body, Date createdDate, String photo_url, User user, Post parentPost){
+    public Comment(String body, Date createdDate, String photo_url, User user, Post parentPost, Date editDate){
         this.body = body;
+        this.editDate = editDate;
         this.createdDate = createdDate;
         this.photo_url = photo_url;
         this.user = user;
         this.parentPost = parentPost;
     }
 
-    public Comment(long id, String body, Date createdDate, String photo_url, User user, Post parentPost){
+    public Comment(long id, String body, Date createdDate, String photo_url, User user, Post parentPost, Date editDate){
         this.body = body;
+        this.editDate = editDate;
         this.createdDate = createdDate;
         this.photo_url = photo_url;
         this.user = user;
@@ -56,8 +62,10 @@ public class Comment {
     public User getUser(){return user;}
     public long getId(){return id;}
     public Post getParentPost(){return parentPost;}
+    public Date getEditDate(){return editDate;}
 
     public void setBody(String body){ this.body = body;}
+    public void setEditDate(Date editDate){this.editDate = editDate;}
     public void setCreatedDate(Date createdDate){this.createdDate = createdDate;}
     public void setPhoto_url(String photo_url){this.photo_url = photo_url;}
     public void setUser(User user){this.user = user;}
