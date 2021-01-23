@@ -15,23 +15,38 @@
             <h6 class="card-subtitle mb-2 text-muted" th:text="${item.getCreatedDate()}"></h6>
             <p class="card-text" th:text="${item.getBody()}"></p>
             <a th:href="@{/posts/create/{username}/{postId}/comment (username=${#authentication.principal.username}, postId = ${item.id})}" class="card-link">Comment</a>
-            <a href="#" class="card-link">Another link</a>
+<!--            todo: create a link to friends profiles-->
+<!--            <a th:href="@{/{username}/{friendName}/profile (username=${#authentication.principal.username}, friendName = ${item.getUser().username})}" class="card-link">View Profile</a>-->
         </div>
     </div>
-<!--    <form th:action="@{/{username}/{friendId}/delete (username=${#authentication.principal.username}, friendId = ${item.id})}" th:method="POST">-->
-<!--        <input type="submit" name="Unfriend" value="Unfriend"/>-->
-<!--    </form>-->
+
     <div th:each="item : ${item.getComments()}">
         <div class="card" style="width: 10rem;">
             <div class="card-body">
-                <h5 class="card-title" th:text="${item.getUser().username}"></h5>
+                <h5 class="card-title" th:id="commentUser" th:text="${item.getUser().username}"></h5>
                 <p class="card-text" th:text="${item.body}"></p>
-<!--                <a th:href="${/}"></a>-->
+
+<!--                displays edit comment button onl if current user is author of comment-->
+                <div th:id="currentUser" hidden th:text="${#authentication.principal.username}"></div>
+                <script>
+                    $(document).ready(function (){
+                        let editLink = document.getElementById("editComment");
+                        let commentAuthor = document.getElementById("commentUser");
+                        let currentUser = document.getElementById("currentUser");
+                        if (currentUser.innerText === commentAuthor.innerText){
+                            editLink.style.display = "block";
+                        } else {
+                            editLink.style.display = "none";
+                        }
+                    })
+                </script>
+                <a th:id="editComment" th:href="@{/comments/edit/{username}/{commentId} (username=${item.getUser().username}, commentId=${item.getId()})}">Edit Post</a>
             </div>
         </div>
     </div>
     <br><br><br>
 </div>
+
 
 <footer th:replace="partials/footer :: footer"></footer>
 </body>

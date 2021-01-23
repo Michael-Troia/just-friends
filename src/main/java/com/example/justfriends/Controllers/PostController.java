@@ -6,6 +6,7 @@ import com.example.justfriends.Models.User;
 import com.example.justfriends.Models.UserFriend;
 import com.example.justfriends.Repositories.*;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,7 +60,6 @@ public class PostController {
         newPost.setCreatedDate(new Date());
         newPost.setBody(post.getBody());
         Post dbPost = postRepo.save(newPost);
-
         model.addAttribute("user", newUser);
         model.addAttribute("post", dbPost);
         System.out.println(newUser.getUsername());
@@ -93,7 +93,6 @@ public class PostController {
                                    @PathVariable String username) {
         Post post = postRepo.getOne(id);
         User user = userRepo.findByUsername(username);
-
         viewModel.addAttribute("post", post);
         viewModel.addAttribute("user", user);
 
@@ -109,7 +108,6 @@ public class PostController {
         Post post = postRepo.findById(id);
         User user = userRepo.findByUsername(username);
         Date editDate = new Date();
-
         postToBeUpdated.setEditDate(editDate);
         postToBeUpdated.setId(post.getId());
         postToBeUpdated.setComments(post.getComments());
@@ -154,10 +152,41 @@ public class PostController {
         newComment.setBody(comment.getBody());
         newComment.setParentPost(parentPost);
         Comment dbComment = commentRepo.save(newComment);
-
         model.addAttribute("user", newUser);
         model.addAttribute("comment", dbComment);
         System.out.println(newUser.getUsername());
         return "redirect:/" + newUser.getUsername() + "/stories";
+    }
+
+    //edit comment
+    @GetMapping("/comments/edit/{username}/{commentId}")
+    public String viewEditCommentForm(@PathVariable String username,
+                                      @PathVariable long commentId,
+                                      Model model){
+        Comment comment = commentRepo.getOne(commentId);
+        User user = userRepo.findByUsername(username);
+        model.addAttribute("comment", comment);
+        model.addAttribute("user", user);
+        return "post/comment-edit";
+    }
+
+    @PostMapping("/comments/edit/{username}/{commentId}")
+    public String editComment(
+            @ModelAttribute Comment commentToBeUpdated,
+            @PathVariable String username,
+            @PathVariable long commentId,
+            @ModelAttribute User currentUser) {
+        Comment comment = commentRepo.findById(commentId);
+        User user = userRepo.findByUsername(username);
+        Date editDate = new Date();
+        commentToBeUpdated.setEditDate(editDate);
+        commentToBeUpdated.setId(comment.getId());
+        commentToBeUpdated.setParentPost(comment.getParentPost());
+        commentToBeUpdated.setCreatedDate(comment.getCreatedDate());
+        commentToBeUpdated.setUser(user);
+        commentToBeUpdated.setPhoto_url(comment.getPhoto_url());
+        Comment dbComment = commentRepo.save(commentToBeUpdated);
+
+        return "redirect:/" + dbComment.getUser().getUsername() + "/stories";
     }
 }
