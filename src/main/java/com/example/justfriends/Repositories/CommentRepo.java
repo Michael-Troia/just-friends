@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface CommentRepo extends JpaRepository <Comment, Long> {
 
+    Comment findByBody(String body);
     List<Comment> findAllByUserId(long id);
     Comment findById(long id);
 }
