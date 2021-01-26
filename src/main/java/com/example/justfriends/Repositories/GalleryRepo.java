@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface GalleryRepo extends JpaRepository <Gallery, Long> {
 
     Gallery findById(long id);
+    Gallery findByName(String name);
 }
