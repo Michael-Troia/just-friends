@@ -41,7 +41,7 @@ public class PostController {
         this.pictureRepo = pictureRepo;
     }
 
-
+//create posts
     @GetMapping("/posts/create/{username}")
     public String showCreatePostForm(Model model, @PathVariable String username) {
         model.addAttribute("user", userRepo.findByUsername(username));

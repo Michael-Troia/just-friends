@@ -20,28 +20,35 @@ public class Gallery {
     @Column(nullable = false)
     private Date createdDate;
 
+    @Column(nullable = false)
+    private String name;
+
     public Gallery(){}
 
-    public Gallery(List<Picture> pictures, User user, Date createdDate){
+    public Gallery(List<Picture> pictures, User user, Date createdDate, String name){
         this.pictures = pictures;
+        this.name = name;
         this.createdDate = createdDate;
         this.user = user;
     }
 
-    public Gallery(long id, List<Picture> pictures, User user, Date createdDate){
+    public Gallery(long id, List<Picture> pictures, User user, Date createdDate, String name){
         this.pictures = pictures;
+        this.name = name;
         this.createdDate = createdDate;
         this.user = user;
         this.id = id;
     }
 
     public long getId(){return id;}
+    public String getName(){return name;}
     public List<Picture> getPictures(){return pictures;}
     public User getUser(){return user;}
     public Date getCreatedDate(){return createdDate;}
 
     public void setId(long id){this.id = id;}
     public void setPictures(List<Picture> pictures){this.pictures = pictures;}
+    public void setName(String name){ this.name = name;}
     public void setUser(User user){this.user = user;}
     public void setCreatedDate(Date createdDate){this.createdDate = createdDate;}
 }
