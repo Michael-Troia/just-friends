@@ -118,17 +118,29 @@ public class UserFriendController {
     @GetMapping("/{username}/stories")
     public String showNewsFeed(@PathVariable String username,
                                      Model model){
-        User user = userRepo.findByUsername(username);
-        List<UserFriend> userFriends = userFriendRepo.findAllByUserAndStatus(user, Status.ACCEPTED);
-        List<Post> posts = new ArrayList<>();
-        for (UserFriend userFriend : userFriends){
-            posts.addAll(postRepo.findAllByUser(userFriend.getFriend()));
+        User currentUser = userRepo.findByUsername(username);
+
+        List<UserFriend> userFriends = userFriendRepo.findAllByUserAndStatus(currentUser, Status.ACCEPTED);// lists friends that you've accepted
+        ArrayList<User> displayUsers = new ArrayList<>();// lists User objects of all the users friends
+        for (UserFriend userFriend : userFriends) {
+            displayUsers.add(userFriend.getFriend());
         }
-        List<Comment> comments = new ArrayList<>();
-        for (Post post : posts){
-            comments.addAll(post.getComments());
+        displayUsers.add(currentUser);// includes your own posts in stories view
+
+
+        ArrayList<Post> displayPosts = new ArrayList<>();// lists all posts by all friends and the user
+        ArrayList<Comment> displayComments = new ArrayList<>();// lists all comments to all posts by all friends and user
+        for (User displayUser : displayUsers) {
+            for (Post post : postRepo.findAllByUser(displayUser)) {
+                displayPosts.add(post);
+                displayComments.addAll(commentRepo.findAllByParentPost(post));
+            }
         }
-        model.addAttribute("posts", posts);
+
+
+        model.addAttribute("comments", displayComments);
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("posts", displayPosts);
 
         return "userFriend/stories";
     }

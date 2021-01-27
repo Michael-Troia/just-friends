@@ -14,6 +14,10 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,6 +37,7 @@ public class IntegrationTest {
     private User testUser1;
     private User testUser2;
     private Post testPost;
+    private Post testPost2;
     private Comment testComment1;
     private Comment testComment2;
     private List<Comment> testComments;
@@ -70,7 +75,8 @@ public class IntegrationTest {
 
         testUser1 = userRepo.findByUsername("TestUsername");
         testUser2 = userRepo.findByUsername("TestUsername2");
-        testPost = postRepo.findById(1);
+        testPost = postRepo.findByBody("TestPostBody1");
+        testPost2 = postRepo.findByBody("TestPostBody2");
         testUserFriend1 = userFriendRepo.findByUserAndFriend(testUser1, testUser2);
         testUserFriend2 = userFriendRepo.findByUserAndFriend(testUser2, testUser1);
         testUserFriends1 = userFriendRepo.findAllByUser(testUser1);
@@ -132,7 +138,7 @@ public class IntegrationTest {
 
         if (testPost == null) {
             Post newPost = new Post();
-            newPost.setId(1);
+//            newPost.setId(1);
             newPost.setBody("TestPostBody1");
             newPost.setUser(testUser1);
             newPost.setCreatedDate(new Date());
@@ -140,6 +146,18 @@ public class IntegrationTest {
             newPost.setPhoto_url("TestPhoto_Url");
             testPost = postRepo.save(newPost);
         }
+
+        if (testPost2 == null) {
+            Post newPost2 = new Post();
+//            newPost2.setId(2);
+            newPost2.setBody("TestPostBody2");
+            newPost2.setUser(testUser2);
+            newPost2.setCreatedDate(new Date());
+            newPost2.setEditDate(new Date());
+            newPost2.setPhoto_url("TestPhoto_Url2");
+            testPost2 = postRepo.save(newPost2);
+        }
+
         if (testComment1 == null) {
             Comment newComment = new Comment();
             newComment.setParentPost(testPost);
@@ -262,4 +280,35 @@ public class IntegrationTest {
                 .param("body", "testComment"))
                 .andExpect(status().is3xxRedirection());
     }
+
+    //read comments
+    @Test
+    public void testReadComment() throws Exception {
+        User existingUser = userRepo.findByUsername("TestUsername");
+
+        List<UserFriend> userFriends = userFriendRepo.findAllByUserAndStatus(existingUser, Status.ACCEPTED);// lists friends that you've accepted
+        ArrayList<User> displayUsers = new ArrayList<>();// lists User objects of all the users friends
+        for (UserFriend userFriend : userFriends) {
+            displayUsers.add(userFriend.getFriend());
+        }
+        displayUsers.add(existingUser);// includes your own posts in stories view
+
+
+        ArrayList<Post> displayPosts = new ArrayList<>();// lists all posts by all friends and the user
+        ArrayList<Comment> displayComments = new ArrayList<>();// lists all comments to all posts by all friends and user
+        for (User displayUser : displayUsers) {
+            for (Post post : postRepo.findAllByUser(displayUser)) {
+                displayPosts.add(post);
+                displayComments.addAll(commentRepo.findAllByParentPost(post));
+            }
+        }
+
+        System.out.println(displayComments);
+        System.out.println(displayPosts.get(0).getUser().getUsername());
+        this.mvc.perform(get("/" + existingUser.getUsername() + "/stories"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString(displayComments.get(0).getBody())));
+
+    }
 }
+

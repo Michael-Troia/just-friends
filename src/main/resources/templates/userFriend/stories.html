@@ -6,46 +6,36 @@
 </head>
 <body>
 <nav th:replace="partials/navbar :: navbar"></nav>
-<h1>Friends</h1>
-
+<h1>NewsFeed</h1>
+username:
+<h2 th:text="${username}">Username:</h2>
 <div th:each="item : ${posts}">
-    <div class="card" style="width: 18rem;">
+    <div class="card" style="width: 30rem;">
         <div class="card-body">
             <h5 class="card-title" th:text="${item.getUser().username}"></h5>
             <h6 class="card-subtitle mb-2 text-muted" th:text="${item.getCreatedDate()}"></h6>
             <p class="card-text" th:text="${item.getBody()}"></p>
-            <a th:href="@{/posts/create/{username}/{postId}/comment (username=${#authentication.principal.username}, postId = ${item.id})}" class="card-link">Comment</a>
+            <a th:href="@{/posts/create/{username}/{postId}/comment (username=${currentUser.username}, postId = ${item.getId()})}" class="card-link">Comment</a>
 <!--            todo: create a link to friends profiles-->
 <!--            <a th:href="@{/{username}/{friendName}/profile (username=${#authentication.principal.username}, friendName = ${item.getUser().username})}" class="card-link">View Profile</a>-->
         </div>
     </div>
-
-    <div th:each="item : ${item.getComments()}">
-        <div class="card" style="width: 10rem;">
-            <div class="card-body">
-                <h5 class="card-title" th:id="commentUser" th:text="${item.getUser().username}"></h5>
-                <p class="card-text" th:text="${item.body}"></p>
-
-<!--                displays edit comment button onl if current user is author of comment-->
-                <div th:id="currentUser" hidden th:text="${#authentication.principal.username}"></div>
-                <script>
-                    $(document).ready(function (){
-                        let editLink = document.getElementById("editComment");
-                        let commentAuthor = document.getElementById("commentUser");
-                        let currentUser = document.getElementById("currentUser");
-                        if (currentUser.innerText === commentAuthor.innerText){
-                            editLink.style.display = "block";
-                        } else {
-                            editLink.style.display = "none";
-                        }
-                    })
-                </script>
-                <a th:id="editComment" th:href="@{/comments/edit/{username}/{commentId} (username=${item.getUser().username}, commentId=${item.getId()})}">Edit Post</a>
+    <div th:each="comment : ${comments}">
+        <div th:if="${comment.getParentPost() == item}" >
+            <div class="card" style="width: 10rem;">
+                <div class="card-body">
+                    <h5 class="card-title" th:id="commentUser" th:text="${comment.getUser().username}"></h5>
+                    <p class="card-text" th:text="${comment.body}"></p>
+                    <div th:if="${comment.getUser() == currentUser}">
+                        <a th:id="editComment" th:href="@{/comments/edit/{username}/{commentId} (username=${currentUser.username}, commentId=${comment.getId()})}">Edit Post</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <br><br><br>
 </div>
+
 
 
 <footer th:replace="partials/footer :: footer"></footer>
