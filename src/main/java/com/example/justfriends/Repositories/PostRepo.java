@@ -12,4 +12,5 @@ public interface PostRepo extends JpaRepository <Post, Long> {
     List<Post> findAllByUserUsername(String username);
     List<Post> findAllByUser(User user);
     Post findByBody(String body);
+//    List<Post> findAllByUserUserFriends(List<UserFriend> userFriends);
 }
