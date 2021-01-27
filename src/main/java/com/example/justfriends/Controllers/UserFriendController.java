@@ -142,4 +142,34 @@ public class UserFriendController {
 
         return "userFriend/stories";
     }
+
+    @GetMapping("/{username}/friend/{friendName}")
+    public String showFriendProfile(@PathVariable String username,
+                                    @PathVariable String friendName,
+                                    Model model){
+        User currentUser = userRepo.findByUsername(username);
+        User friend = userRepo.findByUsername(friendName);
+
+        List<UserFriend> friendUserFriends = userFriendRepo.findAllByUserAndStatus(friend, Status.ACCEPTED);// friend's friend list
+        ArrayList<User> friendFriends = new ArrayList<>();// lists User objects of friend's userfriends
+        for (UserFriend friendUserFriend : friendUserFriends) {
+            friendFriends.add(friendUserFriend.getFriend());
+        }
+
+        List<UserFriend> userFriends = userFriendRepo.findAllByUserAndStatus(currentUser, Status.ACCEPTED);// user's friend list
+
+        List<UserFriend> mutualUserFriends = userFriendRepo.findAllByUserAndFriendAndStatus(currentUser, friend, Status.ACCEPTED);
+        ArrayList<User> mutualFriends = new ArrayList<>();// lists User objects of all the mutual friends
+        for (UserFriend mutualFriend : mutualUserFriends) {
+            mutualFriends.add(mutualFriend.getUser());
+        }
+
+
+        model.addAttribute("friendFriends" ,friendFriends);
+        model.addAttribute("friend", friend);
+//        model.addAttribute("userFriendList" , userFriends);
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("mutualFriends", mutualFriends);
+        return "userFriend/friend-profile";
+    }
 }

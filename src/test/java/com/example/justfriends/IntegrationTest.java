@@ -286,15 +286,12 @@ public class IntegrationTest {
     @Test
     public void testReadComment() throws Exception {
         User existingUser = userRepo.findByUsername("TestUsername");
-
         List<UserFriend> userFriends = userFriendRepo.findAllByUserAndStatus(existingUser, Status.ACCEPTED);// lists friends that you've accepted
         ArrayList<User> displayUsers = new ArrayList<>();// lists User objects of all the users friends
         for (UserFriend userFriend : userFriends) {
             displayUsers.add(userFriend.getFriend());
         }
         displayUsers.add(existingUser);// includes your own posts in stories view
-
-
         ArrayList<Post> displayPosts = new ArrayList<>();// lists all posts by all friends and the user
         ArrayList<Comment> displayComments = new ArrayList<>();// lists all comments to all posts by all friends and user
         for (User displayUser : displayUsers) {
@@ -351,5 +348,16 @@ public class IntegrationTest {
                         .param("id", String.valueOf(temporaryComment.getId())))
                 .andExpect(status().is3xxRedirection());
     }
+
+    //View Friend Profile
+    @Test
+    public void testViewFriendProfile() throws Exception {
+        UserFriend userFriend = userFriendRepo.findAll().get(0);
+        User user = userFriend.getUser();
+        User friend = userFriend.getFriend();
+
+
+    }
+
 }
 
