@@ -38,13 +38,13 @@ public class UserController {
         this.pictureRepo = pictureRepo;
     }
 
-    //create users
+    //Create User Account
     @GetMapping("/sign-up")
     public String showSignUp(Model model) {
         model.addAttribute("user", new User());
+
         return "user/register";
     }
-
     @PostMapping("/sign-up")
     public String registerUser(@ModelAttribute User user,
                                Model viewModel) {
@@ -55,20 +55,20 @@ public class UserController {
         User dbUser = userRepo.save(user);
         viewModel.addAttribute("user", dbUser);
         System.out.println(dbUser.getUsername());
+
         return "redirect:/" + dbUser.getUsername();
     }
 
-    //edit users
+    //Update User information
     @GetMapping("/edit/{username}")
     public String showEditProfile(Model viewModel, @PathVariable String username) {
         viewModel.addAttribute("user", userRepo.findByUsername(username));
+
         return "user/edit";
     }
-
     @PostMapping("/edit/{username}")
     public String editProfile(@PathVariable String username, @ModelAttribute User userToBeUpdated) {
         User user = userRepo.findByUsername(username);
-        Date date = user.getCreatedDate();
         userToBeUpdated.setId(user.getId());
         userToBeUpdated.setUsername(user.getUsername());
         userToBeUpdated.setEmail(user.getEmail());
@@ -78,31 +78,23 @@ public class UserController {
         System.out.println(user.getUsername());
         System.out.println(userToBeUpdated.getJob());
         userRepo.save(userToBeUpdated);
+
         return "redirect:/" + userToBeUpdated.getUsername();
     }
 
-
+    //Show User Profile page
     @GetMapping("/{username}")
     public String showUser(Model model,
                            @PathVariable String username) {
         User user = userRepo.findByUsername(username);
-        List<UserFriend> friendList = userFriendRepo.findAllByUserUsername(username);
-        if (friendList != null) {
-            ArrayList<String> displayFriends = new ArrayList<>();
-            int i = 1;
-            for (UserFriend friend : friendList) {
-                String name = "Friend " + (i++) + ": " + friend.getFriend().getUsername();
-                displayFriends.add(name);
-                String status = " , Status of that friendship: " + friend.getStatus() + " . ";
-                displayFriends.add(status);
-            }
-            model.addAttribute("friendsList", displayFriends);
-        }
-
+        List<UserFriend> userFriends = userFriendRepo.findAllByUserAndStatus(user, Status.ACCEPTED);// lists friends that you've accepted
+        model.addAttribute("friendsList", userFriends);
         model.addAttribute("user", user);
+
         return "user/profile-page";
     }
 
+    //Delete User account
     @PostMapping("/{username}/delete")
     public String deleteAccount(@PathVariable String username){
         User user = userRepo.findByUsername(username);
@@ -115,14 +107,13 @@ public class UserController {
             userFriendRepo.delete(userFriend);
         }
         userRepo.delete(user);
+
         return "redirect:/login?logout";
     }
 
-
+    //Show Home page
     @GetMapping("/")
     public String showTest(Model model, @ModelAttribute User user) {
-
-
         model.addAttribute("currentUser", user);
 
         return "user/home";

@@ -15,9 +15,15 @@ username:
             <h5 class="card-title" th:text="${item.getUser().username}"></h5>
             <h6 class="card-subtitle mb-2 text-muted" th:text="${item.getCreatedDate()}"></h6>
             <p class="card-text" th:text="${item.getBody()}"></p>
+            <div th:if="${item.getUser() == currentUser}">
+                <a th:href="@{/posts/edit/{username}/{id} (username=${currentUser.getUsername()}, id=${item.getId()})}">Edit post</a>
+                <form th:action="@{/posts/delete/{username}/{id} (username=${currentUser.getUsername()}, id = ${item.getId()})}" th:method="post">
+                    <input type="submit" name="delete" VALUE="Remove post"/>
+                </form>
+            </div>
             <a th:href="@{/posts/create/{username}/{postId}/comment (username=${currentUser.username}, postId = ${item.getId()})}" class="card-link">Comment</a>
 <!--            todo: create a link to friends profiles-->
-<!--            <a th:href="@{/{username}/{friendName}/profile (username=${#authentication.principal.username}, friendName = ${item.getUser().username})}" class="card-link">View Profile</a>-->
+            <!--            <a th:href="@{/{username}/{friendName}/profile (username=${#authentication.principal.username}, friendName = ${item.getUser().username})}" class="card-link">View Profile</a>-->
         </div>
     </div>
     <div th:each="comment : ${comments}">
@@ -26,9 +32,11 @@ username:
                 <div class="card-body">
                     <h5 class="card-title" th:id="commentUser" th:text="${comment.getUser().username}"></h5>
                     <p class="card-text" th:text="${comment.body}"></p>
+                    <p class="card-text" th:text="${comment.getEditDate()}"></p>
                     <div th:if="${comment.getUser() == currentUser}">
-                        <a th:id="editComment" th:href="@{/comments/edit/{username}/{commentId} (username=${currentUser.username}, commentId=${comment.getId()})}">Edit Post</a>
+                        <a th:id="editComment" th:href="@{/comments/edit/{username}/{commentId} (username=${currentUser.username}, commentId=${comment.getId()})}">Edit Comment</a>
                     </div>
+<!--                    todo delete comment-->
                 </div>
             </div>
         </div>

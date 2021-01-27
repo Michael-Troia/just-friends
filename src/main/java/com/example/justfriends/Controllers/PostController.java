@@ -41,14 +41,14 @@ public class PostController {
         this.pictureRepo = pictureRepo;
     }
 
-//create posts
+//Create Post
     @GetMapping("/posts/create/{username}")
     public String showCreatePostForm(Model model, @PathVariable String username) {
         model.addAttribute("user", userRepo.findByUsername(username));
         model.addAttribute("post", new Post());
+
         return "post/create";
     }
-
     @PostMapping("/posts/create/{username}")
     public String submitPostForm(@ModelAttribute Post post,
                                  @ModelAttribute User currentUser,
@@ -63,10 +63,11 @@ public class PostController {
         model.addAttribute("user", newUser);
         model.addAttribute("post", dbPost);
         System.out.println(newUser.getUsername());
+
         return "redirect:/posts/view/" + newUser.getUsername();
     }
 
-    //view posts
+    //Read User posts
     @GetMapping("/posts/view/{username}")
     public String showAllUserPosts(Model model,
                                    @PathVariable String username) {
@@ -86,7 +87,7 @@ public class PostController {
         return "post/view";
     }
 
-    //Edit Post
+    //Update Post
     @GetMapping("/posts/edit/{username}/{id}")
     public String viewEditPostForm(Model viewModel,
                                    @PathVariable long id,
@@ -98,10 +99,8 @@ public class PostController {
 
         return "post/edit";
     }
-
     @PostMapping("/posts/edit/{username}/{id}")
-    public String editPost(
-            @ModelAttribute Post postToBeUpdated,
+    public String editPost(@ModelAttribute Post postToBeUpdated,
             @PathVariable String username,
             @PathVariable long id,
             @ModelAttribute User currentUser) {
@@ -116,19 +115,21 @@ public class PostController {
         postToBeUpdated.setPhoto_url(post.getPhoto_url());
         System.out.println(postToBeUpdated.getId());
         Post dbPost = postRepo.save(postToBeUpdated);
-        return "redirect:/posts/view/" + dbPost.getUser().getUsername();
+
+        return "redirect:/" + dbPost.getUser().getUsername() + "/stories";
     }
 
-    //delete posts
+    //Delete Post
     @PostMapping("/posts/delete/{username}/{id}")
     public String deletePost(@PathVariable String username,
                              @PathVariable long id){
         Post post = postRepo.getOne(id);
         postRepo.delete(post);
-        return "redirect:/posts/view/"+ username;
+
+        return "redirect:/" + username + "/stories";
     }
 
-    //create comment
+    //Create Comment
     @GetMapping("/posts/create/{username}/{postId}/comment")
     public String showCommentForm(@PathVariable String username,
                                   @PathVariable long postId,
@@ -136,9 +137,9 @@ public class PostController {
         model.addAttribute("user" , userRepo.findByUsername(username));
         model.addAttribute("comment", new Comment());
         model.addAttribute("post" , postRepo.findById(postId));
+
         return "post/comment";
     }
-
     @PostMapping("/posts/create/{username}/{postId}/comment")
     public String submitCommentForm(@ModelAttribute Comment comment,
                                  @PathVariable long postId,
@@ -155,10 +156,11 @@ public class PostController {
         model.addAttribute("user", newUser);
         model.addAttribute("comment", dbComment);
         System.out.println(newUser.getUsername());
+
         return "redirect:/" + newUser.getUsername() + "/stories";
     }
 
-    //edit comment
+    //Update Comment
     @GetMapping("/comments/edit/{username}/{commentId}")
     public String viewEditCommentForm(@PathVariable String username,
                                       @PathVariable long commentId,
@@ -167,12 +169,11 @@ public class PostController {
         User user = userRepo.findByUsername(username);
         model.addAttribute("comment", comment);
         model.addAttribute("user", user);
+
         return "post/comment-edit";
     }
-
     @PostMapping("/comments/edit/{username}/{commentId}")
-    public String editComment(
-            @ModelAttribute Comment commentToBeUpdated,
+    public String editComment(@ModelAttribute Comment commentToBeUpdated,
             @PathVariable String username,
             @PathVariable long commentId,
             @ModelAttribute User currentUser) {
@@ -188,5 +189,15 @@ public class PostController {
         Comment dbComment = commentRepo.save(commentToBeUpdated);
 
         return "redirect:/" + dbComment.getUser().getUsername() + "/stories";
+    }
+
+    //Delete Comment
+    @PostMapping("/comments/delete/{username}/{commentId}")
+    public String deleteComment(@PathVariable String username,
+                                @PathVariable long commentId) {
+        Comment comment = commentRepo.findById(commentId);
+        commentRepo.delete(comment);
+
+        return "redirect:/" + username + "/stories";
     }
 }

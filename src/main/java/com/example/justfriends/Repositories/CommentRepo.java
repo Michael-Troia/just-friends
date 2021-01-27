@@ -2,6 +2,7 @@ package com.example.justfriends.Repositories;
 
 import com.example.justfriends.Models.Comment;
 import com.example.justfriends.Models.Post;
+import com.example.justfriends.Models.User;
 import com.example.justfriends.Models.UserFriend;
 import javassist.util.proxy.ProxyObjectOutputStream;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +15,5 @@ public interface CommentRepo extends JpaRepository <Comment, Long> {
     List<Comment> findAllByUserId(long id);
     Comment findById(long id);
     List<Comment> findAllByParentPost(Post parentPost);
+    List<Comment> findAllByUser(User user);
 }
