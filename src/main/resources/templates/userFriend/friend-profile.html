@@ -34,7 +34,7 @@
             <h5 class="card-title">Friends</h5>
             <div class="row" th:each="item : ${friendFriends}">
                 <div class="col">
-                    <div style="height: 100px; width: 100px; border: black solid 1px;">Profile pic</div>
+                    <div style="height: 100px; width: 100px; border: black solid 1px; background-color: blueviolet;">Profile pic</div>
                     <div th:if="${userFriendList.contains(item) == true}">
                         <a th:href="@{/{username}/friend/{friendName} (username=${currentUser.getUsername()}, friendName=${item.getUsername()})}" th:text="${item.getUsername()}"></a>
                     </div>
