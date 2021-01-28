@@ -118,6 +118,7 @@ public class UserFriendController {
         return "redirect:/"+username+"/friends/view";
     }
 
+    //Show NewsFeed
     @GetMapping("/{username}/stories")
     public String showNewsFeed(@PathVariable String username,
                                      Model model){
@@ -143,6 +144,7 @@ public class UserFriendController {
         return "userFriend/stories";
     }
 
+    //View Friend profile
     @GetMapping("/{username}/friend/{friendName}")
     public String showFriendProfile(@PathVariable String username,
                                     @PathVariable String friendName,
@@ -156,20 +158,17 @@ public class UserFriendController {
             friendFriends.add(friendUserFriend.getFriend());
         }
 
-        List<UserFriend> userFriends = userFriendRepo.findAllByUserAndStatus(currentUser, Status.ACCEPTED);// user's friend list
-
-        List<UserFriend> mutualUserFriends = userFriendRepo.findAllByUserAndFriendAndStatus(currentUser, friend, Status.ACCEPTED);
-        ArrayList<User> mutualFriends = new ArrayList<>();// lists User objects of all the mutual friends
-        for (UserFriend mutualFriend : mutualUserFriends) {
-            mutualFriends.add(mutualFriend.getUser());
+        List<UserFriend> userUserFriends = userFriendRepo.findAllByUserAndStatus(currentUser, Status.ACCEPTED);// user's friend list
+        ArrayList<User> userFriends = new ArrayList<>();
+        for (UserFriend userUserFriend : userUserFriends) {
+            userFriends.add(userUserFriend.getFriend());
         }
-
 
         model.addAttribute("friendFriends" ,friendFriends);
         model.addAttribute("friend", friend);
-//        model.addAttribute("userFriendList" , userFriends);
+        model.addAttribute("userFriendList" , userFriends);
         model.addAttribute("currentUser", currentUser);
-        model.addAttribute("mutualFriends", mutualFriends);
+
         return "userFriend/friend-profile";
     }
 }

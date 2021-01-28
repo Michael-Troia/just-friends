@@ -35,16 +35,16 @@
             <div class="row" th:each="item : ${friendFriends}">
                 <div class="col">
                     <div style="height: 100px; width: 100px; border: black solid 1px;">Profile pic</div>
-                    <div th:if="${mutualFriends.contains(item) == true}">
-                        <a th:href="@{/{username}/friend/{friendName} (friendName=${item.getUsername()}, username=${currentUser.getUsername()})}" th:text="${item.getUsername()}"></a>
+                    <div th:if="${userFriendList.contains(item) == true}">
+                        <a th:href="@{/{username}/friend/{friendName} (username=${currentUser.getUsername()}, friendName=${item.getUsername()})}" th:text="${item.getUsername()}"></a>
                     </div>
-                    <div th:if="${mutualFriends.contains(item) == false}">
+                    <div th:if="${userFriendList.contains(item) == false}">
                         <p th:text="${item.getUsername()}"></p>
                     </div>
                     <p th:text="${item.getFirstName()}"></p>
                     <p th:text="${item.getLastName()}"></p>
-                    <div th:if="${mutualFriends.contains(item) == false}">
-                        <form th:action="@{/{username}/{friendName} (username=${currentUser.getUsername()}, friendName = ${item.username})}" th:method="POST">
+                    <div th:if="${userFriendList.contains(item) == false}">
+                        <form th:action="@{/{username}/{friendName} (username=${currentUser.getUsername()}, friendName = ${item.getUsername()})}" th:method="POST">
                             <input type="submit" name="befriend" value="Befriend"/>
                         </form>
                     </div>

@@ -80,11 +80,8 @@ public class IntegrationTest {
         testPost2 = postRepo.findByBody("TestPostBody2");
         testUserFriend1 = userFriendRepo.findByUserAndFriend(testUser1, testUser2);
         testUserFriend2 = userFriendRepo.findByUserAndFriend(testUser2, testUser1);
-        testUserFriends1 = userFriendRepo.findAllByUser(testUser1);
-        testUserFriends2 = userFriendRepo.findAllByUser(testUser2);
         testComment1 = commentRepo.findByBody("TestCommentBody1");
         testComment2 = commentRepo.findByBody("TestCommentBody2");
-        testComments = commentRepo.findAllByParentPost(testPost);
         testPicture1 = pictureRepo.findById(1);
         testPicture2 = pictureRepo.findById(2);
         testPictures = pictureRepo.findAllByUser(testUser1);
@@ -348,16 +345,5 @@ public class IntegrationTest {
                         .param("id", String.valueOf(temporaryComment.getId())))
                 .andExpect(status().is3xxRedirection());
     }
-
-    //View Friend Profile
-    @Test
-    public void testViewFriendProfile() throws Exception {
-        UserFriend userFriend = userFriendRepo.findAll().get(0);
-        User user = userFriend.getUser();
-        User friend = userFriend.getFriend();
-
-
-    }
-
 }
 
