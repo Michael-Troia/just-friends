@@ -34,6 +34,7 @@ public class UserFriendController {
         this.galleryRepo = galleryRepo;
         this.pictureRepo = pictureRepo;
     }
+
     //List all users
     @GetMapping("/{username}/friends")
     public String showUsers(Model model,
@@ -43,7 +44,8 @@ public class UserFriendController {
 
         return "userFriend/create";
     }
-    //start a new friend request
+
+    //Create UserFriend (Friend request)
     @PostMapping("/{username}/{friendName}")
     public String addFriend(@PathVariable String username,
                             @PathVariable String friendName){
@@ -51,23 +53,23 @@ public class UserFriendController {
         userFriend.setFriend(userRepo.findByUsername(friendName));
         userFriend.setStatus(Status.PENDING);
         userFriend.setUser(userRepo.findByUsername(username));
-        UserFriend db_userFriend = userFriendRepo.save(userFriend);
+        userFriendRepo.save(userFriend);
 
         return "redirect:/";
     }
 
-    //view friends
+    //View Friendslist
     @GetMapping("/{username}/friends/view")
     public String showFriendList(@PathVariable String username,
                                  Model model){
         User user = userRepo.findByUsername(username);
-        List<UserFriend> userFriends = userFriendRepo.findAllByUser(user);//might need to include other people's requests
+        List<UserFriend> userFriends = userFriendRepo.findAllByUser(user);
         model.addAttribute("friends" , userFriends);
 
         return "userFriend/view";
     }
 
-    //delete friendship
+    //Delete UserFriend (Unfriend)
     @PostMapping("/{username}/{friendId}/delete")
     public String deleteFriend(@PathVariable String username,
                                @PathVariable long friendId){
@@ -77,19 +79,18 @@ public class UserFriendController {
         return "redirect:/"+username+"/friends/view";
     }
 
-    //view friend requests
+    //Read Friend requests
     @PostMapping("/{username}/friends/requests")
     public String showFriendRequests(@PathVariable String username,
                                      Model model){
         User user = userRepo.findByUsername(username);
-        //returns a list of userFriends with the current user as the friend
         List<UserFriend> userFriendRequests = userFriendRepo.findAllByFriendAndStatus(user, Status.PENDING);
         model.addAttribute("friendRequests", userFriendRequests);
 
         return "userFriend/friend-requests";
     }
 
-    //reject friendship
+    //Reject Friend request
     @PostMapping("/{username}/{friendId}/reject")
     public String rejectFriend(@PathVariable String username,
                                @PathVariable long friendId){
@@ -99,7 +100,8 @@ public class UserFriendController {
 
         return "redirect:/"+username+"/friends/view";
     }
-    //accept friendship
+
+    //Accept Friend request
     @PostMapping("/{username}/{friendId}/accept")
     public String acceptFriend(@PathVariable String username,
                                @PathVariable long friendId){
@@ -111,23 +113,22 @@ public class UserFriendController {
         newUserFriend.setFriend(userFriendRequester.getUser());
         newUserFriend.setStatus(Status.ACCEPTED);
         newUserFriend.setUser(userRepo.findByUsername(username));
-        UserFriend db_NewUserFriend = userFriendRepo.save(newUserFriend);
+        userFriendRepo.save(newUserFriend);
+
         return "redirect:/"+username+"/friends/view";
     }
 
+    //Show NewsFeed
     @GetMapping("/{username}/stories")
     public String showNewsFeed(@PathVariable String username,
                                      Model model){
         User currentUser = userRepo.findByUsername(username);
-
         List<UserFriend> userFriends = userFriendRepo.findAllByUserAndStatus(currentUser, Status.ACCEPTED);// lists friends that you've accepted
-        ArrayList<User> displayUsers = new ArrayList<>();// lists User objects of all the users friends
+        ArrayList<User> displayUsers = new ArrayList<>();// lists User objects of all the user's friends
         for (UserFriend userFriend : userFriends) {
             displayUsers.add(userFriend.getFriend());
         }
         displayUsers.add(currentUser);// includes your own posts in stories view
-
-
         ArrayList<Post> displayPosts = new ArrayList<>();// lists all posts by all friends and the user
         ArrayList<Comment> displayComments = new ArrayList<>();// lists all comments to all posts by all friends and user
         for (User displayUser : displayUsers) {
@@ -136,12 +137,38 @@ public class UserFriendController {
                 displayComments.addAll(commentRepo.findAllByParentPost(post));
             }
         }
-
-
         model.addAttribute("comments", displayComments);
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("posts", displayPosts);
 
         return "userFriend/stories";
+    }
+
+    //View Friend profile
+    @GetMapping("/{username}/friend/{friendName}")
+    public String showFriendProfile(@PathVariable String username,
+                                    @PathVariable String friendName,
+                                    Model model){
+        User currentUser = userRepo.findByUsername(username);
+        User friend = userRepo.findByUsername(friendName);
+
+        List<UserFriend> friendUserFriends = userFriendRepo.findAllByUserAndStatus(friend, Status.ACCEPTED);// friend's friend list
+        ArrayList<User> friendFriends = new ArrayList<>();// lists User objects of friend's userfriends
+        for (UserFriend friendUserFriend : friendUserFriends) {
+            friendFriends.add(friendUserFriend.getFriend());
+        }
+
+        List<UserFriend> userUserFriends = userFriendRepo.findAllByUserAndStatus(currentUser, Status.ACCEPTED);// user's friend list
+        ArrayList<User> userFriends = new ArrayList<>();
+        for (UserFriend userUserFriend : userUserFriends) {
+            userFriends.add(userUserFriend.getFriend());
+        }
+
+        model.addAttribute("friendFriends" ,friendFriends);
+        model.addAttribute("friend", friend);
+        model.addAttribute("userFriendList" , userFriends);
+        model.addAttribute("currentUser", currentUser);
+
+        return "userFriend/friend-profile";
     }
 }

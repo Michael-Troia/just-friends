@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="partials/head :: head('Profile')">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<nav th:replace="partials/navbar :: navbar"></nav>
+
+<div style="height: 300px; width: 300px; border: black solid 1px;">image here</div>
+
+<h1 th:text="${friend.getUsername()}"></h1>
+
+<div class="row">
+
+    <div class="card col-6" style="width: 40rem;">
+        <div class="card-body">
+            <h4 class="card-title">About</h4>
+            <div class="card-text">
+                <p th:text="${friend.getFirstName()}"></p>
+                <p th:text="${friend.getLastName()}"></p>
+                <p th:text="${friend.getAboutMe()}"></p>
+                <p th:text="${friend.getEmail()}"></p>
+                <p th:text="${friend.getBirthday()}"></p>
+                <p th:text="${friend.getJob()}"></p>
+                <p th:text="${friend.getCreatedDate()}"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card col-6" style="width: 40rem;">
+        <div class="card-body">
+            <h5 class="card-title">Friends</h5>
+            <div class="row" th:each="item : ${friendFriends}">
+                <div class="col">
+                    <div style="height: 100px; width: 100px; border: black solid 1px;">Profile pic</div>
+                    <div th:if="${userFriendList.contains(item) == true}">
+                        <a th:href="@{/{username}/friend/{friendName} (username=${currentUser.getUsername()}, friendName=${item.getUsername()})}" th:text="${item.getUsername()}"></a>
+                    </div>
+                    <div th:if="${userFriendList.contains(item) == false}">
+                        <p th:text="${item.getUsername()}"></p>
+                    </div>
+                    <p th:text="${item.getFirstName()}"></p>
+                    <p th:text="${item.getLastName()}"></p>
+                    <div th:if="${userFriendList.contains(item) == false}">
+                        <form th:action="@{/{username}/{friendName} (username=${currentUser.getUsername()}, friendName = ${item.getUsername()})}" th:method="POST">
+                            <input type="submit" name="befriend" value="Befriend"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card col-6" style="width: 40rem;">
+        <div class="card-body">
+            <h5 class="card-title">Posts</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+    </div>
+
+    <div class="card col-6" style="width: 40rem;">
+        <div class="card-body">
+            <h5 class="card-title">Photos</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+    </div>
+</div>
+
+<!--<form th:action="@{/edit/{username}(username=${#authentication.principal.username})}" method="GET" class="p-3">-->
+<!--<div sec:authorize="isAuthenticated()">-->
+
+
+<footer th:replace="partials/footer :: footer"></footer>
+</body>
+</html>

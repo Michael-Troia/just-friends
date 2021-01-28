@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -79,11 +80,8 @@ public class IntegrationTest {
         testPost2 = postRepo.findByBody("TestPostBody2");
         testUserFriend1 = userFriendRepo.findByUserAndFriend(testUser1, testUser2);
         testUserFriend2 = userFriendRepo.findByUserAndFriend(testUser2, testUser1);
-        testUserFriends1 = userFriendRepo.findAllByUser(testUser1);
-        testUserFriends2 = userFriendRepo.findAllByUser(testUser2);
         testComment1 = commentRepo.findByBody("TestCommentBody1");
         testComment2 = commentRepo.findByBody("TestCommentBody2");
-        testComments = commentRepo.findAllByParentPost(testPost);
         testPicture1 = pictureRepo.findById(1);
         testPicture2 = pictureRepo.findById(2);
         testPictures = pictureRepo.findAllByUser(testUser1);
@@ -209,7 +207,7 @@ public class IntegrationTest {
                 .andExpect(status().isOk());
     }
 
-    //create post
+    //Create Post
     @Test
     public void testCreatePost() throws Exception {
         User existingUser = userRepo.findAll().get(0);
@@ -221,7 +219,7 @@ public class IntegrationTest {
                 .andExpect(status().is3xxRedirection());
     }
 
-    //read posts
+    //Read posts
     @Test
     public void showAllPosts() throws Exception {
         User existingUser = userRepo.findAll().get(0);
@@ -231,7 +229,7 @@ public class IntegrationTest {
                 .andExpect(content().string(containsString(existingPost.getBody())));
     }
 
-    //update post
+    //Update Post
     @Test
     public void testEditPost() throws Exception {
         User existingUser = userRepo.findAll().get(0);
@@ -250,7 +248,7 @@ public class IntegrationTest {
                 .andExpect(content().string(containsString("New body")));
     }
 
-    //delete post
+    //Delete Post
     @Test
     public void testDeletePost() throws Exception {
         User existingUser = userRepo.findAll().get(0);
@@ -269,7 +267,7 @@ public class IntegrationTest {
                 .andExpect(status().is3xxRedirection());
     }
 
-    //create comment
+    //Create Comment
     @Test
     public void testCreateComment() throws Exception {
         User existingUserParent = userRepo.findAll().get(0);
@@ -281,19 +279,16 @@ public class IntegrationTest {
                 .andExpect(status().is3xxRedirection());
     }
 
-    //read comments
+    //Read NewsFeed comments/posts
     @Test
     public void testReadComment() throws Exception {
         User existingUser = userRepo.findByUsername("TestUsername");
-
         List<UserFriend> userFriends = userFriendRepo.findAllByUserAndStatus(existingUser, Status.ACCEPTED);// lists friends that you've accepted
         ArrayList<User> displayUsers = new ArrayList<>();// lists User objects of all the users friends
         for (UserFriend userFriend : userFriends) {
             displayUsers.add(userFriend.getFriend());
         }
         displayUsers.add(existingUser);// includes your own posts in stories view
-
-
         ArrayList<Post> displayPosts = new ArrayList<>();// lists all posts by all friends and the user
         ArrayList<Comment> displayComments = new ArrayList<>();// lists all comments to all posts by all friends and user
         for (User displayUser : displayUsers) {
@@ -307,8 +302,48 @@ public class IntegrationTest {
         System.out.println(displayPosts.get(0).getUser().getUsername());
         this.mvc.perform(get("/" + existingUser.getUsername() + "/stories"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString(displayComments.get(0).getBody())));
+                .andExpect(content().string(containsString(displayComments.get(0).getBody())))
+                .andExpect(content().string(containsString(displayPosts.get(0).getBody())))
+                .andExpect(content().string(containsString(displayUsers.get(0).getUsername())));
 
+    }
+
+    //Update Comment
+    @Test
+    public void testEditComment() throws Exception {
+        User existingUser = userRepo.findAll().get(0);
+        Comment existingComment = commentRepo.findAllByUser(existingUser).get(0);
+        String username = existingUser.getUsername();
+        long id = existingComment.getId();
+        this.mvc.perform(
+                post("/comments/edit/" + username + "/" + id).with(csrf())
+                        .session((MockHttpSession) httpSession)
+                        .param("editDate", new Date().toString())
+                        .param("body", "New Comment body"))
+                .andExpect(status().is3xxRedirection());
+        //checks that updated comment information displays when queried
+        this.mvc.perform(get("/comments/edit/" + username + "/" + id))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("New Comment body")));
+    }
+
+    //Delete Comment
+    @Test
+    public void testDeleteComment() throws Exception {
+        User existingUserParent = userRepo.findAll().get(0);
+        User existingUserChild = userRepo.findAll().get(1);
+        Post existingParentPost = postRepo.findAllByUser(existingUserParent).get(0);
+        this.mvc.perform(
+                post("/posts/create/" + existingUserChild.getUsername() + "/" + existingParentPost.getId() + "/comment").with(csrf())
+                        .param("body", "test Temporary Comment"))
+                .andExpect(status().is3xxRedirection());
+        Comment temporaryComment = commentRepo.findByBody("test Temporary Comment");
+        long id = temporaryComment.getId();
+        this.mvc.perform(
+                post("/comments/delete/" + existingUserChild.getUsername() + "/" + id).with(csrf())
+                        .session((MockHttpSession) httpSession)
+                        .param("id", String.valueOf(temporaryComment.getId())))
+                .andExpect(status().is3xxRedirection());
     }
 }
 
