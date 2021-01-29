@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="partials/head :: head('MyPhotos')">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<nav th:replace="partials/navbar :: navbar"></nav>
+<h1>Gallery</h1>
+<h3 th:text="${gallery.getName()}"></h3>
+
+<div th:each="item : ${photos}">
+    <div style="height: 200px; width: 200px; border: black solid 1px; background-color: coral;" th:text="${item.getPictureUrl()}"></div>
+    <h4 th:text="${item.getComment()}"></h4>
+<!--    todo create view/controller to edit/delete photos-->
+<!--    <div th:if="${gallery.getUser() == ${user}}" style="border: rebeccapurple solid 1px;">-->
+<!--        <a th:href="@{/{username}/photo/{id}/edit (username=${user.getUsername()}, id=${item.getId()})}">Edit</a>-->
+<!--        <form th:action="@{/{username}/photo/{id}/delete (username=${user.getUsername()}, id=${item.getId()})}">-->
+<!--            <input type="submit" name="delete" VALUE="DELETE"/>-->
+<!--        </form>-->
+<!--    </div>-->
+</div>
+
+<!--todo create view/controller to edit/delete galleries-->
+<!--<div th:if="${gallery.getUser() == ${user}}" style="border: coral solid 1px;">-->
+<!--    <a th:href="@{/{username}/gallery/{id}/edit (username=${user.getUsername()}, id=${gallery.getId()})}">Edit</a>-->
+<!--    <form th:action="@{/{username}/gallery/{id}/delete (username=${user.getUsername()}, id=${gallery.getId()})}">-->
+<!--        <input type="submit" name="delete" VALUE="DELETE"/>-->
+<!--    </form>-->
+<!--</div>-->
+
+<footer th:replace="partials/footer :: footer"></footer>
+</body>
+</html>

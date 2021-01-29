@@ -20,6 +20,8 @@
         <br><br><br>
         Friends
         <p th:text="${friendsList}"></p>
+        <br><br><br>
+        <a th:href="@{/{username}/my-photos (username=${#authentication.principal.username})}" class="btn btn-primary p-3">View Photos</a>
     </div>
 
 
