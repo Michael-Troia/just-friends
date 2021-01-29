@@ -25,26 +25,30 @@ public class Picture {
 
     public Picture(){}
 
-    public Picture(String pictureUrl, String comment, User user){
+    public Picture(String pictureUrl, String comment, User user, Gallery gallery){
         this.pictureUrl = pictureUrl;
         this.comment = comment;
         this.user = user;
+        this.gallery = gallery;
     }
 
-    public Picture(long id, String pictureUrl, String comment, User user){
+    public Picture(long id, String pictureUrl, String comment, User user, Gallery gallery){
         this. id = id;
         this.pictureUrl = pictureUrl;
         this.comment = comment;
         this.user = user;
+        this.gallery = gallery;
     }
 
     public long getId(){return id;}
     public String getPictureUrl(){return pictureUrl;}
     public String getComment(){return comment;}
     public User getUser(){return user;}
+    public Gallery getGallery(){return gallery;}
 
     public void setId(long id){this.id = id;}
     public void setPictureUrl(String pictureUrl){this.pictureUrl = pictureUrl;}
     public void setComment(String comment){this.comment = comment;}
     public void setUser(User user){this.user = user;}
+    public void setGallery(Gallery gallery){this.gallery = gallery;}
 }

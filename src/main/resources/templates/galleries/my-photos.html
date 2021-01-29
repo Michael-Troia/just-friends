@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="partials/head :: head('MyPhotos')">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<nav th:replace="partials/navbar :: navbar"></nav>
+
+<h1>Galleries</h1>
+<div th:each="item: ${galleries}">
+    <a th:href="@{/{username}/gallery/{id} (username=${user.getUsername()}, id=${item.getId()})}" th:text="${item.getName()}"></a>
+    <br>
+</div>
+
+<br><br><br>
+
+
+<footer th:replace="partials/footer :: footer"></footer>
+</body>
+</html>
