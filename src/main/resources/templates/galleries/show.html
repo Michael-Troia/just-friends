@@ -34,7 +34,7 @@
             <textarea id="galleryName" class="form-control" rows="1" cols="5" th:field="*{name}"></textarea>
             <button type="submit" class="btn btn-primary">Change Gallery Name</button>
         </form>
-        <form th:action="@{/{username}/gallery/{id}/delete (username=${sessionUser.getUsername()}, id=${gallery.getId()})}">
+        <form th:action="@{/{username}/gallery/{id}/delete (username=${sessionUser.getUsername()}, id=${gallery.getId()})}" th:object="${gallery}" method="post" class="p-3">
             <input type="submit" name="delete" VALUE="DELETE"/>
         </form>
     </div>

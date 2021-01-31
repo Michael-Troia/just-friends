@@ -1,8 +1,6 @@
 package com.example.justfriends.Controllers;
 
-import com.example.justfriends.Models.Gallery;
-import com.example.justfriends.Models.Picture;
-import com.example.justfriends.Models.User;
+import com.example.justfriends.Models.*;
 import com.example.justfriends.Repositories.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -80,5 +78,19 @@ public class PhotoController {
         galleryRepo.save(galleryToBeUpdated);
 
         return "redirect:/" + username + "/gallery/{id}";
+    }
+
+    //Delete Gallery
+    @PostMapping("/{username}/gallery/{id}/delete")
+    public String deleteAccount(@PathVariable String username,
+                                @PathVariable long id){
+        User user = userRepo.findByUsername(username);
+        List<Picture> pictures = galleryRepo.findById(id).getPictures();
+        for (Picture picture : pictures){
+            pictureRepo.delete(picture);
+        }
+        galleryRepo.delete(galleryRepo.findById(id));
+
+        return "redirect:/" + username + "/my-photos";
     }
 }
