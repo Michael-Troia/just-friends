@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="partials/head :: head('MyPhotos')">
+<head th:replace="partials/head :: head('Photos')">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
@@ -15,15 +15,7 @@
 </div>
 
 <br><br>
-
-<div sec:authorize="isAuthenticated()">
-    <h3>Create Gallery</h3>
-    <form th:action="@{/{username}/gallery/create (username=${#authentication.principal.username})}" th:object="${gallery}" method="POST" class="p-3">
-        <label for="galleryName">Gallery Name</label>
-        <textarea id="galleryName" class="form-control" rows="1" cols="5" th:field="*{name}"></textarea>
-        <button type="submit" class="btn btn-primary">Create Gallery</button>
-    </form>
-</div>
+<a th:href="@{/{username}/friend/{friendName}(username=${#authentication.getPrincipal().username}, friendName=${user.getUsername()})}">Return to Profile</a>
 
 
 

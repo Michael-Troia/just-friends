@@ -171,4 +171,19 @@ public class UserFriendController {
 
         return "userFriend/friend-profile";
     }
+
+    //View friend photos
+    @GetMapping("{username}/photos")
+    public String showPhotosHome(@PathVariable String username,
+                                 Model model){
+        User currentUser = userRepo.findByUsername(username);
+        List<Picture> userPhotos = pictureRepo.findAllByUser(currentUser);
+        List<Gallery> userGalleries = galleryRepo.findAllByUser(currentUser);
+
+        model.addAttribute("user", currentUser);
+        model.addAttribute("photos", userPhotos);
+        model.addAttribute("galleries", userGalleries);
+
+        return "userFriend/friend-photos";
+    }
 }

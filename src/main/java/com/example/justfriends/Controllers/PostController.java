@@ -51,7 +51,6 @@ public class PostController {
     }
     @PostMapping("/posts/create/{username}")
     public String submitPostForm(@ModelAttribute Post post,
-                                 @ModelAttribute User currentUser,
                                  @PathVariable String username,
                                  Model model) {
         Post newPost = new Post();
