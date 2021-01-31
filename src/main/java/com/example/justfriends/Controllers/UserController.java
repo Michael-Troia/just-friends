@@ -119,4 +119,20 @@ public class UserController {
         return "user/home";
     }
 
+    //Show my-photos
+    @GetMapping("{username}/my-photos")
+    public String showPhotosHome(@PathVariable String username,
+                                 Model model){
+        User currentUser = userRepo.findByUsername(username);
+        List<Picture> userPhotos = pictureRepo.findAllByUser(currentUser);
+        List<Gallery> userGalleries = galleryRepo.findAllByUser(currentUser);
+
+        model.addAttribute("user", currentUser);
+        model.addAttribute("photos", userPhotos);
+        model.addAttribute("galleries", userGalleries);
+        model.addAttribute("gallery", new Gallery());
+
+        return "galleries/my-photos";
+    }
+
 }

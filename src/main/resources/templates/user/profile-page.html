@@ -11,7 +11,6 @@
     <h1>Profile Page</h1>
 
     <form th:action="@{/edit/{username}(username=${#authentication.principal.username})}" method="GET" class="p-3">
-        <button type="submit" class="btn btn-primary">Update Profile Details</button>
     </form>
 
     <div sec:authorize="isAuthenticated()" class="navbar-nav">
@@ -21,6 +20,7 @@
         Friends
         <p th:text="${friendsList}"></p>
         <br><br><br>
+
         <a th:href="@{/{username}/my-photos (username=${#authentication.principal.username})}" class="btn btn-primary p-3">View Photos</a>
     </div>
 

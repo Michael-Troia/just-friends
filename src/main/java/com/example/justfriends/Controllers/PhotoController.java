@@ -4,11 +4,15 @@ import com.example.justfriends.Models.Gallery;
 import com.example.justfriends.Models.Picture;
 import com.example.justfriends.Models.User;
 import com.example.justfriends.Repositories.*;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -31,32 +35,37 @@ public class PhotoController {
         this.pictureRepo = pictureRepo;
     }
 
-    @GetMapping("{username}/my-photos")
-    public String showPhotosHome(@PathVariable String username,
-                                 Model model){
-        User currentUser = userRepo.findByUsername(username);
-        List<Picture> userPhotos = pictureRepo.findAllByUser(currentUser);
-        List<Gallery> userGalleries = galleryRepo.findAllByUser(currentUser);
-
-        model.addAttribute("user", currentUser);
-        model.addAttribute("photos", userPhotos);
-        model.addAttribute("galleries", userGalleries);
-
-        return "galleries/my-photos";
-    }
-
+    //View Gallery
     @GetMapping("{username}/gallery/{id}")
     public String showPhotosHome(@PathVariable String username,
                                  @PathVariable long id,
                                  Model model){
-        User currentUser = userRepo.findByUsername(username);
+        User displayUser = userRepo.findByUsername(username);
+        User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         Gallery gallery = galleryRepo.findById(id);
         List<Picture> userPhotos = pictureRepo.findAllByGallery(gallery);
 
-        model.addAttribute("user", currentUser);
+        model.addAttribute("displayUser", displayUser);
+        model.addAttribute("sessionUser", sessionUser);
         model.addAttribute("gallery", gallery);
         model.addAttribute("photos", userPhotos);
 
         return "galleries/show";
     }
+
+    //Create Gallery
+    @PostMapping("{username}/gallery/create")
+    public String createGallery(@PathVariable String username,
+                                @ModelAttribute Gallery gallery){
+        User newUser = userRepo.findByUsername(username);
+        Gallery newGallery = new Gallery();
+        newGallery.setCreatedDate(new Date());
+        newGallery.setName(gallery.getName());
+        newGallery.setUser(newUser);
+        galleryRepo.save(newGallery);
+
+        return "redirect:/" + username + "/my-photos";
+    }
+
 }
