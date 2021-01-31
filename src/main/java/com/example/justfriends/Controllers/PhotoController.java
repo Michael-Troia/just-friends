@@ -3,6 +3,7 @@ package com.example.justfriends.Controllers;
 import com.example.justfriends.Models.*;
 import com.example.justfriends.Repositories.*;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -96,6 +97,8 @@ public class PhotoController {
         return "redirect:/" + username + "/my-photos";
     }
 
+    //Create Photo
+
     //Update photo
     @PostMapping("{username}/photo/{id}/edit")
     public String editPhoto(@PathVariable String username,
@@ -123,5 +126,36 @@ public class PhotoController {
         pictureRepo.delete(picture);
 
         return "redirect:/" + username + "/gallery/" + gallery.getId();
+    }
+
+    //Create Photo
+    @GetMapping("/{username}/gallery/{id}/create-photo")
+    public String showCreatePhotoForm(@PathVariable String username,
+                                      @PathVariable long id,
+                                      Model model){
+        User user = userRepo.findByUsername(username);
+        Gallery gallery = galleryRepo.findById(id);
+        Picture newPicture = new Picture();
+
+        model.addAttribute("user", user);
+        model.addAttribute("gallery", gallery);
+        model.addAttribute("newPicture", newPicture);
+
+        return "galleries/create-photo";
+    }
+    @PostMapping("/{username}/gallery/{id}/create-photo")
+    public String submitCreatePhotoForm(@PathVariable String username,
+                                      @PathVariable long id,
+                                      @ModelAttribute Picture picture){
+        Picture newPicture = new Picture();
+        User user = userRepo.findByUsername(username);
+        Gallery gallery = galleryRepo.findById(id);
+        newPicture.setPictureUrl(picture.getPictureUrl());
+        newPicture.setGallery(gallery);
+        newPicture.setUser(user);
+        newPicture.setComment(picture.getComment());
+        pictureRepo.save(newPicture);
+
+        return "redirect:/" + username + "/gallery/" + id;
     }
 }

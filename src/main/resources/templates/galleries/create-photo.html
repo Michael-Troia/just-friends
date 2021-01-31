@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="partials/head :: head('Add a photo')">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<nav th:replace="partials/navbar :: navbar"></nav>
+
+<h1>Post</h1>
+<form th:action="@{/{username}/gallery/{id}/create-photo (username=${#authentication.principal.username}, id=${gallery.getId()})}" th:object="${newPicture}" method="POST" class="p-3">
+    <label for="pictureUrl">PictureUrl</label>
+    <textarea id="pictureUrl" class="form-control" rows="1" cols="5" th:field="*{pictureUrl}"></textarea>
+    <label for="comment">Caption</label>
+    <textarea id="comment" class="form-control" rows="1" cols="5" th:field="*{comment}"></textarea>
+    <button type="submit" class="btn btn-primary">Add photo</button>
+</form>
+
+<footer th:replace="partials/footer :: footer"></footer>
+</body>
+</html>

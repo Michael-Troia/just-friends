@@ -30,8 +30,9 @@
 
 <div th:if="${sessionUser.getUsername()} == ${displayUser.getUsername()}">
 <!--        todo create add photo form/controller-->
-    <button type="submit" class="btn btn-primary">Add Photo</button>
-    <!--todo create view/controller to edit/delete galleries-->
+    <form th:action="@{/{username}/gallery/{id}/create-photo (username=${sessionUser.getUsername()}, id=${gallery.getId()})}" method="get" class="p-3">
+        <input type="submit" name="add-photo" VALUE="Add Photo"/>
+    </form>
     <div style="border: coral solid 1px;">
         <form th:action="@{/{username}/gallery/{id}/edit (username=${sessionUser.getUsername()}, id=${gallery.getId()})}" th:object="${gallery}" method="POST" class="p-3">
             <label for="galleryName">Gallery Name</label>
