@@ -578,18 +578,5 @@ public class IntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(userGalleries.get(0).getName())));
     }
-
-    //View Gallery
-    @Test
-    public void testShowGallery() throws Exception {
-            Gallery gallery = galleryRepo.findAll().get(0);
-            User user = gallery.getUser();
-            String username = user.getUsername();
-            List<Picture> userPhotos = pictureRepo.findAllByGallery(gallery);
-
-            this.mvc.perform(get("/" + username + "/gallery/" + gallery.getId()))
-                    .andExpect(status().isOk())
-                    .andExpect(content().string(containsString(gallery.getName())));
-    }
 }
 

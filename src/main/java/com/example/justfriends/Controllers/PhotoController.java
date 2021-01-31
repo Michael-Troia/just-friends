@@ -35,6 +35,20 @@ public class PhotoController {
         this.pictureRepo = pictureRepo;
     }
 
+    //Create Gallery
+    @PostMapping("{username}/gallery/create")
+    public String createGallery(@PathVariable String username,
+                                @ModelAttribute Gallery gallery){
+        User newUser = userRepo.findByUsername(username);
+        Gallery newGallery = new Gallery();
+        newGallery.setCreatedDate(new Date());
+        newGallery.setName(gallery.getName());
+        newGallery.setUser(newUser);
+        galleryRepo.save(newGallery);
+
+        return "redirect:/" + username + "/my-photos";
+    }
+
     //View Gallery
     @GetMapping("{username}/gallery/{id}")
     public String showPhotosHome(@PathVariable String username,
@@ -54,18 +68,17 @@ public class PhotoController {
         return "galleries/show";
     }
 
-    //Create Gallery
-    @PostMapping("{username}/gallery/create")
-    public String createGallery(@PathVariable String username,
-                                @ModelAttribute Gallery gallery){
-        User newUser = userRepo.findByUsername(username);
-        Gallery newGallery = new Gallery();
-        newGallery.setCreatedDate(new Date());
-        newGallery.setName(gallery.getName());
-        newGallery.setUser(newUser);
-        galleryRepo.save(newGallery);
+    //Update Gallery
+    @PostMapping("{username}/gallery/{id}/edit")
+    public String editGallery(@PathVariable String username,
+                              @PathVariable long id,
+                              @ModelAttribute Gallery galleryToBeUpdated){
+        User user = userRepo.findByUsername(username);
+        Gallery gallery = galleryRepo.findById(id);
+        galleryToBeUpdated.setCreatedDate(gallery.getCreatedDate());
+        galleryToBeUpdated.setUser(gallery.getUser());
+        galleryRepo.save(galleryToBeUpdated);
 
-        return "redirect:/" + username + "/my-photos";
+        return "redirect:/" + username + "/gallery/{id}";
     }
-
 }

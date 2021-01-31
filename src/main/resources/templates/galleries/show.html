@@ -8,19 +8,19 @@
 <body>
 <nav th:replace="partials/navbar :: navbar"></nav>
 <h1>Gallery</h1>
-<h3 th:text="${gallery.getName()}"></h3>
+<h2 th:text="${gallery.getName()}"></h2>
 
 <div th:each="item : ${photos}">
     <div style="height: 200px; width: 200px; border: black solid 1px; background-color: coral;" th:text="${item.getPictureUrl()}"></div>
     <h4 th:text="${item.getComment()}"></h4>
     <div th:if="${sessionUser.getUsername()} == ${displayUser.getUsername()}">
         <!--    todo create view/controller to edit/delete photos-->
-    <!--    <div th:if="${gallery.getUser() == ${user}}" style="border: rebeccapurple solid 1px;">-->
-    <!--        <a th:href="@{/{username}/photo/{id}/edit (username=${user.getUsername()}, id=${item.getId()})}">Edit</a>-->
-    <!--        <form th:action="@{/{username}/photo/{id}/delete (username=${user.getUsername()}, id=${item.getId()})}">-->
-    <!--            <input type="submit" name="delete" VALUE="DELETE"/>-->
-    <!--        </form>-->
-    <!--    </div>-->
+        <div style="border: rebeccapurple solid 1px;">
+            <a th:href="@{/{username}/photo/{id}/edit (username=${sessionUser.getUsername()}, id=${item.getId()})}">Edit</a>
+            <form th:action="@{/{username}/photo/{id}/delete (username=${sessionUser.getUsername()}, id=${item.getId()})}">
+                <input type="submit" name="delete" VALUE="DELETE"/>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -28,12 +28,16 @@
 <!--        todo create add photo form/controller-->
     <button type="submit" class="btn btn-primary">Add Photo</button>
     <!--todo create view/controller to edit/delete galleries-->
-    <!--<div th:if="${gallery.getUser() == ${user}}" style="border: coral solid 1px;">-->
-    <!--    <a th:href="@{/{username}/gallery/{id}/edit (username=${user.getUsername()}, id=${gallery.getId()})}">Edit</a>-->
-    <!--    <form th:action="@{/{username}/gallery/{id}/delete (username=${user.getUsername()}, id=${gallery.getId()})}">-->
-    <!--        <input type="submit" name="delete" VALUE="DELETE"/>-->
-    <!--    </form>-->
-    <!--</div>-->
+    <div style="border: coral solid 1px;">
+        <form th:action="@{/{username}/gallery/{id}/edit (username=${sessionUser.getUsername()}, id=${gallery.getId()})}" th:object="${gallery}" method="POST" class="p-3">
+            <label for="galleryName">Gallery Name</label>
+            <textarea id="galleryName" class="form-control" rows="1" cols="5" th:field="*{name}"></textarea>
+            <button type="submit" class="btn btn-primary">Change Gallery Name</button>
+        </form>
+        <form th:action="@{/{username}/gallery/{id}/delete (username=${sessionUser.getUsername()}, id=${gallery.getId()})}">
+            <input type="submit" name="delete" VALUE="DELETE"/>
+        </form>
+    </div>
 </div>
 
     <footer th:replace="partials/footer :: footer"></footer>
