@@ -16,8 +16,12 @@
     <div th:if="${sessionUser.getUsername()} == ${displayUser.getUsername()}">
         <!--    todo create view/controller to edit/delete photos-->
         <div style="border: rebeccapurple solid 1px;">
-            <a th:href="@{/{username}/photo/{id}/edit (username=${sessionUser.getUsername()}, id=${item.getId()})}">Edit</a>
-            <form th:action="@{/{username}/photo/{id}/delete (username=${sessionUser.getUsername()}, id=${item.getId()})}">
+            <form th:action="@{/{username}/photo/{id}/edit (username=${sessionUser.getUsername()}, id=${item.getId()})}" th:object="${displayPhoto}" method="POST" class="p-3">
+                <label for="caption">Caption</label>
+                <textarea id="caption" class="form-control" rows="1" cols="5" th:field="*{comment}"></textarea>
+                <button type="submit" class="btn btn-primary">Change Picture Caption</button>
+            </form>
+            <form th:action="@{/{username}/photo/{id}/delete (username=${sessionUser.getUsername()}, id=${item.getId()})}" method="post" th:object="${displayPhoto}">
                 <input type="submit" name="delete" VALUE="DELETE"/>
             </form>
         </div>

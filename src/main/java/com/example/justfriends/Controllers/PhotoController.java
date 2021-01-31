@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -59,6 +60,7 @@ public class PhotoController {
         List<Picture> userPhotos = pictureRepo.findAllByGallery(gallery);
 
         model.addAttribute("displayUser", displayUser);
+        model.addAttribute("displayPhoto", new Picture());
         model.addAttribute("sessionUser", sessionUser);
         model.addAttribute("gallery", gallery);
         model.addAttribute("photos", userPhotos);
@@ -92,5 +94,34 @@ public class PhotoController {
         galleryRepo.delete(galleryRepo.findById(id));
 
         return "redirect:/" + username + "/my-photos";
+    }
+
+    //Update photo
+    @PostMapping("{username}/photo/{id}/edit")
+    public String editPhoto(@PathVariable String username,
+                              @PathVariable long id,
+                              @ModelAttribute Picture pictureToBeUpdated){
+        User user = userRepo.findByUsername(username);
+        Picture picture = pictureRepo.findById(id);
+        pictureToBeUpdated.setUser(user);
+        pictureToBeUpdated.setGallery(picture.getGallery());
+        pictureToBeUpdated.setPictureUrl(picture.getPictureUrl());
+        pictureToBeUpdated.setId(id);
+
+        pictureRepo.save(pictureToBeUpdated);
+
+        return "redirect:/" + username + "/gallery/" + picture.getGallery().getId();
+    }
+
+    //Delete Photo
+    @PostMapping("/{username}/photo/{id}/delete")
+    public String deletePhoto(@PathVariable String username,
+                              @PathVariable long id,
+                              @ModelAttribute Picture pictureToBeDeleted){
+        Picture picture = pictureRepo.findById(id);
+        Gallery gallery = galleryRepo.findById(picture.getGallery().getId());
+        pictureRepo.delete(picture);
+
+        return "redirect:/" + username + "/gallery/" + gallery.getId();
     }
 }
