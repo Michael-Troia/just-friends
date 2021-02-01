@@ -110,12 +110,12 @@ public class UserController {
     }
 
     //Show Home page
-    @GetMapping("/")
-    public String showTest(Model model, @ModelAttribute User user) {
-        model.addAttribute("currentUser", user);
-
-        return "index";
-    }
+//    @GetMapping("/")
+//    public String showTest(Model model, @ModelAttribute User user) {
+//        model.addAttribute("currentUser", user);
+//
+//        return "index";
+//    }
 
     //Show my-photos
     @GetMapping("{username}/my-photos")

@@ -45,8 +45,9 @@ public class UserFriendController {
         return "userFriend/create";
     }
 
+    // THis is the ISSUE !!!!!!
     //Create UserFriend (Friend request)
-    @PostMapping("/{username}/{friendName}")
+    @PostMapping("/request/{username}/{friendName}")
     public String addFriend(@PathVariable String username,
                             @PathVariable String friendName){
         UserFriend userFriend = new UserFriend();
@@ -57,6 +58,7 @@ public class UserFriendController {
 
         return "redirect:/";
     }
+    // THis is the ISSUE !!!!!!
 
     //View Friendslist
     @GetMapping("/{username}/friends/view")

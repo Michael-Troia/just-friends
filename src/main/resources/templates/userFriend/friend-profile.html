@@ -44,7 +44,7 @@
                     <p th:text="${item.getFirstName()}"></p>
                     <p th:text="${item.getLastName()}"></p>
                     <div th:if="${userFriendList.contains(item) == false}">
-                        <form th:action="@{/{username}/{friendName} (username=${currentUser.getUsername()}, friendName = ${item.getUsername()})}" th:method="POST">
+                        <form th:action="@{/request/{username}/{friendName} (username=${currentUser.getUsername()}, friendName = ${item.getUsername()})}" th:method="POST">
                             <input type="submit" name="befriend" value="Befriend"/>
                         </form>
                     </div>
