@@ -11,7 +11,10 @@
 <h2 th:text="${gallery.getName()}"></h2>
 
 <div th:each="item : ${photos}">
-    <div style="height: 200px; width: 200px; border: black solid 1px; background-color: coral;" th:text="${item.getPictureUrl()}"></div>
+<!--    <div style="height: 200px; width: 200px; border: black solid 1px; background-color: coral;" th:text="${item.getPictureUrl()}"></div>-->
+    <img id="galleryPhoto" th:src="${item.pictureUrl}"
+         alt="User uploaded image"/>
+
     <h4 th:text="${item.getComment()}"></h4>
     <div th:if="${sessionUser.getUsername()} == ${displayUser.getUsername()}">
         <!--    todo create view/controller to edit/delete photos-->

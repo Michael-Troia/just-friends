@@ -8,13 +8,11 @@
 <body>
 <nav th:replace="partials/navbar :: navbar"></nav>
 
-<div style="height: 300px; width: 300px; border: black solid 1px;">image here</div>
-
 <h1 th:text="${friend.getUsername()}"></h1>
 
 <div class="row">
-
-    <div class="card col-6" style="width: 40rem;">
+    <div class="card col-3" style="width: 40rem;">
+        <img class="card-img-top" id="profile-photo" th:src="${friend.getProfile_picture_url().toString()}" alt="User profile image">
         <div class="card-body">
             <h4 class="card-title">About</h4>
             <div class="card-text">
@@ -29,12 +27,12 @@
         </div>
     </div>
 
-    <div class="card col-6" style="width: 40rem;">
+    <div class="card col-3" style="width: 40rem;">
         <div class="card-body">
             <h5 class="card-title">Friends</h5>
             <div class="row" th:each="item : ${friendFriends}">
                 <div class="col">
-                    <div style="height: 100px; width: 100px; border: black solid 1px; background-color: blueviolet;">Profile pic</div>
+                    <img class="card-img-top" id="friend-profile-picture" th:src="${item.getProfile_picture_url().toString()}" alt="User profile image">
                     <div th:if="${userFriendList.contains(item) == true}">
                         <a th:href="@{/{username}/friend/{friendName} (username=${currentUser.getUsername()}, friendName=${item.getUsername()})}" th:text="${item.getUsername()}"></a>
                     </div>
@@ -45,7 +43,7 @@
                     <p th:text="${item.getLastName()}"></p>
                     <div th:if="${userFriendList.contains(item) == false}">
                         <form th:action="@{/request/{username}/{friendName} (username=${currentUser.getUsername()}, friendName = ${item.getUsername()})}" th:method="POST">
-                            <input type="submit" name="befriend" value="Befriend"/>
+                            <input type="submit" name="befriend" value="Send Friend Request"/>
                         </form>
                     </div>
                 </div>
@@ -53,7 +51,7 @@
         </div>
     </div>
 
-    <div class="card col-6" style="width: 40rem;">
+    <div class="card col-3" style="width: 40rem;">
         <div class="card-body">
             <h5 class="card-title">Photos</h5>
 <!--            todo gallery thumbnails here-->
@@ -62,7 +60,7 @@
         </div>
     </div>
 
-    <div class="card col-6" style="width: 40rem;">
+    <div class="card col-3" style="width: 40rem;">
         <div class="card-body">
             <h5 class="card-title">Photos</h5>
             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>

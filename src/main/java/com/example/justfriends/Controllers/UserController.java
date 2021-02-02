@@ -2,6 +2,7 @@ package com.example.justfriends.Controllers;
 
 import com.example.justfriends.Models.*;
 import com.example.justfriends.Repositories.*;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,19 +49,30 @@ public class UserController {
                                Model viewModel) {
         String hash = passwordEncoder.encode(user.getPassword());
         Date date = new Date();
+        Gallery defaultGallery = new Gallery();
+        defaultGallery.setName("Photos");
+        defaultGallery.setUser(user);
+        defaultGallery.setCreatedDate(date);
+        Picture defaultPic = new Picture();
+        defaultPic.setUser(user);
+        defaultPic.setComment("Profile");
+        defaultPic.setPictureUrl("/img/blank-profile-picture.png");
+        defaultPic.setGallery(defaultGallery);
         user.setPassword(hash);
         user.setCreatedDate(date);
+        user.setProfile_picture_url("/img/blank-profile-picture.png");
         User dbUser = userRepo.save(user);
         viewModel.addAttribute("user", dbUser);
         System.out.println(dbUser.getUsername());
 
-        return "redirect:/" + dbUser.getUsername();
+        return "redirect:/";
     }
 
     //Update User information
     @GetMapping("/edit/{username}")
-    public String showEditProfile(Model viewModel, @PathVariable String username) {
-        viewModel.addAttribute("user", userRepo.findByUsername(username));
+    public String showEditProfile(Model model, @PathVariable String username) {
+        User user = userRepo.findByUsername(username);
+        model.addAttribute("user", user);
 
         return "user/edit";
     }
@@ -72,22 +84,22 @@ public class UserController {
         userToBeUpdated.setEmail(user.getEmail());
         userToBeUpdated.setPassword(user.getPassword());
         userToBeUpdated.setCreatedDate(user.getCreatedDate());
-        System.out.println(userToBeUpdated.getUsername());
-        System.out.println(user.getUsername());
-        System.out.println(userToBeUpdated.getJob());
         userRepo.save(userToBeUpdated);
 
-        return "redirect:/" + userToBeUpdated.getUsername();
+        return "redirect:/user/" + user.getUsername();
     }
 
     //Show User Profile page
-    @GetMapping("/{username}")
+    @GetMapping("/user/{username}")
     public String showUser(Model model,
                            @PathVariable String username) {
         User user = userRepo.findByUsername(username);
         List<UserFriend> userFriends = userFriendRepo.findAllByUserAndStatus(user, Status.ACCEPTED);// lists friends that you've accepted
+        User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("friendsList", userFriends);
         model.addAttribute("user", user);
+        model.addAttribute("sessionUser", sessionUser);
+        model.addAttribute("friends",userFriendRepo.findAllByUserAndStatus(user,Status.ACCEPTED));
 
         return "user/profile-page";
     }
@@ -110,12 +122,12 @@ public class UserController {
     }
 
     //Show Home page
-//    @GetMapping("/")
-//    public String showTest(Model model, @ModelAttribute User user) {
-//        model.addAttribute("currentUser", user);
-//
-//        return "index";
-//    }
+    @GetMapping("/")
+    public String showTest(Model model, @ModelAttribute User user) {
+        model.addAttribute("currentUser", user);
+
+        return "index";
+    }
 
     //Show my-photos
     @GetMapping("{username}/my-photos")

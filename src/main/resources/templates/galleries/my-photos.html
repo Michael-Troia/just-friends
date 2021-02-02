@@ -20,7 +20,7 @@
     <h3>Create Gallery</h3>
     <form th:action="@{/{username}/gallery/create (username=${#authentication.principal.username})}" th:object="${gallery}" method="POST" class="p-3">
         <label for="galleryName">Gallery Name</label>
-        <textarea id="galleryName" class="form-control" rows="1" cols="5" th:field="*{name}"></textarea>
+        <textarea id="galleryName" class="form-control" rows="1" cols="5" th:field="*{name}" th:value="default"></textarea>
         <button type="submit" class="btn btn-primary">Create Gallery</button>
     </form>
 </div>
