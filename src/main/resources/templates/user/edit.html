@@ -34,14 +34,16 @@
         <input type="text" id="job" class="form-control" th:field="*{job}">
     </div>
 
-    <div class="form-group">
-        <label for="profile-picture-url">Profile Picture URL</label>
-        <input type="text" id="profile-picture-url" class="form-control" th:field="*{profile_picture_url}">
+    <div id="uploadPhoto">
+        <input type="hidden" id="photo" name="gallery_photo" th:field="*{profile_picture_url}" />
+        <button class="btn btn-primary" id="upload">Add Picture</button>
     </div>
 
     <button type="submit" class="btn btn-primary">Save Changes</button>
 </form>
 
 <footer th:replace="partials/footer :: footer"></footer>
+<script src="//static.filestackapi.com/filestack-js/3.x.x/filestack.min.js" defer></script>
+<script type="text/javascript" th:src="@{/js/filestack.js}" defer></script>
 </body>
 </html>

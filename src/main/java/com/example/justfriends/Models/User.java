@@ -1,6 +1,8 @@
 package com.example.justfriends.Models;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -42,15 +44,17 @@ public class User {
     private String job;
 
     @Column
-    private String profile_picture_url;
+    private String profile_picture_url = "/img/blank-profile-picture.png";
 
-    @Column
+    @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "friend")
     private List<UserFriend> userFriends;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonBackReference
     private List<Picture> pictures;
 
     public User(){}

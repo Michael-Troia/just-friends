@@ -40,6 +40,7 @@ public class IntegrationTest {
     private User testUser2;
     private User testUser3;
     private User testUser4;
+    private List<User> userList;
     private Post testPost;
     private Post testPost2;
     private Post testPost3;
@@ -64,7 +65,7 @@ public class IntegrationTest {
     private Picture testPicture2;
     private Picture testPicture3;
     private Picture testPicture4;
-    private List<Picture> testPictures1;
+    private ArrayList<Picture> testPictures1;
     private Gallery testGallery1;
     private Gallery testGallery2;
 
@@ -117,15 +118,16 @@ public class IntegrationTest {
         testComment2 = commentRepo.findByBody("TestCommentBody2");
         testComment3 = commentRepo.findByBody("TestCommentBody3");
         testComment4 = commentRepo.findByBody("TestCommentBody4");
-        testPicture1 = pictureRepo.findByPictureUrl("TestPictureUrl1");
-        testPicture2 = pictureRepo.findByPictureUrl("TestPictureUrl2");
-        testPicture3 = pictureRepo.findByPictureUrl("TestPictureUrl3");
-        testPicture4 = pictureRepo.findByPictureUrl("TestPictureUrl4");
-        testPictures1 = pictureRepo.findAllByUser(testUser1);
+        testPicture1 = pictureRepo.findByPictureUrl("TestPictureComment1(TestGallery1)");
+        testPicture2 = pictureRepo.findByPictureUrl("TestPictureComment2(TestGallery1)");
+        testPicture3 = pictureRepo.findByPictureUrl("TestPictureComment3(TestDefaultGallery1)");
+        testPicture4 = pictureRepo.findByPictureUrl("TestPictureComment4(TestDefaultGallery1");
+//        testPictures1 = pictureRepo.findAllByUser(testUser1);
         testGallery1 = galleryRepo.findByName("TestGallery1");
         testGallery2 = galleryRepo.findByName("TestDefaultGallery1");
 
 //create
+
         if (testUser1 == null) {
             User newUser = new User();
             newUser.setEmail("TestEmail@Test.com");
@@ -134,7 +136,8 @@ public class IntegrationTest {
             newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
             newUser.setFirstName("TestFirstName");
             newUser.setLastName("TestLastName");
-            newUser.setAboutMe("TestAboutMe");
+//            newUser.setAboutMe("TestAboutMe");
+            newUser.setProfile_picture_url("/img/blank-profile-picture.png");
             newUser.setBirthday(new Date());
             newUser.setCreatedDate(new Date());
             testUser1 = userRepo.save(newUser);
@@ -147,7 +150,8 @@ public class IntegrationTest {
             newUser2.setPassword(passwordEncoder.encode(newUser2.getPassword()));
             newUser2.setFirstName("TestFirstName2");
             newUser2.setLastName("TestLastName2");
-            newUser2.setAboutMe("TestAboutMe2");
+//            newUser2.setAboutMe("TestAboutMe2");
+            newUser2.setProfile_picture_url("/img/blank-profile-picture.png");
             newUser2.setBirthday(new Date());
             newUser2.setCreatedDate(new Date());
             testUser2 = userRepo.save(newUser2);
@@ -160,7 +164,8 @@ public class IntegrationTest {
             newUser3.setPassword(passwordEncoder.encode(newUser3.getPassword()));
             newUser3.setFirstName("TestFirstName3");
             newUser3.setLastName("TestLastName3");
-            newUser3.setAboutMe("TestAboutMe3");
+//            newUser3.setAboutMe("TestAboutMe3");
+            newUser3.setProfile_picture_url("/img/blank-profile-picture.png");
             newUser3.setBirthday(new Date());
             newUser3.setCreatedDate(new Date());
             testUser3 = userRepo.save(newUser3);
@@ -173,10 +178,16 @@ public class IntegrationTest {
             newUser4.setPassword(passwordEncoder.encode(newUser4.getPassword()));
             newUser4.setFirstName("TestFirstName4");
             newUser4.setLastName("TestLastName4");
-            newUser4.setAboutMe("TestAboutMe4");
+//            newUser4.setAboutMe("TestAboutMe4");
+            newUser4.setProfile_picture_url("/img/blank-profile-picture.png");
             newUser4.setBirthday(new Date());
             newUser4.setCreatedDate(new Date());
             testUser4 = userRepo.save(newUser4);
+            userList = new ArrayList<>();
+            userList.add(testUser1);
+            userList.add(testUser2);
+            userList.add(testUser3);
+            userList.add(testUser4);
         }
 
         if (testUserFriend1 == null) {
@@ -256,7 +267,7 @@ public class IntegrationTest {
             newPost.setUser(testUser1);
             newPost.setCreatedDate(new Date());
             newPost.setEditDate(new Date());
-            newPost.setPhoto_url("TestPhoto_Url");
+            newPost.setPhoto_url("/img/friends-poster.jpg");
             testPost = postRepo.save(newPost);
         }
         if (testPost2 == null) {
@@ -265,7 +276,7 @@ public class IntegrationTest {
             newPost2.setUser(testUser2);
             newPost2.setCreatedDate(new Date());
             newPost2.setEditDate(new Date());
-            newPost2.setPhoto_url("TestPhoto_Url2");
+            newPost2.setPhoto_url("/img/friends-poster.jpg");
             testPost2 = postRepo.save(newPost2);
         }
         if (testPost3 == null) {
@@ -274,7 +285,7 @@ public class IntegrationTest {
             newPost.setUser(testUser3);
             newPost.setCreatedDate(new Date());
             newPost.setEditDate(new Date());
-            newPost.setPhoto_url("TestPhoto_Url3");
+            newPost.setPhoto_url("/img/friends-poster.jpg");
             testPost3 = postRepo.save(newPost);
         }
         if (testPost4 == null) {
@@ -283,7 +294,7 @@ public class IntegrationTest {
             newPost2.setUser(testUser4);
             newPost2.setCreatedDate(new Date());
             newPost2.setEditDate(new Date());
-            newPost2.setPhoto_url("TestPhoto_Url4");
+            newPost2.setPhoto_url("/img/friends-poster.jpg");
             testPost4 = postRepo.save(newPost2);
         }
         if (testPost5 == null) { //user 1 has 2 posts
@@ -292,7 +303,7 @@ public class IntegrationTest {
             newPost.setUser(testUser1);
             newPost.setCreatedDate(new Date());
             newPost.setEditDate(new Date());
-            newPost.setPhoto_url("TestPhoto_Url5");
+            newPost.setPhoto_url("/img/friends-poster.jpg");
             testPost5 = postRepo.save(newPost);
         }
         if (testPost6 == null) { //user2 has 2 posts
@@ -301,7 +312,7 @@ public class IntegrationTest {
             newPost2.setUser(testUser2);
             newPost2.setCreatedDate(new Date());
             newPost2.setEditDate(new Date());
-            newPost2.setPhoto_url("TestPhoto_Url6");
+            newPost2.setPhoto_url("/img/friends-poster.jpg");
             testPost6 = postRepo.save(newPost2);
         }
 
@@ -311,7 +322,7 @@ public class IntegrationTest {
             newComment.setBody("TestCommentBody1");
             newComment.setCreatedDate(new Date());
             newComment.setEditDate(new Date());
-            newComment.setPhoto_url("TestPhoto_UrlComment1");
+            newComment.setPhoto_url("/img/friends-poster.jpg");
             newComment.setUser(testUser2);
             testComment1 = commentRepo.save(newComment);
         }
@@ -321,7 +332,7 @@ public class IntegrationTest {
             newComment2.setBody("TestCommentBody2");
             newComment2.setCreatedDate(new Date());
             newComment2.setEditDate(new Date());
-            newComment2.setPhoto_url("TestPhoto_UrlComment2");
+            newComment2.setPhoto_url("/img/friends-poster.jpg");
             newComment2.setUser(testUser2);
             testComment2 = commentRepo.save(newComment2);
         }
@@ -331,7 +342,7 @@ public class IntegrationTest {
             newComment2.setBody("TestCommentBody3");
             newComment2.setCreatedDate(new Date());
             newComment2.setEditDate(new Date());
-            newComment2.setPhoto_url("TestPhoto_UrlComment3");
+            newComment2.setPhoto_url("/img/friends-poster.jpg");
             newComment2.setUser(testUser3);
             testComment3 = commentRepo.save(newComment2);
         }
@@ -341,7 +352,7 @@ public class IntegrationTest {
             newComment.setBody("TestCommentBody4");
             newComment.setCreatedDate(new Date());
             newComment.setEditDate(new Date());
-            newComment.setPhoto_url("TestPhoto_UrlComment4");
+            newComment.setPhoto_url("/img/friends-poster.jpg");
             newComment.setUser(testUser4);
             testComment1 = commentRepo.save(newComment);
         }
@@ -363,7 +374,7 @@ public class IntegrationTest {
 
         if (testPicture1 == null) {
             Picture newPicture = new Picture();
-            newPicture.setPictureUrl("TestPictureUrl1");
+            newPicture.setPictureUrl("/img/friends-poster.jpg");
             newPicture.setUser(testUser1);
             newPicture.setComment("TestPictureComment1(TestGallery1)");
             newPicture.setGallery(galleryRepo.findByName("TestGallery1"));
@@ -371,7 +382,7 @@ public class IntegrationTest {
         }
         if (testPicture2 == null) {
             Picture newPicture = new Picture();
-            newPicture.setPictureUrl("TestPictureUrl2");
+            newPicture.setPictureUrl("/img/friends-poster.jpg");
             newPicture.setUser(testUser1);
             newPicture.setComment("TestPictureComment2(TestGallery1)");
             newPicture.setGallery(galleryRepo.findByName("TestGallery1"));
@@ -379,7 +390,7 @@ public class IntegrationTest {
         }
         if (testPicture3 == null) {
             Picture newPicture = new Picture();
-            newPicture.setPictureUrl("TestPictureUrl3");
+            newPicture.setPictureUrl("/img/friends-poster.jpg");
             newPicture.setUser(testUser1);
             newPicture.setComment("TestPictureComment3(TestDefaultGallery1)");
             newPicture.setGallery(galleryRepo.findByName("TestDefaultGallery1"));
@@ -387,11 +398,31 @@ public class IntegrationTest {
         }
         if (testPicture4 == null) {
             Picture newPicture = new Picture();
-            newPicture.setPictureUrl("TestPictureUrl4");
+            newPicture.setPictureUrl("/img/friends-poster.jpg");
             newPicture.setUser(testUser1);
             newPicture.setComment("TestPictureComment4(TestDefaultGallery1");
             newPicture.setGallery(galleryRepo.findByName("TestDefaultGallery1"));
             testPicture4 = pictureRepo.save(newPicture);
+        }
+
+        if (userList != null && userList.get(0).getJob() == null) {
+            for (User user : userList) {
+//                Gallery defaultGallery = new Gallery();
+//                defaultGallery.setName("Photos");
+//                defaultGallery.setUser(user);
+//                defaultGallery.setCreatedDate(new Date());
+//                Picture defaultPic = new Picture();
+//                defaultPic.setUser(user);
+//                defaultPic.setComment("Profile");
+//                defaultPic.setPictureUrl("/img/blank-profile-picture.png");
+//                defaultPic.setGallery(defaultGallery);
+//                user.setProfile_picture_url("/img/blank-profile-picture.png");
+                user.setJob("Just a friend");
+                user.setAboutMe("Friendship is born at that moment when one person says to another, ‘What! You too? I thought I was the only one.");
+//                galleryRepo.save(defaultGallery);
+//                pictureRepo.save(defaultPic);
+                userRepo.save(user);
+            }
         }
 
         // Throws a Post request to /login and expect a redirection to the home page after being logged in

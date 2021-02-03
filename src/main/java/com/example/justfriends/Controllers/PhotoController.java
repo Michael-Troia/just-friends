@@ -108,7 +108,6 @@ public class PhotoController {
         Picture picture = pictureRepo.findById(id);
         pictureToBeUpdated.setUser(user);
         pictureToBeUpdated.setGallery(picture.getGallery());
-        pictureToBeUpdated.setPictureUrl(picture.getPictureUrl());
         pictureToBeUpdated.setId(id);
 
         pictureRepo.save(pictureToBeUpdated);

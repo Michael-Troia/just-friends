@@ -9,9 +9,14 @@
 <nav th:replace="partials/navbar :: navbar"></nav>
 
 <h1>Galleries</h1>
-<div th:each="item: ${galleries}">
-    <a th:href="@{/{username}/gallery/{id} (username=${user.getUsername()}, id=${item.getId()})}" th:text="${item.getName()}"></a>
-    <br>
+<div class="row" id="gallery-thumbnails">
+    <div id="photo-gallery" th:each="item: ${galleries}">
+        <div class="col-4" id="thumbnail-container">
+            <a th:href="@{/{username}/gallery/{id} (username=${user.getUsername()}, id=${item.getId()})}">
+                <img class="card-img-top" id="gallery-thumbnail-image" th:src="${item.getPictures().get(0).getPictureUrl().toString()}" alt="Gallery Thumbnail Image">
+            </a>
+        </div>
+    </div>
 </div>
 
 <br><br>
@@ -20,7 +25,7 @@
     <h3>Create Gallery</h3>
     <form th:action="@{/{username}/gallery/create (username=${#authentication.principal.username})}" th:object="${gallery}" method="POST" class="p-3">
         <label for="galleryName">Gallery Name</label>
-        <textarea id="galleryName" class="form-control" rows="1" cols="5" th:field="*{name}"></textarea>
+        <textarea id="galleryName" class="form-control" rows="1" cols="5" th:field="*{name}" th:value="default"></textarea>
         <button type="submit" class="btn btn-primary">Create Gallery</button>
     </form>
 </div>

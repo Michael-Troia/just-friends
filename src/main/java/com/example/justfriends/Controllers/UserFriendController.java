@@ -45,7 +45,6 @@ public class UserFriendController {
         return "userFriend/create";
     }
 
-    // THis is the ISSUE !!!!!!
     //Create UserFriend (Friend request)
     @PostMapping("/request/{username}/{friendName}")
     public String addFriend(@PathVariable String username,
@@ -58,7 +57,6 @@ public class UserFriendController {
 
         return "redirect:/";
     }
-    // THis is the ISSUE !!!!!!
 
     //View Friendslist
     @GetMapping("/{username}/friends/view")
@@ -93,7 +91,7 @@ public class UserFriendController {
     }
 
     //Reject Friend request
-    @PostMapping("/{username}/{friendId}/reject")
+    @PostMapping("/request/{username}/{friendId}/reject")
     public String rejectFriend(@PathVariable String username,
                                @PathVariable long friendId){
         UserFriend userFriend = userFriendRepo.findById(friendId);
@@ -104,7 +102,7 @@ public class UserFriendController {
     }
 
     //Accept Friend request
-    @PostMapping("/{username}/{friendId}/accept")
+    @PostMapping("/request/{username}/{friendId}/accept")
     public String acceptFriend(@PathVariable String username,
                                @PathVariable long friendId){
         UserFriend userFriendRequester = userFriendRepo.findById(friendId);
