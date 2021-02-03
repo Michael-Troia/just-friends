@@ -9,9 +9,14 @@
 <nav th:replace="partials/navbar :: navbar"></nav>
 
 <h1>Galleries</h1>
-<div th:each="item: ${galleries}">
-    <a th:href="@{/{username}/gallery/{id} (username=${user.getUsername()}, id=${item.getId()})}" th:text="${item.getName()}"></a>
-    <br>
+<div class="row" id="gallery-thumbnails">
+    <div id="photo-gallery" th:each="item: ${galleries}">
+        <div class="col-4" id="thumbnail-container">
+            <a th:href="@{/{username}/gallery/{id} (username=${user.getUsername()}, id=${item.getId()})}">
+                <img class="card-img-top" id="gallery-thumbnail-image" th:src="${item.getPictures().get(0).getPictureUrl().toString()}" alt="Gallery Thumbnail Image">
+            </a>
+        </div>
+    </div>
 </div>
 
 <br><br>
