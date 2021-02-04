@@ -6,12 +6,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -117,25 +119,28 @@ public class PhotoController {
                                       Model model){
         User user = userRepo.findByUsername(username);
         Gallery gallery = galleryRepo.findById(id);
-        Picture newPicture = new Picture();
-
         model.addAttribute("user", user);
         model.addAttribute("gallery", gallery);
-        model.addAttribute("newPicture", newPicture);
+        model.addAttribute("picture", new Picture());
 
         return "galleries/create-photo";
     }
     @PostMapping("/{username}/gallery/{id}/create-photo")
     public String submitCreatePhotoForm(@PathVariable String username,
                                         @PathVariable long id,
-                                        @ModelAttribute Picture picture){
+                                        @Valid Picture picture,
+                                        Errors validation,
+                                        Model model){
+        if (validation.hasErrors()){
+            model.addAttribute("errors", validation);
+            model.addAttribute("picture", picture);
+            model.addAttribute("user", userRepo.findByUsername(username));
+            model.addAttribute("gallery", galleryRepo.findById(id));
+            return "galleries/create-photo";
+        }
         Picture newPicture = new Picture();
         User user = userRepo.findByUsername(username);
         Gallery gallery = galleryRepo.findById(id);
-//        if (picture.getPictureUrl().isBlank()){
-//
-//
-//        }
         newPicture.setPictureUrl(picture.getPictureUrl());
         newPicture.setGallery(gallery);
         newPicture.setUser(user);
@@ -145,7 +150,7 @@ public class PhotoController {
         return "redirect:/" + username + "/gallery/" + id;
     }
 
-    //Update photo
+    //Update photo comment
     @PostMapping("{username}/photo/{id}/edit")
     public String editPhoto(@PathVariable String username,
                               @PathVariable long id,

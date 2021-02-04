@@ -8,7 +8,7 @@
 <nav th:replace="partials/navbar :: navbar"></nav>
 
 <h1>Upload Photo</h1>
-<form th:action="@{/{username}/gallery/{id}/create-photo (username=${#authentication.principal.username}, id=${gallery.getId()})}" th:object="${newPicture}" method="POST" class="p-3" th:required="${newPicture.pictureUrl}">
+<form th:action="@{/{username}/gallery/{id}/create-photo (username=${#authentication.principal.username}, id=${gallery.getId()})}" th:object="${picture}" method="POST" class="p-3">
     <div id="uploadPhoto">
         <input type="hidden" id="photo" name="gallery_photo" th:field="*{pictureUrl}"/>
         <button class="btn btn-primary" id="upload">Add Picture</button>
@@ -19,6 +19,8 @@
     <label for="comment">Caption</label>
     <textarea id="comment" class="form-control" rows="1" cols="5" th:field="*{comment}"></textarea>
     <button id="submitAddPhoto" type="submit" class="btn btn-primary">Add photo</button>
+
+    <div class="error-message" th:if="${#fields.hasErrors('pictureUrl')}" th:errors="*{pictureUrl}"></div>
 </form>
 
 <footer th:replace="partials/footer :: footer"></footer>
