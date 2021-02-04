@@ -2,6 +2,7 @@ package com.example.justfriends.Controllers;
 
 import com.example.justfriends.Models.*;
 import com.example.justfriends.Repositories.*;
+import com.example.justfriends.Services.EmailService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -26,10 +27,11 @@ public class UserController {
     public CommentRepo commentRepo;
     public PictureRepo pictureRepo;
     public GalleryRepo galleryRepo;
+    private final EmailService emailService;
 
     public UserController(UserRepo userRepo, PasswordEncoder passwordEncoder,
                           UserFriendRepo userFriendRepo, PostRepo postRepo, CommentRepo commentRepo,
-                          PictureRepo pictureRepo, GalleryRepo galleryRepo) {
+                          PictureRepo pictureRepo, GalleryRepo galleryRepo, EmailService emailService) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
         this.userFriendRepo = userFriendRepo;
@@ -37,6 +39,7 @@ public class UserController {
         this.commentRepo = commentRepo;
         this.galleryRepo = galleryRepo;
         this.pictureRepo = pictureRepo;
+        this.emailService = emailService;
     }
 
     //Create User Account
@@ -86,8 +89,13 @@ public class UserController {
         user.setProfile_picture_url("/img/blank-profile-picture.png");
         User dbUser = userRepo.save(user);
         model.addAttribute("user", dbUser);
-        System.out.println(dbUser.getUsername());
 
+        emailService.prepareAndSend(user,"Welcome to JustFriends " + user.getUsername() + "!",
+                "We're glad to have you! You might notice that your newsfeed is a little quiet. We want to avoid the" +
+                        "drama that social media sites typically have of suggesting who you should be friends with or advertising" +
+                        "to you. You probably want to make that decision for yourself! Instead, why not invite invite your friends" +
+                        " to join, or send them a friend request if they " +
+                        "already have!");
         return "redirect:/";
     }
 

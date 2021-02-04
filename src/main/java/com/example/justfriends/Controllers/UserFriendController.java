@@ -2,6 +2,7 @@ package com.example.justfriends.Controllers;
 
 import com.example.justfriends.Models.*;
 import com.example.justfriends.Repositories.*;
+import com.example.justfriends.Services.EmailService;
 import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -23,16 +24,18 @@ public class UserFriendController {
     public CommentRepo commentRepo;
     public PictureRepo pictureRepo;
     public GalleryRepo galleryRepo;
+    private final EmailService emailService;
 
     public UserFriendController(UserRepo userRepo, UserFriendRepo userFriendRepo,
                                 PostRepo postRepo, CommentRepo commentRepo,
-                          PictureRepo pictureRepo, GalleryRepo galleryRepo) {
+                          PictureRepo pictureRepo, GalleryRepo galleryRepo, EmailService emailService) {
         this.userRepo = userRepo;
         this.userFriendRepo = userFriendRepo;
         this.postRepo = postRepo;
         this.commentRepo = commentRepo;
         this.galleryRepo = galleryRepo;
         this.pictureRepo = pictureRepo;
+        this.emailService = emailService;
     }
 
     //List all users
@@ -57,6 +60,9 @@ public class UserFriendController {
         userFriend.setStatus(Status.PENDING);
         userFriend.setUser(userRepo.findByUsername(username));
         userFriendRepo.save(userFriend);
+        emailService.prepareAndSend(userRepo.findByUsername(friendName), friendName + ", someone wants to be your friend :)",
+                "Looks like you're popular! You might have a friend in " + username + " . Head to the friend request page on your" +
+                        " justfriends.online profile to let them know if you'd like to be friends!");
 
         return "redirect:/";
     }
