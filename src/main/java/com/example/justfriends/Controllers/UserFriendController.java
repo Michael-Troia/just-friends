@@ -49,6 +49,9 @@ public class UserFriendController {
     @PostMapping("/request/{username}/{friendName}")
     public String addFriend(@PathVariable String username,
                             @PathVariable String friendName){
+        if (userFriendRepo.findByUserAndFriend(userRepo.findByUsername(username), userRepo.findByUsername(friendName)) != null){
+            return "redirect:/";
+        }
         UserFriend userFriend = new UserFriend();
         userFriend.setFriend(userRepo.findByUsername(friendName));
         userFriend.setStatus(Status.PENDING);
@@ -164,10 +167,13 @@ public class UserFriendController {
             userFriends.add(userUserFriend.getFriend());
         }
 
+        List<Gallery> friendGalleries = galleryRepo.findAllByUser(friend);
+
         model.addAttribute("friendFriends" ,friendFriends);
         model.addAttribute("friend", friend);
         model.addAttribute("userFriendList" , userFriends);
         model.addAttribute("currentUser", currentUser);
+        model.addAttribute("friendGalleries", friendGalleries);
 
         return "userFriend/friend-profile";
     }

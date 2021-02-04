@@ -13,6 +13,7 @@
     <div class="form-group">
         <label for="username">Username</label>
         <input id="username" class="form-control" th:field="*{username}" />
+
     </div>
 
     <div class="form-group">
@@ -34,6 +35,12 @@
         <label for="password">Password</label>
         <input id="password" class="form-control" type="password" th:field="*{password}" />
     </div>
+
+    <div class="error-message" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+    <div class="error-message" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+    <div class="error-message" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+    <div class="error-message" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+    <div class="error-message" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
 
     <button type="submit" class="btn btn-primary">Sign me up!</button>
 </form>

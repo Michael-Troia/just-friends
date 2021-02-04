@@ -11,7 +11,7 @@
 <h1 th:text="${friend.getUsername()}"></h1>
 
 <div class="row">
-    <div class="card col-3" style="width: 40rem;">
+    <div class="card col-3">
         <img class="card-img-top" id="profile-photo" th:src="${friend.getProfile_picture_url().toString()}" alt="User profile image">
         <div class="card-body">
             <h4 class="card-title">About</h4>
@@ -27,7 +27,7 @@
         </div>
     </div>
 
-    <div class="card col-3" style="width: 40rem;">
+    <div class="card col-3" >
         <div class="card-body">
             <h5 class="card-title">Friends</h5>
             <div class="row" th:each="item : ${friendFriends}">
@@ -42,25 +42,34 @@
                     <p th:text="${item.getFirstName()}"></p>
                     <p th:text="${item.getLastName()}"></p>
                     <div th:if="${userFriendList.contains(item) == false}">
-                        <form th:action="@{/request/{username}/{friendName} (username=${currentUser.getUsername()}, friendName = ${item.getUsername()})}" th:method="POST">
-                            <input type="submit" name="befriend" value="Send Friend Request"/>
-                        </form>
+                        <div th:if="${item != currentUser}">
+                            <form th:action="@{/request/{username}/{friendName} (username=${currentUser.getUsername()}, friendName = ${item.getUsername()})}" th:method="POST">
+                                <input type="submit" name="befriend" value="Send Friend Request"/>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="card col-3" style="width: 40rem;">
+    <div class="card col-3">
+        <h5 class="card-title">Photos</h5>
         <div class="card-body">
-            <h5 class="card-title">Photos</h5>
-<!--            todo gallery thumbnails here-->
-            <p class="card-text">Gallery thumbnails go here</p>
+            <div th:each="gallery: ${friendGalleries}">
+                <div class="col-6" id="thumbnail-container">
+                    <a th:href="@{/{username}/gallery/{id} (username=${friend.getUsername()}, id=${gallery.getId()})}">
+                        <img class="card-img-top" id="gallery-thumbnail-image" th:src="${gallery.getPictures.get(0).getPictureUrl().toString()}" alt="Gallery Thumbnail Image">
+                        <p th:text="${gallery.getName()}"></p>
+                    </a>
+                </div>
+            </div>
+
             <a th:href="@{/{username}/photos (username=${friend.getUsername()})}" class="btn btn-primary">View Photos</a>
         </div>
     </div>
 
-    <div class="card col-3" style="width: 40rem;">
+    <div class="card col-3">
         <div class="card-body">
             <h5 class="card-title">Photos</h5>
             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>

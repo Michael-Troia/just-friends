@@ -11,7 +11,6 @@
 <h2 th:text="${gallery.getName()}"></h2>
 
 <div th:each="item : ${photos}">
-<!--    <div style="height: 200px; width: 200px; border: black solid 1px; background-color: coral;" th:text="${item.getPictureUrl()}"></div>-->
     <img id="galleryPhoto" th:src="${item.pictureUrl}"
          alt="User uploaded image"/>
 
@@ -41,6 +40,7 @@
             <label for="galleryName">Gallery Name</label>
             <textarea id="galleryName" class="form-control" rows="1" cols="5" th:field="*{name}"></textarea>
             <button type="submit" class="btn btn-primary">Change Gallery Name</button>
+            <div class="error-message" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
         </form>
         <form th:action="@{/{username}/gallery/{id}/delete (username=${sessionUser.getUsername()}, id=${gallery.getId()})}" th:object="${gallery}" method="post" class="p-3">
             <input type="submit" name="delete" VALUE="DELETE"/>

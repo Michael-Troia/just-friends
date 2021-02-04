@@ -1,6 +1,7 @@
 package com.example.justfriends.Models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class Gallery {
     @Column(nullable = false)
     private Date createdDate;
 
+    @NotBlank(message = "Please enter a name for your gallery.")
     @Column(nullable = false)
     private String name;
 

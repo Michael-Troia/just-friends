@@ -7,12 +7,10 @@
 <body>
 <nav th:replace="partials/navbar :: navbar"></nav>
 
-<h1>Post</h1>
-<form th:action="@{/{username}/gallery/{id}/create-photo (username=${#authentication.principal.username}, id=${gallery.getId()})}" th:object="${newPicture}" method="POST" class="p-3">
-<!--    <label for="pictureUrl">PictureUrl</label>-->
-<!--    <textarea id="pictureUrl" class="form-control" rows="1" cols="5" th:field="*{pictureUrl}"></textarea>-->
+<h1>Upload Photo</h1>
+<form th:action="@{/{username}/gallery/{id}/create-photo (username=${#authentication.principal.username}, id=${gallery.getId()})}" th:object="${picture}" method="POST" class="p-3">
     <div id="uploadPhoto">
-        <input type="hidden" id="photo" name="gallery_photo" th:field="*{pictureUrl}" />
+        <input type="hidden" id="photo" name="gallery_photo" th:field="*{pictureUrl}"/>
         <button class="btn btn-primary" id="upload">Add Picture</button>
     </div>
 
@@ -20,10 +18,13 @@
 
     <label for="comment">Caption</label>
     <textarea id="comment" class="form-control" rows="1" cols="5" th:field="*{comment}"></textarea>
-    <button type="submit" class="btn btn-primary">Add photo</button>
+    <button id="submitAddPhoto" type="submit" class="btn btn-primary">Add photo</button>
+
+    <div class="error-message" th:if="${#fields.hasErrors('pictureUrl')}" th:errors="*{pictureUrl}"></div>
 </form>
 
 <footer th:replace="partials/footer :: footer"></footer>
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 <script src="//static.filestackapi.com/filestack-js/3.x.x/filestack.min.js" defer></script>
 <script type="text/javascript" th:src="@{/js/filestack.js}" defer></script>
 </body>

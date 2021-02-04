@@ -3,6 +3,8 @@ package com.example.justfriends.Models;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "pictures")
@@ -11,6 +13,7 @@ public class Picture {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotBlank(message = "Please upload a picture.")
     @Column(nullable = false)
     private String pictureUrl;
 

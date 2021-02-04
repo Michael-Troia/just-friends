@@ -118,10 +118,10 @@ public class IntegrationTest {
         testComment2 = commentRepo.findByBody("TestCommentBody2");
         testComment3 = commentRepo.findByBody("TestCommentBody3");
         testComment4 = commentRepo.findByBody("TestCommentBody4");
-        testPicture1 = pictureRepo.findByPictureUrl("TestPictureComment1(TestGallery1)");
-        testPicture2 = pictureRepo.findByPictureUrl("TestPictureComment2(TestGallery1)");
-        testPicture3 = pictureRepo.findByPictureUrl("TestPictureComment3(TestDefaultGallery1)");
-        testPicture4 = pictureRepo.findByPictureUrl("TestPictureComment4(TestDefaultGallery1");
+        testPicture1 = pictureRepo.findByComment("TestPictureComment1(TestGallery1)");
+        testPicture2 = pictureRepo.findByComment("TestPictureComment2(TestGallery1)");
+        testPicture3 = pictureRepo.findByComment("TestPictureComment3(TestDefaultGallery1)");
+        testPicture4 = pictureRepo.findByComment("TestPictureComment4(TestDefaultGallery1");
 //        testPictures1 = pictureRepo.findAllByUser(testUser1);
         testGallery1 = galleryRepo.findByName("TestGallery1");
         testGallery2 = galleryRepo.findByName("TestDefaultGallery1");
@@ -136,8 +136,9 @@ public class IntegrationTest {
             newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
             newUser.setFirstName("TestFirstName");
             newUser.setLastName("TestLastName");
-//            newUser.setAboutMe("TestAboutMe");
             newUser.setProfile_picture_url("/img/blank-profile-picture.png");
+            newUser.setJob("Just a friend");
+            newUser.setAboutMe("Friendship is born at that moment when one person says to another, ‘What! You too? I thought I was the only one.");
             newUser.setBirthday(new Date());
             newUser.setCreatedDate(new Date());
             testUser1 = userRepo.save(newUser);
@@ -150,7 +151,8 @@ public class IntegrationTest {
             newUser2.setPassword(passwordEncoder.encode(newUser2.getPassword()));
             newUser2.setFirstName("TestFirstName2");
             newUser2.setLastName("TestLastName2");
-//            newUser2.setAboutMe("TestAboutMe2");
+            newUser2.setJob("Just a friend");
+            newUser2.setAboutMe("Friendship is born at that moment when one person says to another, ‘What! You too? I thought I was the only one.");
             newUser2.setProfile_picture_url("/img/blank-profile-picture.png");
             newUser2.setBirthday(new Date());
             newUser2.setCreatedDate(new Date());
@@ -164,7 +166,8 @@ public class IntegrationTest {
             newUser3.setPassword(passwordEncoder.encode(newUser3.getPassword()));
             newUser3.setFirstName("TestFirstName3");
             newUser3.setLastName("TestLastName3");
-//            newUser3.setAboutMe("TestAboutMe3");
+            newUser3.setJob("Just a friend");
+            newUser3.setAboutMe("Friendship is born at that moment when one person says to another, ‘What! You too? I thought I was the only one.");
             newUser3.setProfile_picture_url("/img/blank-profile-picture.png");
             newUser3.setBirthday(new Date());
             newUser3.setCreatedDate(new Date());
@@ -178,7 +181,8 @@ public class IntegrationTest {
             newUser4.setPassword(passwordEncoder.encode(newUser4.getPassword()));
             newUser4.setFirstName("TestFirstName4");
             newUser4.setLastName("TestLastName4");
-//            newUser4.setAboutMe("TestAboutMe4");
+            newUser4.setJob("Just a friend");
+            newUser4.setAboutMe("Friendship is born at that moment when one person says to another, ‘What! You too? I thought I was the only one.");
             newUser4.setProfile_picture_url("/img/blank-profile-picture.png");
             newUser4.setBirthday(new Date());
             newUser4.setCreatedDate(new Date());
@@ -403,26 +407,6 @@ public class IntegrationTest {
             newPicture.setComment("TestPictureComment4(TestDefaultGallery1");
             newPicture.setGallery(galleryRepo.findByName("TestDefaultGallery1"));
             testPicture4 = pictureRepo.save(newPicture);
-        }
-
-        if (userList != null && userList.get(0).getJob() == null) {
-            for (User user : userList) {
-//                Gallery defaultGallery = new Gallery();
-//                defaultGallery.setName("Photos");
-//                defaultGallery.setUser(user);
-//                defaultGallery.setCreatedDate(new Date());
-//                Picture defaultPic = new Picture();
-//                defaultPic.setUser(user);
-//                defaultPic.setComment("Profile");
-//                defaultPic.setPictureUrl("/img/blank-profile-picture.png");
-//                defaultPic.setGallery(defaultGallery);
-//                user.setProfile_picture_url("/img/blank-profile-picture.png");
-                user.setJob("Just a friend");
-                user.setAboutMe("Friendship is born at that moment when one person says to another, ‘What! You too? I thought I was the only one.");
-//                galleryRepo.save(defaultGallery);
-//                pictureRepo.save(defaultPic);
-                userRepo.save(user);
-            }
         }
 
         // Throws a Post request to /login and expect a redirection to the home page after being logged in

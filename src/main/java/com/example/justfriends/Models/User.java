@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.List;
 
@@ -20,18 +21,22 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
 
+    @NotBlank(message = "Please include your first name.")
     @Column(nullable = false)
     private String firstName;
 
+    @NotBlank(message = "Please include your last name.")
     @Column(nullable = false)
     private String lastName;
 
+    @NotBlank(message = "Please include your email address.")
     @Column(nullable = false, unique = true)
     private String email;
 
     @Column(columnDefinition = "TEXT")
     private String aboutMe;
 
+    @NotBlank(message = "Please include a username.")
     @Column(nullable = false, unique = true)
     private String username;
 
@@ -46,6 +51,7 @@ public class User {
     @Column
     private String profile_picture_url = "/img/blank-profile-picture.png";
 
+    @NotBlank(message = "Please create a password.")
     @Column(nullable = false)
     @JsonIgnore
     private String password;
