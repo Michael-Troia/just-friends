@@ -100,15 +100,7 @@ public class UserController {
         return "user/edit";
     }
     @PostMapping("/edit/{username}")
-    public String editProfile(@PathVariable String username,
-                              @Valid User userToBeUpdated,
-                              Errors validation,
-                              Model model) {
-        if (validation.hasErrors()){
-            model.addAttribute("errors", validation);
-            model.addAttribute(userToBeUpdated);
-            return "user/edit";
-        }
+    public String editProfile(@PathVariable String username, @ModelAttribute User userToBeUpdated) {
         User user = userRepo.findByUsername(username);
         userToBeUpdated.setId(user.getId());
         userToBeUpdated.setUsername(user.getUsername());
@@ -158,22 +150,6 @@ public class UserController {
         model.addAttribute("currentUser", user);
 
         return "index";
-    }
-
-    //Show my-photos
-    @GetMapping("{username}/my-photos")
-    public String showPhotosHome(@PathVariable String username,
-                                 Model model){
-        User currentUser = userRepo.findByUsername(username);
-        List<Picture> userPhotos = pictureRepo.findAllByUser(currentUser);
-        List<Gallery> userGalleries = galleryRepo.findAllByUser(currentUser);
-
-        model.addAttribute("user", currentUser);
-        model.addAttribute("photos", userPhotos);
-        model.addAttribute("galleries", userGalleries);
-        model.addAttribute("gallery", new Gallery());
-
-        return "galleries/my-photos";
     }
 
 }

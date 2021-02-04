@@ -3,18 +3,15 @@ package com.example.justfriends.Controllers;
 import com.example.justfriends.Models.*;
 import com.example.justfriends.Repositories.*;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,10 +35,39 @@ public class PhotoController {
         this.pictureRepo = pictureRepo;
     }
 
+    //Show my-photos
+    @GetMapping("{username}/my-photos")
+    public String showPhotosHome(@PathVariable String username,
+                                 Model model){
+        User currentUser = userRepo.findByUsername(username);
+        List<Picture> userPhotos = pictureRepo.findAllByUser(currentUser);
+        List<Gallery> userGalleries = galleryRepo.findAllByUser(currentUser);
+
+        model.addAttribute("user", currentUser);
+        model.addAttribute("photos", userPhotos);
+        model.addAttribute("galleries", userGalleries);
+        model.addAttribute("gallery", new Gallery());
+
+        return "galleries/my-photos";
+    }
+
     //Create Gallery
     @PostMapping("{username}/gallery/create")
     public String createGallery(@PathVariable String username,
-                                @ModelAttribute Gallery gallery){
+                                @Valid Gallery gallery,
+                                Errors validation,
+                                Model model){
+        if (validation.hasErrors()){
+            User currentUser = userRepo.findByUsername(username);
+            List<Picture> userPhotos = pictureRepo.findAllByUser(currentUser);
+            List<Gallery> userGalleries = galleryRepo.findAllByUser(currentUser);
+            model.addAttribute("user", currentUser);
+            model.addAttribute("photos", userPhotos);
+            model.addAttribute("galleries", userGalleries);
+            model.addAttribute("gallery", gallery);
+            model.addAttribute("errors", validation);
+            return "galleries/my-photos";
+        }
         User newUser = userRepo.findByUsername(username);
         Gallery newGallery = new Gallery();
         newGallery.setCreatedDate(new Date());
@@ -88,11 +114,25 @@ public class PhotoController {
     @PostMapping("{username}/gallery/{id}/edit")
     public String editGallery(@PathVariable String username,
                               @PathVariable long id,
-                              @ModelAttribute Gallery galleryToBeUpdated){
+                              @Valid Gallery galleryToBeUpdated,
+                              Errors validation,
+                              Model model){
         User user = userRepo.findByUsername(username);
         Gallery gallery = galleryRepo.findById(id);
         galleryToBeUpdated.setCreatedDate(gallery.getCreatedDate());
         galleryToBeUpdated.setUser(gallery.getUser());
+        if (validation.hasErrors()){
+            User displayUser = userRepo.findByUsername(username);
+            User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            List<Picture> userPhotos = pictureRepo.findAllByGallery(gallery);
+            model.addAttribute("displayUser", displayUser);
+            model.addAttribute("displayPhoto", new Picture());
+            model.addAttribute("sessionUser", sessionUser);
+            model.addAttribute("gallery", galleryToBeUpdated);
+            model.addAttribute("photos", userPhotos);
+            model.addAttribute("errors", validation);
+            return "galleries/show";
+        }
         galleryRepo.save(galleryToBeUpdated);
 
         return "redirect:/" + username + "/gallery/{id}";
