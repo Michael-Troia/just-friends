@@ -49,6 +49,9 @@ public class UserFriendController {
     @PostMapping("/request/{username}/{friendName}")
     public String addFriend(@PathVariable String username,
                             @PathVariable String friendName){
+        if (userFriendRepo.findByUserAndFriend(userRepo.findByUsername(username), userRepo.findByUsername(friendName)) != null){
+            return "redirect:/";
+        }
         UserFriend userFriend = new UserFriend();
         userFriend.setFriend(userRepo.findByUsername(friendName));
         userFriend.setStatus(Status.PENDING);
