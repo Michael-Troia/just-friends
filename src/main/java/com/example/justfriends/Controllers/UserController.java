@@ -6,11 +6,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 
@@ -45,8 +47,29 @@ public class UserController {
         return "user/register";
     }
     @PostMapping("/sign-up")
-    public String registerUser(@ModelAttribute User user,
-                               Model viewModel) {
+    public String registerUser(Model model,
+                               @Valid User user,
+                               Errors validation) {
+        if (userRepo.findByEmail(user.getEmail()) != null){
+            validation.rejectValue(
+                    "email",
+                    "user.email",
+                    "This email is already in use."
+            );
+        }
+        if (userRepo.findByUsername(user.getUsername()) != null){
+            validation.rejectValue(
+                    "username",
+                    "user.username",
+                    "This username is taken."
+            );
+        }
+        if (validation.hasErrors()){
+            model.addAttribute("user", user);
+            model.addAttribute("errors", validation);
+
+            return "user/register";
+        }
         String hash = passwordEncoder.encode(user.getPassword());
         Date date = new Date();
         Gallery defaultGallery = new Gallery();
@@ -62,7 +85,7 @@ public class UserController {
         user.setCreatedDate(date);
         user.setProfile_picture_url("/img/blank-profile-picture.png");
         User dbUser = userRepo.save(user);
-        viewModel.addAttribute("user", dbUser);
+        model.addAttribute("user", dbUser);
         System.out.println(dbUser.getUsername());
 
         return "redirect:/";
