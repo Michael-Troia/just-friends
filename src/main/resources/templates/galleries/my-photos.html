@@ -8,13 +8,21 @@
 <body>
 <nav th:replace="partials/navbar :: navbar"></nav>
 
+<!--todo this code is broken if a gallery has no photos-->
 <h1>Galleries</h1>
-<div class="row" id="gallery-thumbnails">
-    <div id="photo-gallery" th:each="item: ${galleries}">
-        <div class="col-4" id="thumbnail-container">
+<div id="gallery-thumbnails">
+    <div th:each="item: ${galleries}">
+        <div th:if="${!item.getPictures().isEmpty()}" id="thumbnail-container">
             <a th:href="@{/{username}/gallery/{id} (username=${user.getUsername()}, id=${item.getId()})}">
-                <img class="card-img-top" id="gallery-thumbnail-image" th:src="${item.getPictures().get(0).getPictureUrl().toString()}" alt="Gallery Thumbnail Image">
+                <img class="card-img-top gallery-thumbnail-image" th:src="${item.getPictures.get(0).getPictureUrl().toString()}" alt="Gallery Thumbnail Image">
             </a>
+            <p id="caption" th:text="${item.getName()}"></p>
+        </div>
+        <div th:if="${item.getPictures().isEmpty()}">
+            <a th:href="@{/{username}/gallery/{id} (username=${user.getUsername()}, id=${item.getId()})}">
+                <img class="card-img-top gallery-thumbnail-image" src="/img/thumbnailDefault.jpg" alt="Gallery Thumbnail Image">
+            </a>
+            <p class="caption" th:text="${item.getName()}"></p>
         </div>
     </div>
 </div>

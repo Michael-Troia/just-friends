@@ -164,10 +164,13 @@ public class UserFriendController {
             userFriends.add(userUserFriend.getFriend());
         }
 
+        List<Gallery> friendGalleries = galleryRepo.findAllByUser(friend);
+
         model.addAttribute("friendFriends" ,friendFriends);
         model.addAttribute("friend", friend);
         model.addAttribute("userFriendList" , userFriends);
         model.addAttribute("currentUser", currentUser);
+        model.addAttribute("friendGalleries", friendGalleries);
 
         return "userFriend/friend-profile";
     }

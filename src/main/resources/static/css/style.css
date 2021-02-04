@@ -1,3 +1,7 @@
+* {
+    border: gray 1px solid;
+}
+
 #profile-photo {
     max-width: 300px;
     max-height: 300px;
@@ -6,4 +10,15 @@
 #friend-profile-picture {
     max-height: 150px;
     max-width: 150px;
+}
+
+#thumbnail-container {
+    margin: 10px;
+    float: left;
+    width: 100%;
+}
+
+.gallery-thumbnail-image {
+    width: 100%;
+    height: auto;
 }
