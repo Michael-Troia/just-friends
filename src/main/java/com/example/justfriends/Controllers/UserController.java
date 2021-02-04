@@ -100,7 +100,15 @@ public class UserController {
         return "user/edit";
     }
     @PostMapping("/edit/{username}")
-    public String editProfile(@PathVariable String username, @ModelAttribute User userToBeUpdated) {
+    public String editProfile(@PathVariable String username,
+                              @Valid User userToBeUpdated,
+                              Errors validation,
+                              Model model) {
+        if (validation.hasErrors()){
+            model.addAttribute("errors", validation);
+            model.addAttribute(userToBeUpdated);
+            return "user/edit";
+        }
         User user = userRepo.findByUsername(username);
         userToBeUpdated.setId(user.getId());
         userToBeUpdated.setUsername(user.getUsername());
