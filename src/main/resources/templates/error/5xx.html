@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!DOCTYPE html>
+    <html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="partials/head :: head('Error')">
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+<body>
+<nav th:replace="partials/navbar :: navbar"></nav>
+<h1>Whoops...</h1>
+<p>We had an internal server error, use this <a href="javascript:window.history.back();">back</a> button and try again.</p>
+
+
+<footer th:replace="partials/footer :: footer"></footer>
+</body>
+</html>
