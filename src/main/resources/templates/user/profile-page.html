@@ -7,6 +7,7 @@
 </head>
 <body>
     <nav th:replace="partials/navbar :: navbar"></nav>
+    <div sec:authorize="isAuthenticated()" class="navbar-nav">
 
     <h1>Profile Page</h1>
     <div class="row">
@@ -30,30 +31,43 @@
             </div>
         </div>
 
-        <div class="col-6">
-            <div sec:authorize="isAuthenticated()" class="navbar-nav">
-                <div class="row">
-                    <div class="card col-6 p-3" th:each="item : ${friends}">
-                        <img class="card-img-top" id="friend-profile-picture" th:src="${item.getFriend().profile_picture_url.toString()}" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title"><a th:href="@{/{username}/friend/{friendName} (username=${sessionUser.getUsername()}, friendName=${item.getFriend().getUsername()})}" th:text="${item.getFriend().username}"></a></h5>
-                            <div>
-                                <p th:text="${item.getFriend().getFirstName()}"></p>
-                                <p th:text="${item.getFriend().getLastName()}"></p>
-                            </div>
+
+        <div class="card col-3">
+            <div class="card-body row p-3" th:each="item : ${friends}">
+                <div class="col">
+                    <img class="card-img-top" id="friend-profile-picture" th:src="${item.getFriend().profile_picture_url.toString()}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title"><a th:href="@{/{username}/friend/{friendName} (username=${sessionUser.getUsername()}, friendName=${item.getFriend().getUsername()})}" th:text="${item.getFriend().username}"></a></h5>
+                        <div>
+                            <p th:text="${item.getFriend().getFirstName()}"></p>
+                            <p th:text="${item.getFriend().getLastName()}"></p>
                         </div>
                     </div>
                 </div>
-                <!--        <div class="card col-6" style="width: 40rem;">-->
-                <!--            <div class="card-body">-->
-                <!--                <h5 class="card-title">Photos</h5>-->
-                <!--                &lt;!&ndash;            todo gallery thumbnails here&ndash;&gt;-->
-                <!--                <p class="card-text">Gallery thumbnails go here</p>-->
-                <!--                <a th:href="@{/{username}/photos (username=${friend.getUsername()})}" class="btn btn-primary">View Photos</a>-->
-                <!--            </div>-->
-                <!--        </div>-->
             </div>
         </div>
+
+        <div class="card col-6" id="gallery-thumbnails">
+            <div class="card-body">
+                <div class="row" th:each="item: ${galleries}">
+                    <div class="col-6">
+                        <div th:if="${!item.getPictures().isEmpty()}" id="thumbnail-container">
+                            <a th:href="@{/{username}/gallery/{id} (username=${user.getUsername()}, id=${item.getId()})}">
+                                <img class="card-img-top gallery-thumbnail-image" th:src="${item.getPictures.get(0).getPictureUrl().toString()}" alt="Gallery Thumbnail Image">
+                            </a>
+                            <p id="caption" th:text="${item.getName()}"></p>
+                        </div>
+                        <div th:if="${item.getPictures().isEmpty()}">
+                            <a th:href="@{/{username}/gallery/{id} (username=${user.getUsername()}, id=${item.getId()})}">
+                                <img class="card-img-top gallery-thumbnail-image" src="/img/thumbnailDefault.jpg" alt="Gallery Thumbnail Image">
+                            </a>
+                            <p class="caption" th:text="${item.getName()}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 
 

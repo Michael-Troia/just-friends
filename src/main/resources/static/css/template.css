@@ -1,0 +1,138 @@
+*{
+    border: 1px dotted black;
+}
+body{
+    background-color: white;
+    margin: 0px;
+}
+
+
+.template {
+    display: grid;
+    grid-template-areas: "header header header"
+	                     "navigation main ads";
+    grid-template-columns: 350px 1fr;
+    grid-template-rows: 100px
+						1fr
+						400px;
+    min-height: 100vh;
+    width: 80%;
+    margin: auto;
+    background-color: lavender;
+    border: 30px solid lavender;
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+header { grid-area: header; }
+.footer { grid-area: footer; }
+.main { grid-area: main; }
+.left { grid-area: navigation; }
+.right { grid-area: ads; }
+
+.main {
+    height: 100%;
+}
+.template-container {
+    height: 100%;
+}
+.card-grid-container {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+}
+.card-grid {
+    display: grid;
+    /*     grid-template-columns: repeat(4, 14%); */
+    grid-auto-rows: auto;
+    grid-template-columns: repeat( auto-fit, minmax(20%, 1fr) );
+    grid-gap: 2%;
+    justify-content: center;
+    /*     border: 10px solid black; */
+    width: 70%;
+    height: 100%;
+}
+.photo-cards {
+    border: 2px solid #e7e7e7;
+    border-radius: 4px;
+    height: 100%;
+    width: 100%;
+}
+.pic {
+    height: 80%;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 5px;
+}
+.card-img-top{
+    width: 80%;
+}
+.pic-title {
+    padding: 0px 10px;
+    margin: 0px;
+    overflow: hidden;
+    text-align: left;
+}
+
+header,
+footer {
+    grid-column: 1 / span 2;
+}
+
+@media screen and (max-width: 1400px) {
+    .template {
+        grid-template-areas: "header"
+		                     "navigation"
+		                     "main"
+		                     "ads"
+		                     "footer";
+        grid-template-columns: 100%;
+        grid-template-rows: auto
+							auto
+							1fr
+							50px
+							30px;
+    }
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 30%);
+        grid-auto-rows: auto;
+        grid-gap: 2em;
+    }
+    .card-img-top {
+        width: 40%
+    }
+}
+
+
+@media screen and (max-width: 1000px) {
+    .template {
+        grid-template-areas: "header"
+		                     "navigation"
+		                     "main"
+		                     "ads"
+		                     "footer";
+        grid-template-columns: 100%;
+        grid-template-rows: auto
+							auto
+							auto
+							50px
+							30px;
+        width: 90%;
+    }
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 40%);
+        grid-auto-rows: auto;
+        grid-gap: 2em;
+    }
+    .left {
+        height: 100%;
+    }
+    .card-img-top {
+        width: 40%
+    }
+}

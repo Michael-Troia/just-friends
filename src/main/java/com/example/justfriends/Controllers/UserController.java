@@ -127,6 +127,9 @@ public class UserController {
         User user = userRepo.findByUsername(username);
         List<UserFriend> userFriends = userFriendRepo.findAllByUserAndStatus(user, Status.ACCEPTED);// lists friends that you've accepted
         User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        List<Gallery> galleries = galleryRepo.findAllByUser(user);
+        model.addAttribute("galleries", galleries);
         model.addAttribute("friendsList", userFriends);
         model.addAttribute("user", user);
         model.addAttribute("sessionUser", sessionUser);
@@ -160,4 +163,9 @@ public class UserController {
         return "index";
     }
 
+    //show template
+    @GetMapping("/template")
+    public String showTemplate(){
+        return "gallery-template";
+    }
 }
