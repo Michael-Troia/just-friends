@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/layout.css/}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+</head>
+<body>
+<header class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link" href="#">Features</a>
+                <a class="nav-item nav-link" href="#">Pricing</a>
+                <a class="nav-item nav-link disabled" href="#">Disabled</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="grid template">
+    <aside>
+        <div class="container-fluid">
+            <div class="card p-0">
+                <img class="card-img-top container-fluid" src="https://imgix.bustle.com/uploads/image/2017/8/22/4dbabff7-c8bd-4817-abff-a413fd946e49-joey-tribbiani-pineapple.jpg?w=800&fit=crop&crop=faces&auto=format%2Ccompress&q=50&dpr=2" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Joey</h5>
+                    <p class="card-text">
+                        <h6>About Me:</h6>
+                        <p>Joseph Francis Tribbiani Jr. is a fictional character, serving as one of the primary characters of the NBC sitcom Friends and the main protagonist of its spin-off Joey, and he is portrayed by Matt LeBlanc in both series.</p>
+                        <br>
+                        <p>Joseph</p>
+                        <p>Francis</p>
+                        <p>Member Since:</p>
+                        <p>July 25th, 1967</p>
+                        <p>JoeSchmoe@email.com</p>
+                        <p>Actor</p>
+                    </p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <main>
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Home</a>
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Profile</a>
+                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</a>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <!--       tab 1 -->
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                <div class="form">
+                    <div class="mb-3">
+                        <label for="formGroupExampleInput" class="form-label">Example label</label>
+                        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input placeholder">
+                    </div>
+                    <div class="mb-3">
+                        <label for="formGroupExampleInput2" class="form-label">Another label</label>
+                        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input placeholder">
+                    </div>
+                </div>
+            </div>
+            <!--       tab 2 -->
+            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" >
+                <div class="container-fluid p-1">
+                    <div class="">
+                        <div class="image-box col-xs-6 col-md-3"><img class="centered-image" src="https://thumbs.dreamstime.com/b/happy-family-mother-father-children-son-daughter-sunset-nature-150794881.jpg" alt="img"></div>
+                        <div class="image-box col-xs-6 col-md-3"><img class="centered-image" src="https://images-na.ssl-images-amazon.com/images/I/71bNsWlkyeL._AC_SX522_.jpg" alt="img"></div>
+                        <div class="image-box col-xs-6 col-md-3"><img class="centered-image" src="https://images-na.ssl-images-amazon.com/images/I/71bNsWlkyeL._AC_SX522_.jpg" alt="img"></div>
+                        <div class="image-box col-xs-6 col-md-3"><img class="centered-image" src="https://images-na.ssl-images-amazon.com/images/I/71bNsWlkyeL._AC_SX522_.jpg" alt="img"></div>
+                        <div class="image-box col-xs-6 col-md-3"><img class="centered-image" src="https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cg_face%2Cq_auto:good%2Cw_300/MTQ3NjM5ODIyNjU0MTIxMDM0/snoop_dogg_photo_by_estevan_oriol_archive_photos_getty_455616412.jpg" alt="img"></div>
+                    </div>
+                </div>
+            </div>
+            <!--       tab 3 -->
+            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" >
+                contact contact
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        Footer
+    </footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
