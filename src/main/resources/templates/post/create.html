@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<nav th:replace="partials/navbar :: navbar"></nav>
+<header th:replace="partials/header :: header"></header>
 
 <h1>Post</h1>
 <form th:action="@{/posts/create/{username}(username=${#authentication.principal.username})}" th:object="${post}" method="POST" class="p-3">

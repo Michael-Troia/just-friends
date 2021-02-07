@@ -6,7 +6,7 @@
     <title>Title</title>
 </head>
 <body>
-<nav th:replace="partials/navbar :: navbar"></nav>
+<header th:replace="partials/header :: header"></header>
 
 <h1>Edit a post</h1>
 <form th:action="@{/posts/edit/{username}/{id} (username = ${user.username}, id = ${post.id} )}" th:object="${post}" method="POST" class="p-3">

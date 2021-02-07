@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<nav th:replace="partials/navbar :: navbar"></nav>
+<header th:replace="partials/header :: header"></header>
 
 <h1>comment</h1>
 <form th:action="@{/posts/create/{username}/{postId}/comment (username=${#authentication.principal.username}, postId=${post.getId()})}" th:object="${comment}" method="POST" class="p-3">
