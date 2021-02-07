@@ -160,4 +160,10 @@ public class UserController {
         return "index";
     }
 
+    //layout prototype
+    @GetMapping("/layout")
+    public String showLayout(){
+        return "partials/layout";
+    }
+
 }
