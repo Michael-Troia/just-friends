@@ -127,6 +127,8 @@ public class UserController {
         User user = userRepo.findByUsername(username);
         List<UserFriend> userFriends = userFriendRepo.findAllByUserAndStatus(user, Status.ACCEPTED);// lists friends that you've accepted
         User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        model.addAttribute("galleries", galleryRepo.findAllByUser(user));
+        model.addAttribute("all-galleries", galleryRepo.findAll());
         model.addAttribute("friendsList", userFriends);
         model.addAttribute("user", user);
         model.addAttribute("sessionUser", sessionUser);

@@ -68,6 +68,7 @@ img {
     height: calc(var(--width) / var(--items));
     object-fit: cover;
 }
+
 .image-text-container:hover {
     transform: scale(1.1);
 }
