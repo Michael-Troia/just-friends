@@ -3,6 +3,7 @@ package com.example.justfriends.Controllers;
 import com.example.justfriends.Models.*;
 import com.example.justfriends.Repositories.*;
 import com.example.justfriends.Services.EmailService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -159,6 +160,8 @@ public class UserFriendController {
                                     @PathVariable String friendName,
                                     Model model){
         User currentUser = userRepo.findByUsername(username);
+        User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         User friend = userRepo.findByUsername(friendName);
 
         List<UserFriend> friendUserFriends = userFriendRepo.findAllByUserAndStatus(friend, Status.ACCEPTED);// friend's friend list
@@ -179,7 +182,8 @@ public class UserFriendController {
         model.addAttribute("friend", friend);
         model.addAttribute("userFriendList" , userFriends);
         model.addAttribute("currentUser", currentUser);
-        model.addAttribute("friendGalleries", friendGalleries);
+        model.addAttribute("galleries", friendGalleries);
+        model.addAttribute("sessionUser", sessionUser);
 
         return "userFriend/friend-profile";
     }
