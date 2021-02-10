@@ -7,47 +7,160 @@
 </head>
 <body>
 <header th:replace="partials/header :: header"></header>
-<h1>Gallery</h1>
-<h2 th:text="${gallery.getName()}"></h2>
-
-<div th:each="item : ${photos}">
-    <img id="galleryPhoto" th:src="${item.pictureUrl}"
-         alt="User uploaded image"/>
-
-    <h4 th:text="${item.getComment()}"></h4>
-    <div th:if="${sessionUser.getUsername()} == ${displayUser.getUsername()}">
-        <!--    todo create view/controller to edit/delete photos-->
-        <div style="border: rebeccapurple solid 1px;">
-            <form th:action="@{/{username}/photo/{id}/edit (username=${sessionUser.getUsername()}, id=${item.getId()})}" th:object="${displayPhoto}" method="POST" class="p-3">
-                <label for="caption">Caption</label>
-                <textarea id="caption" class="form-control" rows="1" cols="5" th:field="*{comment}"></textarea>
-                <button type="submit" class="btn btn-primary">Change Picture Caption</button>
-            </form>
-            <form th:action="@{/{username}/photo/{id}/delete (username=${sessionUser.getUsername()}, id=${item.getId()})}" method="post" th:object="${displayPhoto}">
-                <input type="submit" name="delete" VALUE="DELETE"/>
-            </form>
+<div class="grid template">
+    <aside>
+        <div class="container-fluid">
+            <div class="card p-0">
+                <img class="card-img-top container-fluid" th:src="${user.getProfile_picture_url().toString()}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${user.username}"></h5>
+                    <div class="card-text p-0">
+                        <h6>About Me:</h6>
+                        <p th:text="${user.aboutMe}"></p>
+                        <br>
+                        <p th:text="${user.firstName}"></p>
+                        <p th:text="${user.lastName}"></p>
+                        <p th:text="${user.createdDate}"></p>
+                        <p th:text="${user.birthday}"></p>
+                        <p th:text="${user.email}"></p>
+                        <p th:text="${user.job}"></p>
+                    </div>
+                    <a th:if="${sessionUser.username == user.username}" th:href="@{/edit/{username}(username=${#authentication.principal.username})}" class="card-link">Edit Profile</a>
+                    <a th:href="@{/{username}/my-photos (username=${#authentication.principal.username})}" class="btn btn-primary p-3">View Photos</a>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
+    </aside>
+    <main>
+        <div style="width: 100%;">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link" id="nav-friends-tab" data-toggle="tab" href="#nav-friends" role="tab" aria-controls="nav-friends" aria-selected="false">Friends</a>
+                    <a class="nav-item nav-link active" id="nav-photos-tab" data-toggle="tab" href="#nav-photos" role="tab" aria-controls="nav-photos" aria-selected="true">Photos</a>
+                    <a class="nav-item nav-link" id="nav-posts-tab" data-toggle="tab" href="#nav-posts" role="tab" aria-controls="nav-posts" aria-selected="false">Posts</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <!--       tab 1 friends-->
+                <div class="tab-pane fade" id="nav-friends" role="tabpanel" aria-labelledby="nav-friends-tab">
+                    <div class="square-gallery p-0">
+                        <div class="image-text-container gallery-item" th:each="item : ${friends}">
+                            <a th:href="@{/{username}/friend/{friendName} (username=${sessionUser.getUsername()}, friendName=${item.getFriend().getUsername()})}">
+                                <img th:src="${item.getFriend().profile_picture_url.toString()}">
+                                <p class="image-text" th:text="${item.getFriend().username}"></p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+<!--            tab 2 photos    -->
+                <div class="tab-pane fade show active" id="nav-photos" role="tabpanel" aria-labelledby="nav-photos-tab" >
+                    <h2 th:text="${gallery.getName()}"></h2>
+                    <div class="square-gallery p-0">
+                        <div th:each="item : ${photos}">
+                            <div class="image-text-container gallery-item">
+                                <div id="thumbnail-container">
+<!--                                    todo need create zoom on click-->
+                                    <a  href="#" data-toggle="modal">
+                                        <img id="galleryPhoto" th:src="${item.pictureUrl}" alt="User uploaded image"/>
+                                    </a>
+                                    <div class="caption" th:text="${item.getComment()}"></div>
+                                    <div th:if="${sessionUser.getUsername()} == ${displayUser.getUsername()}">
+                                        <div class="pic-btn-container">
+                                            <form th:action="@{/{username}/photo/{id}/edit (username=${sessionUser.getUsername()}, id=${item.getId()})}" th:object="${displayPhoto}" method="POST" class="gallery-btn p-0">
+                                                <textarea id="caption" class="form-control" rows="1" cols="5" th:field="*{comment}"></textarea>
+                                                <button type="submit" class="btn btn-primary">Change Picture Caption</button>
+                                            </form>
+                                            <form th:action="@{/{username}/photo/{id}/delete (username=${sessionUser.getUsername()}, id=${item.getId()})}" method="post" th:object="${displayPhoto}" class="gallery-btn">
+                                                <input type="submit" name="delete" VALUE="DELETE"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br><br><br><br><br><br><br>
+<!--                    redesign this-->
+                    <div th:if="${sessionUser.getUsername()} == ${displayUser.getUsername()}">
+                        <!--        todo create add photo form/controller-->
+                        <form th:action="@{/{username}/gallery/{id}/create-photo (username=${sessionUser.getUsername()}, id=${gallery.getId()})}" method="get" class="p-3">
+                            <input type="submit" name="add-photo" VALUE="Add Photo"/>
+                        </form>
+                        <div style="border: coral solid 1px;">
+                            <form th:action="@{/{username}/gallery/{id}/edit (username=${sessionUser.getUsername()}, id=${gallery.getId()})}" th:object="${gallery}" method="POST" class="p-3">
+                                <label for="galleryName">Gallery Name</label>
+                                <textarea id="galleryName" class="form-control" rows="1" cols="5" th:field="*{name}"></textarea>
+                                <button type="submit" class="btn btn-primary">Change Gallery Name</button>
+                                <div class="error-message" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                            </form>
+                            <form th:action="@{/{username}/gallery/{id}/delete (username=${sessionUser.getUsername()}, id=${gallery.getId()})}" th:object="${gallery}" method="post" class="p-3">
+                                <input type="submit" name="delete" VALUE="DELETE"/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!--       tab 3 -->
+                <div class="tab-pane fade" id="nav-posts" role="tabpanel" aria-labelledby="nav-posts-tab">
+                    <div class="container">
+                        <div th:each="item : ${posts}">
+                            <div class="card">
+                                <!--                                <img src="..." class="rounded me-2" alt="...">-->
+                                <div class="card-body">
+                                    <strong class="me-auto card-title">
+                                        <a th:if="${item.getUser() != user}" th:href="@{/{username}/friend/{friendName} (friendName=${item.getUser().getUsername()}, username=${user.getUsername()})}" th:text="${item.getUser().getUsername()}"></a>
+                                        <a th:if="${item.getUser() == user}" th:href="@{/{username} (username=${user.getUsername()})}" th:text="${item.getUser().getUsername()}"></a>
+                                    </strong>
+                                    <small class="text-muted" th:text="${item.getCreatedDate()}"></small>
+                                    <p class="card-text" th:text="${item.getBody()}"></p>
+                                    <div class="mt-2 pt-2 border-top">
+                                        <div th:if="${item.getUser() == user}">
+                                            <a th:href="@{/posts/edit/{username}/{id} (username=${user.getUsername()}, id=${item.getId()})}">Edit Post</a>
+                                            <form th:action="@{/posts/delete/{username}/{id} (username=${user.getUsername()}, id = ${item.getId()})}" th:method="post">
+                                                <input type="submit" name="delete" VALUE="Remove post"/>
+                                            </form>
+                                        </div>
+                                        <a th:href="@{/posts/create/{username}/{postId}/comment (username=${user.username}, postId = ${item.getId()})}" class="card-link">Comment</a>
+                                    </div>
+                                </div>
+                            </div>
 
-<div th:if="${sessionUser.getUsername()} == ${displayUser.getUsername()}">
-<!--        todo create add photo form/controller-->
-    <form th:action="@{/{username}/gallery/{id}/create-photo (username=${sessionUser.getUsername()}, id=${gallery.getId()})}" method="get" class="p-3">
-        <input type="submit" name="add-photo" VALUE="Add Photo"/>
-    </form>
-    <div style="border: coral solid 1px;">
-        <form th:action="@{/{username}/gallery/{id}/edit (username=${sessionUser.getUsername()}, id=${gallery.getId()})}" th:object="${gallery}" method="POST" class="p-3">
-            <label for="galleryName">Gallery Name</label>
-            <textarea id="galleryName" class="form-control" rows="1" cols="5" th:field="*{name}"></textarea>
-            <button type="submit" class="btn btn-primary">Change Gallery Name</button>
-            <div class="error-message" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
-        </form>
-        <form th:action="@{/{username}/gallery/{id}/delete (username=${sessionUser.getUsername()}, id=${gallery.getId()})}" th:object="${gallery}" method="post" class="p-3">
-            <input type="submit" name="delete" VALUE="DELETE"/>
-        </form>
-    </div>
+                            <div th:each="comment : ${comments}" class="m-5">
+                                <div th:if="${comment.getParentPost() == item}" >
+                                    <div class="card">
+                                        <!--                                <img src="..." class="rounded me-2" alt="...">-->
+                                        <div class="card-body">
+                                            <strong class="me-auto card-title">
+                                                <a th:if="${comment.getUser() != user}" th:href="@{/{username}/friend/{friendName} (friendName=${comment.getUser().getUsername()}, username=${user.getUsername()})}" th:text="${comment.getUser().getUsername()}"></a>
+                                                <a th:if="${comment.getUser() == user}" th:href="@{/{username} (username=${user.getUsername()})}" th:text="${user.getUsername()}"></a>
+                                            </strong>
+                                            <small class="text-muted" th:text="${comment.getCreatedDate()}"></small>
+                                            <p class="card-text" th:text="${comment.getBody()}"></p>
+                                            <div class="mt-2 pt-2 border-top">
+                                                <div th:if="${comment.getUser() == user}">
+                                                    <a th:id="editComment" th:href="@{/comments/edit/{username}/{commentId} (username=${user.username}, commentId=${comment.getId()})}">Edit Comment</a>
+                                                    <form th:action="@{/comments/delete/{username}/{commentId} (username=${user.getUsername()}, commentId=${comment.getId()})}" method="post">
+                                                        <input type="submit" name="delete" VALUE="Remove Comment"/>
+                                                    </form>
+                                                </div>
+                                                <!--                                            <a th:href="@{/posts/create/{username}/{postId}/comment (username=${user.username}, postId = ${item.getId()})}" class="card-link">Comment</a>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        footer
+    </footer>
 </div>
-
-    <footer th:replace="partials/footer :: footer"></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -36,7 +36,6 @@
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <a class="nav-item nav-link active" id="nav-friends-tab" data-toggle="tab" href="#nav-friends" role="tab" aria-controls="nav-friends" aria-selected="true">Friends</a>
                         <a class="nav-item nav-link" id="nav-photos-tab" data-toggle="tab" href="#nav-photos" role="tab" aria-controls="nav-photos" aria-selected="false">Photos</a>
-                        <a class="nav-item nav-link" id="nav-posts-tab" data-toggle="tab" href="#nav-posts" role="tab" aria-controls="nav-posts" aria-selected="false">Posts</a>
                     </div>
                 </nav>
             </nav>
@@ -75,8 +74,8 @@
                     <div class="square-gallery p-0">
                         <div class="image-text-container gallery-item" th:each="item : ${galleries}">
                             <div th:if="${!item.getPictures().isEmpty()}" id="thumbnail-container">
-                                <a class="modal-link" href="#exampleModal" data-toggle="modal" th:data-id="${item.getId()}">
-                                    <!--                                <a th:href="@{/{username}/gallery/{id} (username=${user.getUsername()}, id=${item.getId()})}">-->
+<!--                                <a class="modal-link" href="#exampleModal" data-toggle="modal" th:data-id="${item.getId()}">-->
+                                <a th:href="@{/{username}/gallery/{id} (username=${user.getUsername()}, id=${item.getId()})}">
                                     <img th:src="${item.getPictures.get(0).getPictureUrl().toString()}" alt="Gallery Thumbnail Image">
                                     <p class="image-text" th:text="${item.getName()}"></p>
                                 </a>
@@ -88,38 +87,35 @@
                                 </a>
                             </div>
                             <!--                    tab 2 photos modal-->
-                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document" style="width: auto;">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel" th:text="${item.name}"></h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div id="modal-content-div"></div>
-                                            <div class="square-gallery p-0">
-                                                <div class="image-text-container gallery-item" th:each="picture : ${item.getPictures()}">
-                                                    <a th:href="@{/{username}/gallery/{id} (username=${friend.getUsername()}, id=${picture.getGallery().getId()})}">
-                                                        <img th:src="${picture.pictureUrl.toString()}">
-                                                        <p class="image-text" th:text="${picture.comment}"></p>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Save changes</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+<!--                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+<!--                                <div class="modal-dialog" role="document" style="width: auto;">-->
+<!--                                    <div class="modal-content">-->
+<!--                                        <div class="modal-header">-->
+<!--                                            <h5 class="modal-title" id="exampleModalLabel" th:text="${item.name}"></h5>-->
+<!--                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                                                <span aria-hidden="true">&times;</span>-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                        <div class="modal-body">-->
+<!--                                            <div id="modal-content-div"></div>-->
+<!--                                            <div class="square-gallery p-0">-->
+<!--                                                <div class="image-text-container gallery-item" th:each="picture : ${item.getPictures()}">-->
+<!--                                                    <a th:href="@{/{username}/gallery/{id} (username=${friend.getUsername()}, id=${picture.getGallery().getId()})}">-->
+<!--                                                        <img th:src="${picture.pictureUrl.toString()}">-->
+<!--                                                        <p class="image-text" th:text="${picture.comment}"></p>-->
+<!--                                                    </a>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="modal-footer">-->
+<!--                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+<!--                                            <button type="button" class="btn btn-primary">Save changes</button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
                         </div>
                     </div>
-                </div>
-                <!--       tab 3 -->
-                <div class="tab-pane fade" id="nav-posts" role="tabpanel" aria-labelledby="nav-posts-tab">
                 </div>
             </div>
         </div>
