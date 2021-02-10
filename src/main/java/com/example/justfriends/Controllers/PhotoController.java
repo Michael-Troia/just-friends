@@ -96,17 +96,12 @@ public class PhotoController {
     public String showPhotosHome(@PathVariable String username,
                                  @PathVariable long id,
                                  Model model){
-        User displaygalleryUser = userRepo.findByUsername(username);
         User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Gallery gallery = galleryRepo.findById(id);
-        List<Picture> userPhotos = pictureRepo.findAllByGallery(gallery);
+        User displayGalleryUser = gallery.getUser();
 
-        model.addAttribute("displayUser", displaygalleryUser);
-        model.addAttribute("displayPhoto", new Picture());
-        model.addAttribute("sessionUser", sessionUser);
-        model.addAttribute("gallery", gallery);
-        model.addAttribute("photos", userPhotos);
+        List<Picture> userPhotos = pictureRepo.findAllByGallery(gallery);
 
         User user = userRepo.findByUsername(username);
         List<UserFriend> userFriends = userFriendRepo.findAllByUserAndStatus(user, Status.ACCEPTED);// lists friends that you've accepted
@@ -125,6 +120,11 @@ public class PhotoController {
             }
         }
 
+        model.addAttribute("displayUser", displayGalleryUser);
+        model.addAttribute("displayPhoto", new Picture());
+        model.addAttribute("sessionUser", sessionUser);
+        model.addAttribute("gallery", gallery);
+        model.addAttribute("photos", userPhotos);
         model.addAttribute("galleries", galleryRepo.findAllByUser(user));
         model.addAttribute("all-galleries", galleryRepo.findAll());
         model.addAttribute("friendsList", userFriends);
@@ -133,6 +133,7 @@ public class PhotoController {
         model.addAttribute("friends",userFriendRepo.findAllByUserAndStatus(user,Status.ACCEPTED));
         model.addAttribute("comments", displayComments);
         model.addAttribute("posts", displayPosts);
+        model.addAttribute("picture", new Picture());
 
         return "galleries/show";
     }
@@ -149,20 +150,11 @@ public class PhotoController {
         galleryToBeUpdated.setCreatedDate(gallery.getCreatedDate());
         galleryToBeUpdated.setUser(gallery.getUser());
         if (validation.hasErrors()){
-            User displayUser = userRepo.findByUsername(username);
-            User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            List<Picture> userPhotos = pictureRepo.findAllByGallery(gallery);
-            model.addAttribute("displayUser", displayUser);
-            model.addAttribute("displayPhoto", new Picture());
-            model.addAttribute("sessionUser", sessionUser);
-            model.addAttribute("gallery", galleryToBeUpdated);
-            model.addAttribute("photos", userPhotos);
-            model.addAttribute("errors", validation);
-            return "galleries/show";
+            return "redirect:/" + username + "/gallery/" + id;
         }
         galleryRepo.save(galleryToBeUpdated);
 
-        return "redirect:/" + username + "/gallery/{id}";
+        return "redirect:/" + username + "/gallery/" + id;
     }
 
     //Delete Gallery

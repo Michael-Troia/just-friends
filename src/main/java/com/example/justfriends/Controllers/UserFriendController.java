@@ -129,30 +129,30 @@ public class UserFriendController {
     }
 
     //Show NewsFeed
-    @GetMapping("/{username}/stories")
-    public String showNewsFeed(@PathVariable String username,
-                                     Model model){
-        User currentUser = userRepo.findByUsername(username);
-        List<UserFriend> userFriends = userFriendRepo.findAllByUserAndStatus(currentUser, Status.ACCEPTED);// lists friends that you've accepted
-        ArrayList<User> displayUsers = new ArrayList<>();// lists User objects of all the user's friends
-        for (UserFriend userFriend : userFriends) {
-            displayUsers.add(userFriend.getFriend());
-        }
-        displayUsers.add(currentUser);// includes your own posts in stories view
-        ArrayList<Post> displayPosts = new ArrayList<>();// lists all posts by all friends and the user
-        ArrayList<Comment> displayComments = new ArrayList<>();// lists all comments to all posts by all friends and user
-        for (User displayUser : displayUsers) {
-            for (Post post : postRepo.findAllByUser(displayUser)) {
-                displayPosts.add(post);
-                displayComments.addAll(commentRepo.findAllByParentPost(post));
-            }
-        }
-        model.addAttribute("comments", displayComments);
-        model.addAttribute("currentUser", currentUser);
-        model.addAttribute("posts", displayPosts);
-
-        return "userFriend/stories";
-    }
+//    @GetMapping("/{username}/stories")
+//    public String showNewsFeed(@PathVariable String username,
+//                                     Model model){
+//        User currentUser = userRepo.findByUsername(username);
+//        List<UserFriend> userFriends = userFriendRepo.findAllByUserAndStatus(currentUser, Status.ACCEPTED);// lists friends that you've accepted
+//        ArrayList<User> displayUsers = new ArrayList<>();// lists User objects of all the user's friends
+//        for (UserFriend userFriend : userFriends) {
+//            displayUsers.add(userFriend.getFriend());
+//        }
+//        displayUsers.add(currentUser);// includes your own posts in stories view
+//        ArrayList<Post> displayPosts = new ArrayList<>();// lists all posts by all friends and the user
+//        ArrayList<Comment> displayComments = new ArrayList<>();// lists all comments to all posts by all friends and user
+//        for (User displayUser : displayUsers) {
+//            for (Post post : postRepo.findAllByUser(displayUser)) {
+//                displayPosts.add(post);
+//                displayComments.addAll(commentRepo.findAllByParentPost(post));
+//            }
+//        }
+//        model.addAttribute("comments", displayComments);
+//        model.addAttribute("currentUser", currentUser);
+//        model.addAttribute("posts", displayPosts);
+//
+//        return "userFriend/stories";
+//    }
 
     //View Friend profile
     @GetMapping("/{username}/friend/{friendName}")

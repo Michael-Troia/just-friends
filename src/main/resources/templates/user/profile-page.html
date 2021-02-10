@@ -27,7 +27,6 @@
                         <p th:text="${user.job}"></p>
                     </div>
                     <a th:if="${sessionUser.username == user.username}" th:href="@{/edit/{username}(username=${#authentication.principal.username})}" class="card-link">Edit Profile</a>
-                    <a th:href="@{/{username}/my-photos (username=${#authentication.principal.username})}" class="btn btn-primary p-3">View Photos</a>
                 </div>
             </div>
         </div>
@@ -37,7 +36,7 @@
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <a class="nav-item nav-link active" id="nav-friends-tab" data-toggle="tab" href="#nav-friends" role="tab" aria-controls="nav-friends" aria-selected="true">Friends</a>
-                    <a class="nav-item nav-link" id="nav-photos-tab" data-toggle="tab" href="#nav-photos" role="tab" aria-controls="nav-photos" aria-selected="false">Photos</a>
+                    <a class="nav-item nav-link" id="nav-photos-tab" data-toggle="tab" href="#nav-photos" role="tab" aria-controls="nav-photos" aria-selected="false">Galleries</a>
                     <a class="nav-item nav-link" id="nav-posts-tab" data-toggle="tab" href="#nav-posts" role="tab" aria-controls="nav-posts" aria-selected="false">Posts</a>
                 </div>
             </nav>
