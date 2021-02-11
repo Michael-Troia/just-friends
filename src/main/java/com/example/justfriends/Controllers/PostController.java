@@ -180,8 +180,8 @@ public class PostController {
             @ModelAttribute User currentUser) {
         Comment comment = commentRepo.findById(commentId);
         User user = userRepo.findByUsername(username);
-        Date editDate = new Date();
-        commentToBeUpdated.setEditDate(editDate);
+        commentToBeUpdated.setEditDate(new Date());
+        commentToBeUpdated.setParentPost(comment.getParentPost());
         commentToBeUpdated.setId(comment.getId());
         commentToBeUpdated.setCreatedDate(comment.getCreatedDate());
         commentToBeUpdated.setUser(user);
