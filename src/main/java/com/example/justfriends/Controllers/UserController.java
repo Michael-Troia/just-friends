@@ -151,6 +151,8 @@ public class UserController {
         model.addAttribute("friends",userFriendRepo.findAllByUserAndStatus(user,Status.ACCEPTED));
         model.addAttribute("comments", displayComments);
         model.addAttribute("posts", displayPosts);
+        model.addAttribute("newPost", new Post());
+        model.addAttribute("newComment", new Comment());
         return "user/profile-page";
     }
 

@@ -134,6 +134,7 @@ public class PhotoController {
         model.addAttribute("comments", displayComments);
         model.addAttribute("posts", displayPosts);
         model.addAttribute("picture", new Picture());
+        model.addAttribute("newPost", new Post());
 
         return "galleries/show";
     }
