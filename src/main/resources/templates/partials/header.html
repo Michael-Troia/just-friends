@@ -38,9 +38,6 @@
                         <a class="nav-link" th:href="@{/profile-page/{username}(username=${#authentication.principal.username})}"></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/posts/create/{username}(username=${#authentication.principal.username})}">Create Post</a>
-                    </li>
-                    <li class="nav-item">
                         <form th:action="@{/user/{username}(username=${#authentication.principal.username})}" method="GET" class="p-3">
                             <button type="submit" class="btn btn-primary">Profile Page</button>
                         </form>

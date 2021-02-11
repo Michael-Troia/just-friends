@@ -11,14 +11,14 @@
 <form th:action="@{/{username}/gallery/{id}/create-photo (username=${#authentication.principal.username}, id=${gallery.getId()})}" th:object="${picture}" method="POST" class="p-3">
     <div id="uploadPhoto">
         <input type="hidden" id="photo" name="gallery_photo" th:field="*{pictureUrl}"/>
-        <button class="btn btn-primary" id="upload">Add Picture</button>
+        <button class="btn btn-primary" id="upload">Upload</button>
     </div>
 
     <br>
 
     <label for="comment">Caption</label>
-    <textarea id="comment" class="form-control" rows="1" cols="5" th:field="*{comment}"></textarea>
-    <button id="submitAddPhoto" type="submit" class="btn btn-primary">Add photo</button>
+    <input id="comment" type="text" class="form-control" th:field="*{comment}" required>
+    <button id="submitAddPhoto" type="submit" class="btn btn-primary">submit</button>
 
     <div class="error-message" th:if="${#fields.hasErrors('pictureUrl')}" th:errors="*{pictureUrl}"></div>
 </form>
