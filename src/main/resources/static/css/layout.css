@@ -155,3 +155,7 @@ img {
     border-radius: .2em;
     padding: .2em;
 }
+
+.error-message {
+    color: red;
+}

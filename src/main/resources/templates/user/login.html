@@ -7,18 +7,23 @@
 <body>
 <header th:replace="partials/header :: header"></header>
 
-<form th:action="@{/login}" method="POST" class="p-3">
-    <div class="p-1">
-        <label for="username">Username</label>
-        <input id="username" name="username" class="form-control" type="text" />
+<div style="background-color: #b3add6;">
+    <br><br><br>
+    <div class="card p-5" style="max-width: 500px; margin: auto;">
+        <form class="card-body" th:action="@{/login}" method="POST">
+            <div class="p-1">
+                <label for="username">Username</label>
+                <input id="username" name="username" class="form-control" type="text" />
+            </div>
+            <div class="p-1">
+                <label for="password">Password</label>
+                <input id="password" name="password" class="form-control" type="password" />
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
     </div>
-    <div class="p-1">
-        <label for="password">Password</label>
-        <input id="password" name="password" class="form-control" type="password" />
-    </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-</form>
-
+    <br><br><br>
+</div>
 <footer th:replace="partials/footer :: footer"></footer>
 </body>
 </html>

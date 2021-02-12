@@ -97,7 +97,7 @@ public class UserController {
                         "to you. You probably want to make that decision for yourself! Instead, why not invite invite your friends" +
                         " to join, or send them a friend request if they " +
                         "already have!");
-        return "redirect:/";
+        return "redirect:/login";
     }
 
     //Update User information
@@ -180,11 +180,4 @@ public class UserController {
 
         return "index";
     }
-
-    //layout prototype
-    @GetMapping("/layout")
-    public String showLayout(){
-        return "partials/layout";
-    }
-
 }

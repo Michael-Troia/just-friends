@@ -9,6 +9,49 @@
 <h1>Friend Requests</h1>
 
 <div th:each="item : ${friendRequests}">
+    <div class="card">
+        <div class="card-header" style="display: inline-block">
+            <div class="square-gallery-tiny">
+                <div class="gallery-item-tiny">
+                    <img th:src="${item.getUser().getProfile_picture_url().toString()}" class="rounded me-2" alt="...">
+                </div>
+                <div style="display: inline-block">
+                    <a th:if="${item.getUser() != user}" th:href="@{/{username}/friend/{friendName} (friendName=${item.getUser().getUsername()}, username=${user.getUsername()})}">
+                        <h4 class="p-3" th:text="${item.getUser().getUsername()}"></h4>
+                    </a>
+                    <a th:if="${item.getUser() == user}" th:href="@{/{username} (username=${user.getUsername()})}">
+                        <h4 class="p-3" th:text="${item.getUser().getUsername()}"></h4>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div>
+                Uploaded:
+                <small class="text-muted" th:text="${item.getCreatedDate()}"></small>
+                Last Edit:
+                <small class="text-muted" th:text="${item.getEditDate()}"></small>
+            </div>
+            <div class="mt-2 pt-2">
+                <p class="card-text m-3" th:text="${item.getBody()}"></p>
+                <div class="p-3" th:if="${item.getUser() == user}">
+                    <form style="float: left;" th:action="@{/posts/edit/{username}/{id} (username=${user.getUsername()}, id=${item.getId()})}" method="get">
+                        <button class="btn btn-secondary" type="submit" name="edit">Edit post</button>
+                    </form>
+                    <!--                                            <a th:href="@{/posts/edit/{username}/{id} (username=${user.getUsername()}, id=${item.getId()})}">Edit post</a>-->
+                    <form style="float: right;" th:action="@{/posts/delete/{username}/{id} (username=${user.getUsername()}, id = ${item.getId()})}" th:method="post">
+                        <button class="btn btn-light" type="submit" name="delete">Remove post</button>
+                    </form>
+                </div>
+                <br>
+                <form class="mt-2 pt-2 border-top" th:action="@{/posts/create/{username}/{postId}/comment (username=${user.getUsername()}, postId=${item.getId()})}" th:object="${newComment}" method="POST">
+                    <label for="commentBody">Write a comment</label>
+                    <input id="commentBody" class="form-control" th:field="*{body}" type="text" required>
+                    <button type="submit" class="btn btn-primary m-2">Submit comment</button>
+                </form>
+            </div>
+        </div>
+    </div>
     <p th:text="${item.getUser().username}"></p>
     <p th:text="${item.getUser().firstName}"></p>
     <p th:text="${item.getStatus()}"></p>
