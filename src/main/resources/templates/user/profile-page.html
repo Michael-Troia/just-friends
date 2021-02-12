@@ -29,12 +29,70 @@
                     <form  th:if="${sessionUser.getUsername() == user.username}" th:action="@{/edit/{username}(username=${#authentication.principal.username})}" class="card-link" method="get">
                         <button type="submit" class="btn btn-secondary">Edit Profile</button>
                     </form>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                        Launch demo modal
+                    </button>
                 </div>
             </div>
         </div>
     </aside>
     <main>
         <div style="width: 100%;">
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                                <div th:each="item : ${friendRequests}">
+                                    <div class="card m-3" style="width: 18em;">
+
+                                        <img th:src="${item.getUser().getProfile_picture_url().toString()}" class="card-img-top" alt="...">
+                                        <div class="card-body">
+                                            <h4 class="card-title" th:text="${item.getStatus()}"></h4>
+                                            <a th:if="${item.getStatus().ACCEPTED}" th:href="@{/{username}/friend/{friendName} (friendName=${item.getUser().getUsername()}, username=${user.getUsername()})}">
+                                                <h5 class="p-3" th:text="${item.getUser().getUsername()}"></h5>
+                                            </a>
+                                            <div th:if="${item.getStatus().PENDING}" th:href="@{/user/{username} (username=${user.getUsername()})}">
+                                                <h5 class="p-3" th:text="${item.getUser().getUsername()}"></h5>
+                                            </div>
+                                            <p class="card-text" th:text="${item.getUser().getUsername()}"></p>
+                                            <p class="card-text" th:text="${item.getUser().getFirstName()}"></p>
+                                            <p class="card-text" th:text="${item.getUser().getFirstName()}"></p>
+
+                                            <div class="form-group">
+                                                <form id="accept-form" th:action="@{/request/{username}/{friendName}/accept (username=${#authentication.principal.username}, friendName = ${item.getUser().getUsername()})}" th:method="POST">
+                                                    <button id="accept-form-btn" type="submit" class="btn btn-primary">Accept</button>
+                                                </form>
+                                                <form id="reject-form" th:action="@{/request/{username}/{friendName}/reject (username=${#authentication.principal.username}, friendName = ${item.getUser().getUsername()})}" th:method="POST">
+                                                    <button id="reject-form-btn" type="submit" class="btn btn-danger">Reject</button>
+                                                </form>
+                                                <script>
+                                                    $(document).on('click', '#accept-form-btn', function() {
+                                                        $(this.get('#accept-form')).submit();
+                                                    });
+                                                    $(document).on('click', '#reject-form-btn', function() {
+                                                        $(this.get('#reject-form')).submit();
+                                                    });
+                                                </script>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!--            nav tabs-->
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <a class="nav-item nav-link active" id="nav-posts-tab" data-toggle="tab" href="#nav-posts" role="tab" aria-controls="nav-posts" aria-selected="true">Posts</a>
@@ -138,9 +196,9 @@
                     <h1>Friends</h1>
                     <div class="square-gallery p-0">
                         <div class="image-text-container gallery-item" th:each="item : ${friends}">
-                            <a th:href="@{/{username}/friend/{friendName} (username=${sessionUser.getUsername()}, friendName=${item.getFriend().getUsername()})}">
-                                <img th:src="${item.getFriend().profile_picture_url.toString()}">
-                                <p class="image-text" th:text="${item.getFriend().username}"></p>
+                            <a th:href="@{/{username}/friend/{friendName} (username=${sessionUser.getUsername()}, friendName=${item.getUsername()})}">
+                                <img th:src="${item.profile_picture_url.toString()}">
+                                <p class="image-text" th:text="${item.username}"></p>
                             </a>
                         </div>
                     </div>

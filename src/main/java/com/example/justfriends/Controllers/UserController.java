@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -97,6 +98,7 @@ public class UserController {
                         "to you. You probably want to make that decision for yourself! Instead, why not invite invite your friends" +
                         " to join, or send them a friend request if they " +
                         "already have!");
+
         return "redirect:/login";
     }
 
@@ -126,14 +128,23 @@ public class UserController {
     public String showUser(Model model,
                            @PathVariable String username) {
         User user = userRepo.findByUsername(username);
-        List<UserFriend> userFriends = userFriendRepo.findAllByUserAndStatus(user, Status.ACCEPTED);// lists friends that you've accepted
+        List<UserFriend> userFriends1 = userFriendRepo.findAllByUserAndStatus(user, Status.ACCEPTED);// lists friends who accepted you
+        List<UserFriend> userFriends2 = userFriendRepo.findAllByFriendAndStatus(user, Status.ACCEPTED);// lists friends who you accepted
         User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        ArrayList<User> displayUsers = new ArrayList<>();// lists User objects of all the user's friends
-        for (UserFriend userFriend : userFriends) {
+        //collects all accepted friendships involving the user
+        ArrayList<User> displayUsers = new ArrayList<>();
+        ArrayList<User> myFriends = new ArrayList<>();
+        for (UserFriend userFriend : userFriends1) {
             displayUsers.add(userFriend.getFriend());
+            myFriends.add(userFriend.getFriend());
+        }
+        for (UserFriend userFriend : userFriends2) {
+            displayUsers.add(userFriend.getUser());
+            myFriends.add(userFriend.getUser());
         }
         displayUsers.add(user);// includes your own posts in stories view
+
         ArrayList<Post> displayPosts = new ArrayList<>();// lists all posts by all friends and the user
         ArrayList<Comment> displayComments = new ArrayList<>();// lists all comments to all posts by all friends and user
         for (User displayUser : displayUsers) {
@@ -143,12 +154,15 @@ public class UserController {
             }
         }
 
+        List<UserFriend> userFriendRequests = userFriendRepo.findAllByFriendAndStatus(user, Status.PENDING);
+        model.addAttribute("friendRequests", userFriendRequests);
+
         model.addAttribute("galleries", galleryRepo.findAllByUser(user));
         model.addAttribute("all-galleries", galleryRepo.findAll());
-        model.addAttribute("friendsList", userFriends);
+//        model.addAttribute("friendsList", userFriends1.addAll(userFriends2));
         model.addAttribute("user", user);
         model.addAttribute("sessionUser", sessionUser);
-        model.addAttribute("friends",userFriendRepo.findAllByUserAndStatus(user,Status.ACCEPTED));
+        model.addAttribute("friends",myFriends);
         model.addAttribute("comments", displayComments);
         model.addAttribute("posts", displayPosts);
         model.addAttribute("newPost", new Post());
@@ -164,8 +178,12 @@ public class UserController {
         for (Post post : posts){
             postRepo.delete(post);
         }
-        List<UserFriend> userFriends = userFriendRepo.findAllByUser(user);
-        for (UserFriend userFriend : userFriends){
+        List<UserFriend> userFriends1 = userFriendRepo.findAllByUser(user);
+        List<UserFriend> userFriends2 = userFriendRepo.findAllByFriend(user);
+        for (UserFriend userFriend : userFriends1){
+            userFriendRepo.delete(userFriend);
+        }
+        for (UserFriend userFriend : userFriends2) {
             userFriendRepo.delete(userFriend);
         }
         userRepo.delete(user);

@@ -12,6 +12,7 @@ public interface UserFriendRepo extends JpaRepository <UserFriend, Long> {
     List<UserFriend> findAllById(long id);
     List<UserFriend> findAllByUserUsername(String username);
     List<UserFriend> findAllByUser(User user);
+    List<UserFriend> findAllByFriend(User friend);
 //    List<UserFriend> findAllByFriendOrUser(User user);
     UserFriend findById(long id);
     List<UserFriend> findAllByFriendAndStatus(User friend, Status status);
