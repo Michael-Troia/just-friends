@@ -7,9 +7,7 @@
 </head>
 <body>
 <header th:replace="partials/header :: header"></header>
-
-<h1>HomePage</h1>
-
+<h1>Home page</h1>
 <div sec:authorize="isAuthenticated()">
     Username:
     <p th:text="${#authentication.principal.username}"></p>
@@ -46,9 +44,7 @@
     <a th:href="@{/{username}/my-photos (username=${#authentication.principal.username})}" class="btn btn-primary p-3">View Photos</a>
 
 </div>
-
-<br><br><br>
-
 <footer th:replace="partials/footer :: footer"></footer>
+
 </body>
 </html>

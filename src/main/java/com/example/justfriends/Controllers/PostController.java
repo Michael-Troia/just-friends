@@ -115,7 +115,7 @@ public class PostController {
         System.out.println(postToBeUpdated.getId());
         Post dbPost = postRepo.save(postToBeUpdated);
 
-        return "redirect:/" + dbPost.getUser().getUsername() + "/stories";
+        return "redirect:/user/" + username;
     }
 
     //Delete Post
@@ -125,7 +125,7 @@ public class PostController {
         Post post = postRepo.getOne(id);
         postRepo.delete(post);
 
-        return "redirect:/" + username + "/stories";
+        return "redirect:/user/" + username;
     }
 
 ////    Create Comment
@@ -139,9 +139,10 @@ public class PostController {
 //
 //        return "post/comment";
 //    }
+
     @PostMapping("/posts/create/{username}/{postId}/comment")
     public String submitCommentForm(@ModelAttribute Comment comment,
-//                                 @ModelAttribute Post post,
+                                 //@ModelAttribute Post post,
                                  @PathVariable long postId,
                                  @PathVariable String username,
                                  Model model) {
@@ -180,13 +181,15 @@ public class PostController {
             @ModelAttribute User currentUser) {
         Comment comment = commentRepo.findById(commentId);
         User user = userRepo.findByUsername(username);
+
         commentToBeUpdated.setEditDate(new Date());
         commentToBeUpdated.setParentPost(comment.getParentPost());
         commentToBeUpdated.setId(comment.getId());
         commentToBeUpdated.setCreatedDate(comment.getCreatedDate());
+        commentToBeUpdated.setBody(commentToBeUpdated.getBody());
         commentToBeUpdated.setUser(user);
         commentToBeUpdated.setPhoto_url(comment.getPhoto_url());
-        Comment dbComment = commentRepo.save(commentToBeUpdated);
+        commentRepo.save(commentToBeUpdated);
 
         return "redirect:/user/" + username;
     }
