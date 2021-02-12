@@ -5,65 +5,72 @@
     <title>Title</title>
 </head>
 <body>
-<nav th:replace="partials/navbar :: navbar"></nav>
-<h1>Friend Requests</h1>
+<header th:replace="partials/header :: header"></header>
 
-<div th:each="item : ${friendRequests}">
-    <div class="card">
-        <div class="card-header" style="display: inline-block">
-            <div class="square-gallery-tiny">
-                <div class="gallery-item-tiny">
-                    <img th:src="${item.getUser().getProfile_picture_url().toString()}" class="rounded me-2" alt="...">
-                </div>
-                <div style="display: inline-block">
-                    <a th:if="${item.getUser() != user}" th:href="@{/{username}/friend/{friendName} (friendName=${item.getUser().getUsername()}, username=${user.getUsername()})}">
-                        <h4 class="p-3" th:text="${item.getUser().getUsername()}"></h4>
-                    </a>
-                    <a th:if="${item.getUser() == user}" th:href="@{/{username} (username=${user.getUsername()})}">
-                        <h4 class="p-3" th:text="${item.getUser().getUsername()}"></h4>
-                    </a>
+<div class="grid template">
+    <aside>
+        <div class="container-fluid">
+            <div class="card p-0">
+                <img class="card-img-top container-fluid" th:src="${user.getProfile_picture_url().toString()}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${user.username}"></h5>
+                    <div class="card-text p-0">
+                        <h6>About Me:</h6>
+                        <p th:text="${user.aboutMe}"></p>
+                        <br>
+                        <p th:text="${user.firstName}"></p>
+                        <p th:text="${user.lastName}"></p>
+                        <p th:text="${user.createdDate}"></p>
+                        <p th:text="${user.birthday}"></p>
+                        <p th:text="${user.email}"></p>
+                        <p th:text="${user.job}"></p>
+                    </div>
+                    <form th:action="@{/edit/{username}(username=${#authentication.principal.username})}" class="card-link" method="get">
+                        <button type="submit" class="btn btn-secondary">Edit Profile</button>
+                    </form>
                 </div>
             </div>
         </div>
-        <div class="card-body">
-            <div>
-                Uploaded:
-                <small class="text-muted" th:text="${item.getCreatedDate()}"></small>
-                Last Edit:
-                <small class="text-muted" th:text="${item.getEditDate()}"></small>
-            </div>
-            <div class="mt-2 pt-2">
-                <p class="card-text m-3" th:text="${item.getBody()}"></p>
-                <div class="p-3" th:if="${item.getUser() == user}">
-                    <form style="float: left;" th:action="@{/posts/edit/{username}/{id} (username=${user.getUsername()}, id=${item.getId()})}" method="get">
-                        <button class="btn btn-secondary" type="submit" name="edit">Edit post</button>
-                    </form>
-                    <!--                                            <a th:href="@{/posts/edit/{username}/{id} (username=${user.getUsername()}, id=${item.getId()})}">Edit post</a>-->
-                    <form style="float: right;" th:action="@{/posts/delete/{username}/{id} (username=${user.getUsername()}, id = ${item.getId()})}" th:method="post">
-                        <button class="btn btn-light" type="submit" name="delete">Remove post</button>
-                    </form>
+    </aside>
+    <main>
+        <div>
+            <h1>Friend Requests</h1>
+            <div th:each="item : ${friendRequests}">
+                <div class="card m-3" style="width: 18em;">
+
+                    <img th:src="${item.getUser().getProfile_picture_url().toString()}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h4 class="card-title" th:text="${item.getStatus()}"></h4>
+                        <a th:if="${item.getStatus().ACCEPTED}" th:href="@{/{username}/friend/{friendName} (friendName=${item.getUser().getUsername()}, username=${user.getUsername()})}">
+                            <h5 class="p-3" th:text="${item.getUser().getUsername()}"></h5>
+                        </a>
+                        <div th:if="${item.getStatus().PENDING}" th:href="@{/user/{username} (username=${user.getUsername()})}">
+                            <h5 class="p-3" th:text="${item.getUser().getUsername()}"></h5>
+                        </div>
+                        <p class="card-text" th:text="${item.getUser().getUsername()}"></p>
+                        <p class="card-text" th:text="${item.getUser().getFirstName()}"></p>
+                        <p class="card-text" th:text="${item.getUser().getFirstName()}"></p>
+
+                        <div class="form-group">
+                            <form th:action="@{/request/{username}/{friendName}/accept (username=${#authentication.principal.username}, friendName = ${item.getUser().getUsername()})}" th:method="POST">
+                                <button type="submit" class="btn btn-primary">Accept</button>
+                            </form>
+                            <form th:action="@{/request/{username}/{friendName}/reject (username=${#authentication.principal.username}, friendName = ${item.getUser().getUsername()})}" th:method="POST">
+                                <button type="submit" class="btn btn-danger">Reject</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <br>
-                <form class="mt-2 pt-2 border-top" th:action="@{/posts/create/{username}/{postId}/comment (username=${user.getUsername()}, postId=${item.getId()})}" th:object="${newComment}" method="POST">
-                    <label for="commentBody">Write a comment</label>
-                    <input id="commentBody" class="form-control" th:field="*{body}" type="text" required>
-                    <button type="submit" class="btn btn-primary m-2">Submit comment</button>
-                </form>
             </div>
         </div>
-    </div>
-    <p th:text="${item.getUser().username}"></p>
-    <p th:text="${item.getUser().firstName}"></p>
-    <p th:text="${item.getStatus()}"></p>
-    <form th:action="@{/request/{username}/{friendId}/accept (username=${#authentication.principal.username}, friendId = ${item.id})}" th:method="POST">
-        <input type="submit" name="accept" value="accept"/>
-    </form>
-    <form th:action="@{/request/{username}/{friendId}/reject (username=${#authentication.principal.username}, friendId = ${item.id})}" th:method="POST">
-        <input type="submit" name="reject" value="reject"/>
-    </form>
-    <hr>
+    </main>
+    <footer>
+        JustFriends
+    </footer>
 </div>
 
-<footer th:replace="partials/footer :: footer"></footer>
+
+
+
 </body>
 </html>
