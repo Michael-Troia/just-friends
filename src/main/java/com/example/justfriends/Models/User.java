@@ -3,10 +3,13 @@ package com.example.justfriends.Models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.json.Json;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -143,4 +146,6 @@ public class User {
     public void setPictures(List<Picture> pictures){this.pictures = pictures;}
     public void setPassword(String password){this.password = password;}
     public void setCreatedDate(Date createdDate){this.createdDate = createdDate;}
+
+
 }
