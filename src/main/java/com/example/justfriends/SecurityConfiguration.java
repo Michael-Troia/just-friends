@@ -46,14 +46,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
 
-                .antMatchers("/", "/sign-up") // anyone can see the home page
+                .antMatchers("/", "/sign-up", "/login") // anyone can see the home page
                 .permitAll()
                 /* Pages that require authentication */
                 .and()
                 .authorizeRequests()
                 .antMatchers(
                         // Pages only for authenticated users
-                        "/{username}", "/profile/{username}"
+                        "/user/{username}","/edit/**","/comments/**","/posts/**", "/request/**"
                 )
 
                 .authenticated();

@@ -5,22 +5,72 @@
     <title>Title</title>
 </head>
 <body>
-<nav th:replace="partials/navbar :: navbar"></nav>
-<h1>Friend Requests</h1>
+<header th:replace="partials/header :: header"></header>
 
-<div th:each="item : ${friendRequests}">
-    <p th:text="${item.getUser().username}"></p>
-    <p th:text="${item.getUser().firstName}"></p>
-    <p th:text="${item.getStatus()}"></p>
-    <form th:action="@{/request/{username}/{friendId}/accept (username=${#authentication.principal.username}, friendId = ${item.id})}" th:method="POST">
-        <input type="submit" name="accept" value="accept"/>
-    </form>
-    <form th:action="@{/request/{username}/{friendId}/reject (username=${#authentication.principal.username}, friendId = ${item.id})}" th:method="POST">
-        <input type="submit" name="reject" value="reject"/>
-    </form>
-    <hr>
+<div class="grid template">
+    <aside>
+        <div class="container-fluid">
+            <div class="card p-0">
+                <img class="card-img-top container-fluid" th:src="${user.getProfile_picture_url().toString()}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${user.username}"></h5>
+                    <div class="card-text p-0">
+                        <h6>About Me:</h6>
+                        <p th:text="${user.aboutMe}"></p>
+                        <br>
+                        <p th:text="${user.firstName}"></p>
+                        <p th:text="${user.lastName}"></p>
+                        <p th:text="${user.createdDate}"></p>
+                        <p th:text="${user.birthday}"></p>
+                        <p th:text="${user.email}"></p>
+                        <p th:text="${user.job}"></p>
+                    </div>
+                    <form th:action="@{/edit/{username}(username=${#authentication.principal.username})}" class="card-link" method="get">
+                        <button type="submit" class="btn btn-secondary">Edit Profile</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <main>
+        <div>
+            <h1>Friend Requests</h1>
+            <div th:each="item : ${friendRequests}">
+                <div class="card m-3" style="width: 18em;">
+
+                    <img th:src="${item.getUser().getProfile_picture_url().toString()}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h4 class="card-title" th:text="${item.getStatus()}"></h4>
+                        <a th:if="${item.getStatus().ACCEPTED}" th:href="@{/{username}/friend/{friendName} (friendName=${item.getUser().getUsername()}, username=${user.getUsername()})}">
+                            <h5 class="p-3" th:text="${item.getUser().getUsername()}"></h5>
+                        </a>
+                        <div th:if="${item.getStatus().PENDING}" th:href="@{/user/{username} (username=${user.getUsername()})}">
+                            <h5 class="p-3" th:text="${item.getUser().getUsername()}"></h5>
+                        </div>
+                        <p class="card-text" th:text="${item.getUser().getUsername()}"></p>
+                        <p class="card-text" th:text="${item.getUser().getFirstName()}"></p>
+                        <p class="card-text" th:text="${item.getUser().getFirstName()}"></p>
+
+                        <div class="form-group">
+                            <form th:action="@{/request/{username}/{friendName}/accept (username=${#authentication.principal.username}, friendName = ${item.getUser().getUsername()})}" th:method="POST">
+                                <button type="submit" class="btn btn-primary">Accept</button>
+                            </form>
+                            <form th:action="@{/request/{username}/{friendName}/reject (username=${#authentication.principal.username}, friendName = ${item.getUser().getUsername()})}" th:method="POST">
+                                <button type="submit" class="btn btn-danger">Reject</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        JustFriends
+    </footer>
 </div>
 
-<footer th:replace="partials/footer :: footer"></footer>
+
+
+
 </body>
 </html>

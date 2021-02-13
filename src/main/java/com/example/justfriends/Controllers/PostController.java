@@ -42,49 +42,49 @@ public class PostController {
     }
 
 //Create Post
-    @GetMapping("/posts/create/{username}")
-    public String showCreatePostForm(Model model, @PathVariable String username) {
-        model.addAttribute("user", userRepo.findByUsername(username));
-        model.addAttribute("post", new Post());
-
-        return "post/create";
-    }
+//    @GetMapping("/posts/create/{username}")
+//    public String showCreatePostForm(Model model, @PathVariable String username) {
+//        model.addAttribute("user", userRepo.findByUsername(username));
+//        model.addAttribute("post", new Post());
+//
+//        return "post/create";
+//    }
     @PostMapping("/posts/create/{username}")
     public String submitPostForm(@ModelAttribute Post post,
                                  @PathVariable String username,
                                  Model model) {
         Post newPost = new Post();
-        User newUser = userRepo.findByUsername(username);
-        newPost.setUser(newUser);
+        User user = userRepo.findByUsername(username);
+        newPost.setUser(user);
         newPost.setCreatedDate(new Date());
         newPost.setBody(post.getBody());
         Post dbPost = postRepo.save(newPost);
-        model.addAttribute("user", newUser);
+        model.addAttribute("user", user);
         model.addAttribute("post", dbPost);
-        System.out.println(newUser.getUsername());
+        System.out.println(user.getUsername());
 
-        return "redirect:/posts/view/" + newUser.getUsername();
+        return "redirect:/user/" + username;
     }
 
     //Read User posts
-    @GetMapping("/posts/view/{username}")
-    public String showAllUserPosts(Model model,
-                                   @PathVariable String username) {
-        List<Post> postList = postRepo.findAllByUserUsername(username);
-        ArrayList<String> displayPosts = new ArrayList<>();
-        int i = 1;
-        for (Post post : postList) {
-            String body = "Body of post #" + (i++) + ": " + post.getBody();
-            displayPosts.add(body);
-            String date = " , that post was made: " + post.getCreatedDate() + " . ";
-            displayPosts.add(date);
-            String id = "Post Id #:" + post.getId() + " .";
-        }
-        model.addAttribute("userPosts", displayPosts);
-        model.addAttribute("postList" , postList);
-
-        return "post/view";
-    }
+//    @GetMapping("/posts/view/{username}")
+//    public String showAllUserPosts(Model model,
+//                                   @PathVariable String username) {
+//        List<Post> postList = postRepo.findAllByUserUsername(username);
+//        ArrayList<String> displayPosts = new ArrayList<>();
+//        int i = 1;
+//        for (Post post : postList) {
+//            String body = "Body of post #" + (i++) + ": " + post.getBody();
+//            displayPosts.add(body);
+//            String date = " , that post was made: " + post.getCreatedDate() + " . ";
+//            displayPosts.add(date);
+//            String id = "Post Id #:" + post.getId() + " .";
+//        }
+//        model.addAttribute("userPosts", displayPosts);
+//        model.addAttribute("postList" , postList);
+//
+//        return "post/view";
+//    }
 
     //Update Post
     @GetMapping("/posts/edit/{username}/{id}")
@@ -115,7 +115,7 @@ public class PostController {
         System.out.println(postToBeUpdated.getId());
         Post dbPost = postRepo.save(postToBeUpdated);
 
-        return "redirect:/" + dbPost.getUser().getUsername() + "/stories";
+        return "redirect:/user/" + username;
     }
 
     //Delete Post
@@ -125,22 +125,24 @@ public class PostController {
         Post post = postRepo.getOne(id);
         postRepo.delete(post);
 
-        return "redirect:/" + username + "/stories";
+        return "redirect:/user/" + username;
     }
 
-    //Create Comment
-    @GetMapping("/posts/create/{username}/{postId}/comment")
-    public String showCommentForm(@PathVariable String username,
-                                  @PathVariable long postId,
-                                  Model model){
-        model.addAttribute("user" , userRepo.findByUsername(username));
-        model.addAttribute("comment", new Comment());
-        model.addAttribute("post" , postRepo.findById(postId));
+////    Create Comment
+//    @GetMapping("/posts/create/{username}/{postId}/comment")
+//    public String showCommentForm(@PathVariable String username,
+//                                  @PathVariable long postId,
+//                                  Model model){
+//        model.addAttribute("user" , userRepo.findByUsername(username));
+//        model.addAttribute("comment", new Comment());
+//        model.addAttribute("post" , postRepo.findById(postId));
+//
+//        return "post/comment";
+//    }
 
-        return "post/comment";
-    }
     @PostMapping("/posts/create/{username}/{postId}/comment")
     public String submitCommentForm(@ModelAttribute Comment comment,
+                                 //@ModelAttribute Post post,
                                  @PathVariable long postId,
                                  @PathVariable String username,
                                  Model model) {
@@ -156,7 +158,7 @@ public class PostController {
         model.addAttribute("comment", dbComment);
         System.out.println(newUser.getUsername());
 
-        return "redirect:/" + newUser.getUsername() + "/stories";
+        return "redirect:/user/" + username ;
     }
 
     //Update Comment
@@ -171,6 +173,7 @@ public class PostController {
 
         return "post/comment-edit";
     }
+    //Update Comment
     @PostMapping("/comments/edit/{username}/{commentId}")
     public String editComment(@ModelAttribute Comment commentToBeUpdated,
             @PathVariable String username,
@@ -178,16 +181,17 @@ public class PostController {
             @ModelAttribute User currentUser) {
         Comment comment = commentRepo.findById(commentId);
         User user = userRepo.findByUsername(username);
-        Date editDate = new Date();
-        commentToBeUpdated.setEditDate(editDate);
-        commentToBeUpdated.setId(comment.getId());
+
+        commentToBeUpdated.setEditDate(new Date());
         commentToBeUpdated.setParentPost(comment.getParentPost());
+        commentToBeUpdated.setId(comment.getId());
         commentToBeUpdated.setCreatedDate(comment.getCreatedDate());
+        commentToBeUpdated.setBody(commentToBeUpdated.getBody());
         commentToBeUpdated.setUser(user);
         commentToBeUpdated.setPhoto_url(comment.getPhoto_url());
-        Comment dbComment = commentRepo.save(commentToBeUpdated);
+        commentRepo.save(commentToBeUpdated);
 
-        return "redirect:/" + dbComment.getUser().getUsername() + "/stories";
+        return "redirect:/user/" + username;
     }
 
     //Delete Comment
@@ -197,6 +201,6 @@ public class PostController {
         Comment comment = commentRepo.findById(commentId);
         commentRepo.delete(comment);
 
-        return "redirect:/" + username + "/stories";
+        return "redirect:/user/" + username;
     }
 }

@@ -7,44 +7,73 @@
 <body>
 <header th:replace="partials/header :: header"></header>
 
-<form th:action="@{/edit/{username} (username=${user.getUsername()})}" method="POST" th:object="${user}">
+<div class="grid template">
+    <aside>
+        <div class="container-fluid">
+            <div class="card p-0">
+                <img class="card-img-top container-fluid" th:src="${user.getProfile_picture_url().toString()}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${user.username}"></h5>
+                    <div class="card-text p-0">
+                        <h6>About Me:</h6>
+                        <p th:text="${user.aboutMe}"></p>
+                        <br>
+                        <p th:text="${user.firstName}"></p>
+                        <p th:text="${user.lastName}"></p>
+                        <p th:text="${user.createdDate}"></p>
+                        <p th:text="${user.birthday}"></p>
+                        <p th:text="${user.email}"></p>
+                        <p th:text="${user.job}"></p>
+                    </div>
+                    <form th:action="@{/edit/{username}(username=${#authentication.principal.username})}" class="card-link" method="get">
+                        <button type="submit" class="btn btn-secondary">Edit Profile</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <main>
+        <div class="p-5" style="width: 100%; background-color: #b3add6">
+            <form th:action="@{/edit/{username} (username=${user.getUsername()})}" method="POST" th:object="${user}">
+                <div class="mb-3">
+                    <label for="first-name-input">First Name</label>
+                    <input id="first-name-input" class="form-control" th:field="*{firstName}" />
+                </div>
+                <div class="mb-3">
+                    <label for="last-name-input" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="last-name-input" th:field="*{lastName}">
+                </div>
+                <div class="mb-3">
+                    <label for="aboutMe-input" class="form-label">About Me</label>
+                    <input type="text" class="form-control" id="aboutMe-input" th:field="*{aboutMe}">
+                </div>
+                <div class="mb-3">
+                    <label for="birthday-input" class="form-label">Birthday</label>
+                    <input type="text" class="form-control" id="birthday-input" th:field="*{birthday}">
+                </div>
+                <div class="mb-3">
+                    <label for="job-input" class="form-label">Job</label>
+                    <input type="text" class="form-control" id="job-input" th:field="*{job}">
+                </div>
+                <div class="mb-3 p-5" id="uploadPhoto">
+                    <input type="hidden" id="photo" name="gallery_photo" th:field="*{profile_picture_url}" />
+                    <button class="btn btn-secondary" id="upload">Change Profile Photo</button>
+                </div>
+                <div class="error-message" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+                <div class="error-message" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+        </div>
+    </main>
+    <footer>
+        JustFriends
+    </footer>
+</div>
 
-    <div class="form-group">
-        <label for="first-name">First Name</label>
-        <input id="first-name" class="form-control" th:field="*{firstName}" />
-    </div>
-
-    <div class="form-group">
-        <label for="last-name">Last Name</label>
-        <input id="last-name" class="form-control" th:field="*{lastName}" />
-    </div>
-
-    <div class="form-group">
-        <label for="aboutMe">About Me</label>
-        <input type="text" id="aboutMe" class="form-control" th:field="*{aboutMe}">
-    </div>
-
-    <div>
-        <label for="birthday">Birthday</label>
-        <input type="date" id="birthday" th:field="*{birthday}">
-    </div>
-
-    <div class="form-group">
-        <label for="job">Job</label>
-        <input type="text" id="job" class="form-control" th:field="*{job}">
-    </div>
-
-    <div id="uploadPhoto">
-        <input type="hidden" id="photo" name="gallery_photo" th:field="*{profile_picture_url}" />
-        <button class="btn btn-primary" id="upload">Add Picture</button>
-    </div>
-
-    <div class="error-message" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
-    <div class="error-message" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
-    <button type="submit" class="btn btn-primary">Save Changes</button>
-</form>
-
-<footer th:replace="partials/footer :: footer"></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="//static.filestackapi.com/filestack-js/3.x.x/filestack.min.js" defer></script>
 <script type="text/javascript" th:src="@{/js/filestack.js}" defer></script>
 </body>

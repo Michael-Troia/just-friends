@@ -6,82 +6,99 @@
     <title>Title</title>
 </head>
 <body>
-<nav th:replace="partials/navbar :: navbar"></nav>
+<header th:replace="partials/header :: header"></header>
 
-<h1 th:text="${friend.getUsername()}"></h1>
-
-<div class="row">
-    <div class="card col-3">
-        <img class="card-img-top" id="profile-photo" th:src="${friend.getProfile_picture_url().toString()}" alt="User profile image">
-        <div class="card-body">
-            <h4 class="card-title">About</h4>
-            <div class="card-text">
-                <p th:text="${friend.getFirstName()}"></p>
-                <p th:text="${friend.getLastName()}"></p>
-                <p th:text="${friend.getAboutMe()}"></p>
-                <p th:text="${friend.getEmail()}"></p>
-                <p th:text="${friend.getBirthday()}"></p>
-                <p th:text="${friend.getJob()}"></p>
-                <p th:text="${friend.getCreatedDate()}"></p>
+<div class="grid template">
+    <aside>
+        <div class="container-fluid">
+            <div class="card p-0">
+                <img class="card-img-top container-fluid" th:src="${friend.getProfile_picture_url().toString()}" alt="User profile image">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${friend.username}"></h5>
+                    <div class="card-text p-0">
+                        <h6>About Me:</h6>
+                        <p th:text="${friend.aboutMe}"></p>
+                        <br>
+                        <p th:text="${friend.firstName}"></p>
+                        <p th:text="${friend.lastName}"></p>
+                        <p th:text="${friend.createdDate}"></p>
+                        <p th:text="${friend.birthday}"></p>
+                        <p th:text="${friend.email}"></p>
+                        <p th:text="${friend.job}"></p>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div class="card col-3" >
-        <div class="card-body">
-            <h5 class="card-title">Friends</h5>
-            <div class="row" th:each="item : ${friendFriends}">
-                <div class="col">
-                    <img class="card-img-top" id="friend-profile-picture" th:src="${item.getProfile_picture_url().toString()}" alt="User profile image">
-                    <div th:if="${userFriendList.contains(item) == true}">
-                        <a th:href="@{/{username}/friend/{friendName} (username=${currentUser.getUsername()}, friendName=${item.getUsername()})}" th:text="${item.getUsername()}"></a>
+    </aside>
+    <main>
+        <div style="width: 100%;">
+            <nav>
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-friends-tab" data-toggle="tab" href="#nav-friends" role="tab" aria-controls="nav-friends" aria-selected="true">Friends</a>
+                        <a class="nav-item nav-link" id="nav-photos-tab" data-toggle="tab" href="#nav-photos" role="tab" aria-controls="nav-photos" aria-selected="false">Galleries</a>
                     </div>
-                    <div th:if="${userFriendList.contains(item) == false}">
-                        <p th:text="${item.getUsername()}"></p>
+                </nav>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <!--       tab 1 friends-->
+                <div class="tab-pane fade show active" id="nav-friends" role="tabpanel" aria-labelledby="nav-friends-tab">
+                    <div class="square-gallery p-0">
+                        <div class="image-text-container gallery-item" th:each="item : ${friendFriends}">
+                            <div th:if="${item.username == currentUser.username}">
+                                <a th:href="@{/user/{username} (username=${currentUser.getUsername()})}">
+                                    <img th:src="${item.profile_picture_url.toString()}">
+                                    <p class="image-text" th:text="${item.username}"></p>
+                                </a>
+                            </div>
+                            <div th:if="${userFriendList.contains(item) == true}">
+                                <a th:href="@{/{username}/friend/{friendName} (username=${sessionUser.getUsername()}, friendName=${item.getUsername()})}">
+                                    <img th:src="${item.profile_picture_url.toString()}">
+                                    <p class="image-text" th:text="${item.username}"></p>
+                                </a>
+                            </div>
+                            <div th:if="${userFriendList.contains(item) == false && item.username != currentUser.username}">
+                                <div>
+                                    <img th:src="${item.profile_picture_url.toString()}">
+                                    <p class="image-text" th:text="${item.username}"></p>
+                                    <form th:action="@{/request/{username}/{friendName} (username=${sessionUser.getUsername()}, friendName = ${item.getUsername()})}" th:method="POST">
+                                        <button type="submit" class="caption" name="befriend">Send Friend Request</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <p th:text="${item.getFirstName()}"></p>
-                    <p th:text="${item.getLastName()}"></p>
-                    <div th:if="${userFriendList.contains(item) == false}">
-                        <div th:if="${item != currentUser}">
-                            <form th:action="@{/request/{username}/{friendName} (username=${currentUser.getUsername()}, friendName = ${item.getUsername()})}" th:method="POST">
-                                <input type="submit" name="befriend" value="Send Friend Request"/>
-                            </form>
+                </div>
+                <!--       tab 2 galleries-->
+                <div class="tab-pane fade" id="nav-photos" role="tabpanel" aria-labelledby="nav-photos-tab" >
+                    <div class="square-gallery p-0">
+                            <div class="image-text-container gallery-item" th:each="item : ${galleries}">
+                                <div th:if="${!item.getPictures().isEmpty()}" id="thumbnail-container">
+                                    <a th:href="@{/{username}/gallery/{id} (username=${item.getUser().getUsername()}, id=${item.getId()})}">
+                                        <img th:src="${item.getPictures().get(0).getPictureUrl().toString()}" alt="Gallery Thumbnail Image">
+                                        <p class="image-text" th:text="${item.getName()}"></p>
+                                    </a>
+                                </div>
+                                <div th:if="${item.getPictures().isEmpty()}">
+                                    <a th:href="@{/{username}/gallery/{id} (username=${item.getUser().getUsername()}, id=${item.getId()})}">
+                                        <img src="/img/thumbnailDefault.jpg" alt="Gallery Thumbnail Image">
+                                        <p class="image-text" th:text="${item.getName()}"></p>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="card col-3">
-        <h5 class="card-title">Photos</h5>
-        <div class="card-body">
-            <div th:each="gallery: ${friendGalleries}">
-                <div class="col-6" id="thumbnail-container">
-                    <a th:href="@{/{username}/gallery/{id} (username=${friend.getUsername()}, id=${gallery.getId()})}">
-                        <img class="card-img-top" id="gallery-thumbnail-image" th:src="${gallery.getPictures.get(0).getPictureUrl().toString()}" alt="Gallery Thumbnail Image">
-                        <p th:text="${gallery.getName()}"></p>
-                    </a>
-                </div>
-            </div>
-
-            <a th:href="@{/{username}/photos (username=${friend.getUsername()})}" class="btn btn-primary">View Photos</a>
-        </div>
-    </div>
-
-    <div class="card col-3">
-        <div class="card-body">
-            <h5 class="card-title">Photos</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-    </div>
+    </main>
+    <footer>
+        JustFriends
+    </footer>
 </div>
-
-<!--<form th:action="@{/edit/{username}(username=${#authentication.principal.username})}" method="GET" class="p-3">-->
-<!--<div sec:authorize="isAuthenticated()">-->
-
-
-<footer th:replace="partials/footer :: footer"></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>

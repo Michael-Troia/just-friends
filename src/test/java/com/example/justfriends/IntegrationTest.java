@@ -56,11 +56,6 @@ public class IntegrationTest {
     private UserFriend testUserFriend3;
     private UserFriend testUserFriend4;
     private UserFriend testUserFriend5;
-    private UserFriend testUserFriend6;
-    private UserFriend testUserFriend7;
-    private UserFriend testUserFriend8;
-    private UserFriend testUserFriend9;
-    private UserFriend testUserFriend10;
     private Picture testPicture1;
     private Picture testPicture2;
     private Picture testPicture3;
@@ -103,17 +98,10 @@ public class IntegrationTest {
         testPost5 = postRepo.findByBody("TestPostBody5");
         testPost6 = postRepo.findByBody("TestPostBody6");
         testUserFriend1 = userFriendRepo.findByUserAndFriend(testUser1, testUser2);//all users are friends with testUser1
-        testUserFriend2 = userFriendRepo.findByUserAndFriend(testUser2, testUser1);//all users are friends with testUser1
-        testUserFriend3 = userFriendRepo.findByUserAndFriend(testUser1, testUser3);//all users are friends with testUser1
-        testUserFriend4 = userFriendRepo.findByUserAndFriend(testUser3, testUser1);//all users are friends with testUser1
-        testUserFriend5 = userFriendRepo.findByUserAndFriend(testUser1, testUser4);//all users are friends with testUser1
-        testUserFriend6 = userFriendRepo.findByUserAndFriend(testUser4, testUser1);//all users are friends with testUser1
-        testUserFriend7 = userFriendRepo.findByUserAndFriend(testUser2, testUser3);//all users are friends with testUser2
-        testUserFriend8 = userFriendRepo.findByUserAndFriend(testUser3, testUser2);//all users are friends with testUser2
-        testUserFriend9 = userFriendRepo.findByUserAndFriend(testUser2, testUser4);//all users are friends with testUser2
-        testUserFriend10 = userFriendRepo.findByUserAndFriend(testUser4, testUser2);//all users are friends with testUser2
-//        testUserFriend1 = userFriendRepo.findByUserAndFriend(testUser3, testUser4);  testUser3 and testUser4 are not friends
-//        testUserFriend2 = userFriendRepo.findByUserAndFriend(testUser4, testUser3);  testUser3 and testUser4 are not friends
+        testUserFriend2 = userFriendRepo.findByUserAndFriend(testUser1, testUser3);//all users are friends with testUser1
+        testUserFriend3 = userFriendRepo.findByUserAndFriend(testUser1, testUser4);//all users are friends with testUser1
+        testUserFriend4 = userFriendRepo.findByUserAndFriend(testUser2, testUser3);//all users are friends with testUser2
+        testUserFriend5 = userFriendRepo.findByUserAndFriend(testUser2, testUser4);//all users are friends with testUser2
         testComment1 = commentRepo.findByBody("TestCommentBody1");
         testComment2 = commentRepo.findByBody("TestCommentBody2");
         testComment3 = commentRepo.findByBody("TestCommentBody3");
@@ -203,66 +191,31 @@ public class IntegrationTest {
         }
         if (testUserFriend2 == null) {
             UserFriend newUserFriend2 = new UserFriend();
-            newUserFriend2.setUser(testUser2);
-            newUserFriend2.setFriend(testUser1);
+            newUserFriend2.setUser(testUser1);
+            newUserFriend2.setFriend(testUser3);
             newUserFriend2.setStatus(Status.ACCEPTED);
             testUserFriend2 = userFriendRepo.save(newUserFriend2);
         }
         if (testUserFriend3 == null) {
             UserFriend newUserFriend = new UserFriend();
             newUserFriend.setUser(testUser1);
-            newUserFriend.setFriend(testUser3);
+            newUserFriend.setFriend(testUser4);
             newUserFriend.setStatus(Status.ACCEPTED);
             testUserFriend3 = userFriendRepo.save(newUserFriend);
         }
         if (testUserFriend4 == null) {
             UserFriend newUserFriend2 = new UserFriend();
-            newUserFriend2.setUser(testUser3);
-            newUserFriend2.setFriend(testUser1);
+            newUserFriend2.setUser(testUser2);
+            newUserFriend2.setFriend(testUser3);
             newUserFriend2.setStatus(Status.ACCEPTED);
             testUserFriend4 = userFriendRepo.save(newUserFriend2);
         }
         if (testUserFriend5 == null) {
             UserFriend newUserFriend = new UserFriend();
-            newUserFriend.setUser(testUser1);
+            newUserFriend.setUser(testUser2);
             newUserFriend.setFriend(testUser4);
             newUserFriend.setStatus(Status.ACCEPTED);
             testUserFriend5 = userFriendRepo.save(newUserFriend);
-        }
-        if (testUserFriend6 == null) {
-            UserFriend newUserFriend2 = new UserFriend();
-            newUserFriend2.setUser(testUser4);
-            newUserFriend2.setFriend(testUser1);
-            newUserFriend2.setStatus(Status.ACCEPTED);
-            testUserFriend6 = userFriendRepo.save(newUserFriend2);
-        }
-        if (testUserFriend7 == null) {
-            UserFriend newUserFriend = new UserFriend();
-            newUserFriend.setUser(testUser2);
-            newUserFriend.setFriend(testUser3);
-            newUserFriend.setStatus(Status.ACCEPTED);
-            testUserFriend7 = userFriendRepo.save(newUserFriend);
-        }
-        if (testUserFriend8 == null) {
-            UserFriend newUserFriend2 = new UserFriend();
-            newUserFriend2.setUser(testUser3);
-            newUserFriend2.setFriend(testUser2);
-            newUserFriend2.setStatus(Status.ACCEPTED);
-            testUserFriend8 = userFriendRepo.save(newUserFriend2);
-        }
-        if (testUserFriend9 == null) {
-            UserFriend newUserFriend = new UserFriend();
-            newUserFriend.setUser(testUser2);
-            newUserFriend.setFriend(testUser4);
-            newUserFriend.setStatus(Status.ACCEPTED);
-            testUserFriend9 = userFriendRepo.save(newUserFriend);
-        }
-        if (testUserFriend10 == null) {
-            UserFriend newUserFriend2 = new UserFriend();
-            newUserFriend2.setUser(testUser4);
-            newUserFriend2.setFriend(testUser2);
-            newUserFriend2.setStatus(Status.ACCEPTED);
-            testUserFriend10 = userFriendRepo.save(newUserFriend2);
         }
 
         if (testPost == null) {
@@ -464,12 +417,6 @@ public class IntegrationTest {
     //Update Post
     @Test
     public void testEditPost() throws Exception {
-//        if (postRepo.findByBody("testUpdatedPost") == null) {
-//            this.mvc.perform(post("/posts/create/" + userRepo.findAll().get(0)).with(csrf())
-//                .param("createdDate", new Date().toString())
-//                .param("body", "testTemporaryComment"))
-//                .andExpect(status().is3xxRedirection());
-//        }
         Post existingPost = postRepo.findAll().get(0);
         String username = existingPost.getUser().getUsername();
         long id = existingPost.getId();
