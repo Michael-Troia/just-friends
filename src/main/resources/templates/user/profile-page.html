@@ -194,8 +194,12 @@
                 <!--       tab 2 friends-->
                 <div class="tab-pane fade" id="nav-friends" role="tabpanel" aria-labelledby="nav-friends-tab">
                     <h1>Friends</h1>
-                    <form th:action="@{/users/search/{username} (username=${user.getUsername()})}" method="GET" class="p-3">
-                        <button type="submit" class="btn btn-primary">Find friends</button>
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Find Your Friends" aria-label="Search">
+                        <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Search">
+                    </form>
+                    <form style="float: right" th:action="@{/users/search/{username} (username=${user.getUsername()})}" method="GET">
+                        <button type="submit" class="btn btn-primary">Discover</button>
                     </form>
                     <div class="square-gallery p-0">
                         <div class="image-text-container gallery-item" th:each="item : ${friends}">

@@ -8,13 +8,12 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Controller
 public class UserFriendController {
@@ -192,4 +191,57 @@ public class UserFriendController {
         model.addAttribute("userFriends", userFriends);
         return "user/search";
     }
+
+    @PostMapping("/users/search/{username}")
+    public String joinCohort(@RequestParam(name = "search") String search,
+                             Model model,
+                             @PathVariable String username) {
+        User currentUser = userRepo.findByUsername(username);
+        List<UserFriend> userUserFriends1 = userFriendRepo.findAllByUserAndStatus(currentUser, Status.ACCEPTED);// user's friend list
+        List<UserFriend> userUserFriends2 = userFriendRepo.findAllByFriendAndStatus(currentUser, Status.ACCEPTED);
+        List<User> userFriends = new ArrayList<>();
+        for (UserFriend userFriend : userUserFriends1) {
+            userFriends.add(userFriend.getFriend());
+        }
+        for (UserFriend userFriend : userUserFriends2) {
+            userFriends.add(userFriend.getUser());
+        }
+
+        List<User> filteredList = new ArrayList<>();
+        List<String> nameFilter = userNameFilter();
+
+        for (User user : userFriends) {
+            for (String name : nameFilter) {
+                if (user.getUsername().equals(name)) {
+                    filteredList.add(user);
+                    // break;
+                }
+            }
+        }
+        model.addAttribute("allUsers", userRepo.findAll());
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("userFriends", userFriends);
+        model.addAttribute("search", search);
+        return "";
+    }
+
+//    @GetMapping("/users/search/{username}")
+//    public String viewAllAdsWithAjax(@PathVariable String username,
+//                                     Model model) {
+//        User currentUser = userRepo.findByUsername(username);
+//        List<UserFriend> userUserFriends1 = userFriendRepo.findAllByUserAndStatus(currentUser, Status.ACCEPTED);// user's friend list
+//        List<UserFriend> userUserFriends2 = userFriendRepo.findAllByFriendAndStatus(currentUser, Status.ACCEPTED);
+//        ArrayList<User> userFriends = new ArrayList<>();
+//        for (UserFriend userFriend : userUserFriends1) {
+//            userFriends.add(userFriend.getFriend());
+//        }
+//        for (UserFriend userFriend : userUserFriends2) {
+//            userFriends.add(userFriend.getUser());
+//        }
+//        model.addAttribute("allUsers", userRepo.findAll());
+//
+//        model.addAttribute("currentUser", currentUser);
+//        model.addAttribute("userFriends", userFriends);
+//        return "user/search";
+//    }
 }
