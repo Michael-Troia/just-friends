@@ -86,7 +86,7 @@
                                     <div class="error-message" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
                                 </form>
                                 <form th:action="@{/{username}/gallery/{id}/delete (username=${#authentication.principal.username}, id=${gallery.getId()})}" th:object="${gallery}" method="post" class="p-3">
-                                    <input type="submit" name="delete" VALUE="DELETE"/>
+                                    <button type="submit" class="btn btn-danger">Delete Gallery</button>
                                 </form>
                             </div>
                         </div>

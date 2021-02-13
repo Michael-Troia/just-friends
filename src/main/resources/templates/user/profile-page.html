@@ -194,7 +194,7 @@
                 <!--       tab 2 friends-->
                 <div class="tab-pane fade" id="nav-friends" role="tabpanel" aria-labelledby="nav-friends-tab">
                     <h1>Friends</h1>
-                    <form th:action="@{/{username}/friends (username=${#authentication.principal.username})}" method="GET" class="p-3">
+                    <form th:action="@{/users/search/{username} (username=${user.getUsername()})}" method="GET" class="p-3">
                         <button type="submit" class="btn btn-primary">Find friends</button>
                     </form>
                     <div class="square-gallery p-0">

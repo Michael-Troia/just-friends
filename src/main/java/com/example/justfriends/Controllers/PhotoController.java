@@ -178,7 +178,7 @@ public class PhotoController {
         }
         galleryRepo.delete(galleryRepo.findById(id));
 
-        return "redirect:/" + username + "/my-photos";
+        return "redirect:/user/" + username;
     }
 
     //Create Photo

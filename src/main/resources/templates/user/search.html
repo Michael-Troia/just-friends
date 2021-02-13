@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="partials/head :: head('Friend Requests')">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<header th:replace="partials/header :: header"></header>
+
+<div class="grid template">
+    <aside>
+        <div class="container-fluid">
+            <div class="card p-0">
+                <img class="card-img-top container-fluid" th:src="${currentUser.getProfile_picture_url().toString()}" alt="User profile image">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${currentUser.username}"></h5>
+                    <div class="card-text p-0">
+                        <h6>About Me:</h6>
+                        <p th:text="${currentUser.aboutMe}"></p>
+                        <br>
+                        <p th:text="${currentUser.firstName}"></p>
+                        <p th:text="${currentUser.lastName}"></p>
+                        <p th:text="${currentUser.createdDate}"></p>
+                        <p th:text="${currentUser.birthday}"></p>
+                        <p th:text="${currentUser.email}"></p>
+                        <p th:text="${currentUser.job}"></p>
+                    </div>
+                    <form th:action="@{/edit/{username}(username=${#authentication.principal.username})}" class="card-link" method="get">
+                        <button type="submit" class="btn btn-secondary">Edit Profile</button>
+                    </form>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                        Launch demo modal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <main>
+        <div style="width: 100%;">
+                <!--       tab 1 friends-->
+            <div style="background-color: white" class="p-3">
+                <h1>Make New Friends!</h1>
+                <a th:href="@{/user/{username}(username=${#authentication.principal.username})}">
+                    <h5>Go Back</h5>
+                </a>
+                <div class="square-gallery p-0">
+                    <div class="image-text-container gallery-item" th:each="item : ${allUsers}">
+                        <div th:if="${item.username == currentUser.username}">
+                            <a th:href="@{/user/{username} (username=${currentUser.getUsername()})}">
+                                <img th:src="${item.profile_picture_url.toString()}">
+                                <p class="image-text" th:text="${item.username}"></p>
+                            </a>
+                        </div>
+                        <div th:if="${userFriends.contains(item) == true}">
+                            <a th:href="@{/{username}/friend/{friendName} (username=${currentUser.getUsername()}, friendName=${item.getUsername()})}">
+                                <img th:src="${item.profile_picture_url.toString()}">
+                                <p class="image-text" th:text="${item.username}"></p>
+                            </a>
+                        </div>
+                        <div th:if="${userFriends.contains(item) == false && item.username != currentUser.username}">
+                            <div>
+                                <img th:src="${item.profile_picture_url.toString()}">
+                                <p class="image-text" th:text="${item.username}"></p>
+                                <form th:action="@{/request/{username}/{friendName} (username=${currentUser.getUsername()}, friendName = ${item.getUsername()})}" th:method="POST">
+                                    <button type="submit" class="caption" name="befriend">Send Friend Request</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        JustFriends
+    </footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -11,7 +11,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.lang.reflect.Array;
 import java.util.*;
 
 @Controller
@@ -199,4 +198,70 @@ public class UserController {
 
         return "index";
     }
+
+    @GetMapping("/users/search")
+    public @ResponseBody String viewAllAdsInJSONFormat() {
+        List<User> userList = userRepo.findAll();
+        StringBuilder html = new StringBuilder("");
+        for (User user: userList) {// th:src vs src
+            String htmlBuilder =
+                "<div class=\"image-text-container gallery-item\">" +
+//                    "<div th:if=\"${currentUser.username == " + user.getUsername() + "}>" +
+                        "<img src=\"" + user.getProfile_picture_url().toString() + "\">" +
+                        "<p class=\"image-text\" th:text=" + user.getUsername() + "></p>" +
+//                    "</div>" +
+//                    "<div th:if=\"${userFriendList.contains(item) == true}\">" +
+//                        "<a th:href=\"@{/{username}/friend/{friendName} (username=${currentUser.getUsername()}, friendName=${" + user.getUsername() + "})}>" +
+//                            "<img th:src=\"${" + user.getProfile_picture_url() + "}>" +
+//                            "<p class=\"image-text\" th:text=" + user.getUsername() + "></p>" +
+//                        "</a>" +
+//                    </div>
+//                    "<div th:if=\"${userFriendList.contains(item) == false && item.username != currentUser.username}">" +
+//                        "<div>" +
+//                            <img th:src="${item.profile_picture_url.toString()}">
+//                            <p class="image-text" th:text="${item.username}"></p>
+                            "<form th:action=\"@{/request/{username}/{friendName} (username=${currentUser.getUsername()}, friendName = " + user.getUsername() + ")}\" th:method=\"POST\">" +
+                                "<button type=\"submit\" class=\"caption\" name=\"befriend\">Send Friend Request</button>" +
+                            "</form>" +
+//                        "</div>" +
+//                    "</div>" +
+//                "</div>";
+
+//                "<div class=\"card\" style=\"width: 18rem;\">" +
+//                "<h1>" + user.getUsername() + "</h1>" +
+//                "<img class=\"card-img-top\" src=\"" + user.getProfile_picture_url() + "\" alt=\"Card image cap\">" +
+//                "<div class=\"card-body\">" +
+//                    "<h5 class=\"card-title\">" + user.getUsername() + "</h5>" +
+//                    "<p class=\"card-text\">" + user.getFirstName() + "</p>" +
+//                    "<p class=\"card-text\">" + user.getLastName() + "</p>" +
+//                    "<a href=\"#\" class=\"btn btn-primary\">Add Friend</a>" +
+//                "</div>" +
+            "</div>";
+            html.append(htmlBuilder);
+        }
+
+        return String.valueOf(html);
+    }
+
+
+    @GetMapping("/users/search/{username}")
+    public String viewAllAdsWithAjax(@PathVariable String username,
+                                     Model model) {
+        User currentUser = userRepo.findByUsername(username);
+        List<UserFriend> userUserFriends1 = userFriendRepo.findAllByUserAndStatus(currentUser, Status.ACCEPTED);// user's friend list
+        List<UserFriend> userUserFriends2 = userFriendRepo.findAllByFriendAndStatus(currentUser, Status.ACCEPTED);
+        ArrayList<User> userFriends = new ArrayList<>();
+        for (UserFriend userFriend : userUserFriends1) {
+            userFriends.add(userFriend.getFriend());
+        }
+        for (UserFriend userFriend : userUserFriends2) {
+            userFriends.add(userFriend.getUser());
+        }
+        model.addAttribute("allUsers", userRepo.findAll());
+
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("userFriends", userFriends);
+        return "user/search";
+    }
 }
+
