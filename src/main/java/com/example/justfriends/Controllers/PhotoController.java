@@ -36,22 +36,6 @@ public class PhotoController {
         this.pictureRepo = pictureRepo;
     }
 
-    //Show my-photos
-    @GetMapping("{username}/my-photos")
-    public String showPhotosHome(@PathVariable String username,
-                                 Model model){
-        User currentUser = userRepo.findByUsername(username);
-        List<Picture> userPhotos = pictureRepo.findAllByUser(currentUser);
-        List<Gallery> userGalleries = galleryRepo.findAllByUser(currentUser);
-
-        model.addAttribute("user", currentUser);
-        model.addAttribute("photos", userPhotos);
-        model.addAttribute("galleries", userGalleries);
-        model.addAttribute("gallery", new Gallery());
-
-        return "galleries/my-photos";
-    }
-
     //Create Gallery
     @PostMapping("{username}/gallery/create")
     public String createGallery(@PathVariable String username,
@@ -67,7 +51,7 @@ public class PhotoController {
             model.addAttribute("galleries", userGalleries);
             model.addAttribute("gallery", gallery);
             model.addAttribute("errors", validation);
-            return "galleries/my-photos";
+            return "galleries/show";
         }
         User newUser = userRepo.findByUsername(username);
         Gallery newGallery = new Gallery();
@@ -181,19 +165,7 @@ public class PhotoController {
         return "redirect:/user/" + username;
     }
 
-    //Create Photo
-    @GetMapping("/{username}/gallery/{id}/create-photo")
-    public String showCreatePhotoForm(@PathVariable String username,
-                                      @PathVariable long id,
-                                      Model model){
-        User user = userRepo.findByUsername(username);
-        Gallery gallery = galleryRepo.findById(id);
-        model.addAttribute("user", user);
-        model.addAttribute("gallery", gallery);
-        model.addAttribute("picture", new Picture());
-
-        return "galleries/create-photo";
-    }
+    //create photo
     @PostMapping("/{username}/gallery/{id}/create-photo")
     public String submitCreatePhotoForm(@PathVariable String username,
                                         @PathVariable long id,
@@ -219,7 +191,7 @@ public class PhotoController {
         return "redirect:/" + username + "/gallery/" + id;
     }
 
-    //Update photo comment
+    //Update photo caption
     @PostMapping("{username}/photo/{id}/edit")
     public String editPhoto(@PathVariable String username,
                               @PathVariable long id,
@@ -245,16 +217,6 @@ public class PhotoController {
         Gallery gallery = galleryRepo.findById(picture.getGallery().getId());
 
         pictureRepo.delete(picture);
-//
-//        if (galleryRepo.findAll() == null) {
-//            Picture defaultPicture =  new Picture();
-//            defaultPicture.setUser(user);
-//            defaultPicture.setComment("Photo");
-//            defaultPicture.setPictureUrl("img/thumbnailDefault.jpg");
-//            defaultPicture.setGallery(gallery);
-//            pictureRepo.save(defaultPicture);
-//        }
-
 
         return "redirect:/" + username + "/gallery/" + gallery.getId();
     }

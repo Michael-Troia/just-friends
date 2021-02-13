@@ -63,6 +63,9 @@
                 <div class="error-message" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
                 <button type="submit" class="btn btn-primary">Save Changes</button>
             </form>
+            <form style="float: right;" th:action="@{/{username}/delete (username=${#authentication.principal.username})}" method="POST" class="p-3" >
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?\nYou can\'t change your mind after clicking OK.')">Delete your account</button>
+            </form>
         </div>
     </main>
     <footer>

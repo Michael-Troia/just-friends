@@ -3,6 +3,8 @@ package com.example.justfriends.Controllers;
 import com.example.justfriends.Models.*;
 import com.example.justfriends.Repositories.*;
 import com.example.justfriends.Services.EmailService;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -86,8 +88,6 @@ public class UserController {
         User dbUser = userRepo.save(user);
         galleryRepo.save(newGallery);
         pictureRepo.save(defaultPic);
-
-
         model.addAttribute("user", dbUser);
 
 //        emailService.prepareAndSend(user,"Welcome to JustFriends " + user.getUsername() + "!",
@@ -155,10 +155,8 @@ public class UserController {
 
         List<UserFriend> userFriendRequests = userFriendRepo.findAllByFriendAndStatus(user, Status.PENDING);
         model.addAttribute("friendRequests", userFriendRequests);
-
         model.addAttribute("galleries", galleryRepo.findAllByUser(user));
         model.addAttribute("all-galleries", galleryRepo.findAll());
-//        model.addAttribute("friendsList", userFriends1.addAll(userFriends2));
         model.addAttribute("user", user);
         model.addAttribute("sessionUser", sessionUser);
         model.addAttribute("friends",myFriends);
@@ -178,6 +176,18 @@ public class UserController {
         for (Post post : posts){
             postRepo.delete(post);
         }
+        List<Comment> comments = commentRepo.findAllByUser(user);
+        for (Comment comment : comments) {
+            commentRepo.delete(comment);
+        }
+        List<Picture> pictures = pictureRepo.findAllByUser(user);
+        for (Picture picture : pictures) {
+            pictureRepo.delete(picture);
+        }
+        List<Gallery> galleries = galleryRepo.findAllByUser(user);
+        for (Gallery gallery : galleries) {
+            galleryRepo.delete(gallery);
+        }
         List<UserFriend> userFriends1 = userFriendRepo.findAllByUser(user);
         List<UserFriend> userFriends2 = userFriendRepo.findAllByFriend(user);
         for (UserFriend userFriend : userFriends1){
@@ -186,82 +196,27 @@ public class UserController {
         for (UserFriend userFriend : userFriends2) {
             userFriendRepo.delete(userFriend);
         }
+
         userRepo.delete(user);
 
         return "redirect:/login?logout";
     }
 
-    //Show Home page
-    @GetMapping("/")
-    public String showTest(Model model, @ModelAttribute User user) {
-        model.addAttribute("currentUser", user);
+//    //Show Home page
+//    @GetMapping("/")
+//    public String showTest(Model model, @ModelAttribute User user) {
+//        model.addAttribute("currentUser", user);
+//        userRepo.findByUsername(user.getUsername());
+//        return "index";
+//    }
+
+    @RequestMapping("/")
+    public String index(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!(auth instanceof AnonymousAuthenticationToken))
+            return "redirect:/user/" + auth.getName();
 
         return "index";
-    }
-
-    @GetMapping("/users/search")
-    public @ResponseBody String viewAllAdsInJSONFormat() {
-        List<User> userList = userRepo.findAll();
-        StringBuilder html = new StringBuilder("");
-        for (User user: userList) {// th:src vs src
-            String htmlBuilder =
-                "<div class=\"image-text-container gallery-item\">" +
-//                    "<div th:if=\"${currentUser.username == " + user.getUsername() + "}>" +
-                        "<img src=\"" + user.getProfile_picture_url().toString() + "\">" +
-                        "<p class=\"image-text\" th:text=" + user.getUsername() + "></p>" +
-//                    "</div>" +
-//                    "<div th:if=\"${userFriendList.contains(item) == true}\">" +
-//                        "<a th:href=\"@{/{username}/friend/{friendName} (username=${currentUser.getUsername()}, friendName=${" + user.getUsername() + "})}>" +
-//                            "<img th:src=\"${" + user.getProfile_picture_url() + "}>" +
-//                            "<p class=\"image-text\" th:text=" + user.getUsername() + "></p>" +
-//                        "</a>" +
-//                    </div>
-//                    "<div th:if=\"${userFriendList.contains(item) == false && item.username != currentUser.username}">" +
-//                        "<div>" +
-//                            <img th:src="${item.profile_picture_url.toString()}">
-//                            <p class="image-text" th:text="${item.username}"></p>
-                            "<form th:action=\"@{/request/{username}/{friendName} (username=${currentUser.getUsername()}, friendName = " + user.getUsername() + ")}\" th:method=\"POST\">" +
-                                "<button type=\"submit\" class=\"caption\" name=\"befriend\">Send Friend Request</button>" +
-                            "</form>" +
-//                        "</div>" +
-//                    "</div>" +
-//                "</div>";
-
-//                "<div class=\"card\" style=\"width: 18rem;\">" +
-//                "<h1>" + user.getUsername() + "</h1>" +
-//                "<img class=\"card-img-top\" src=\"" + user.getProfile_picture_url() + "\" alt=\"Card image cap\">" +
-//                "<div class=\"card-body\">" +
-//                    "<h5 class=\"card-title\">" + user.getUsername() + "</h5>" +
-//                    "<p class=\"card-text\">" + user.getFirstName() + "</p>" +
-//                    "<p class=\"card-text\">" + user.getLastName() + "</p>" +
-//                    "<a href=\"#\" class=\"btn btn-primary\">Add Friend</a>" +
-//                "</div>" +
-            "</div>";
-            html.append(htmlBuilder);
-        }
-
-        return String.valueOf(html);
-    }
-
-
-    @GetMapping("/users/search/{username}")
-    public String viewAllAdsWithAjax(@PathVariable String username,
-                                     Model model) {
-        User currentUser = userRepo.findByUsername(username);
-        List<UserFriend> userUserFriends1 = userFriendRepo.findAllByUserAndStatus(currentUser, Status.ACCEPTED);// user's friend list
-        List<UserFriend> userUserFriends2 = userFriendRepo.findAllByFriendAndStatus(currentUser, Status.ACCEPTED);
-        ArrayList<User> userFriends = new ArrayList<>();
-        for (UserFriend userFriend : userUserFriends1) {
-            userFriends.add(userFriend.getFriend());
-        }
-        for (UserFriend userFriend : userUserFriends2) {
-            userFriends.add(userFriend.getUser());
-        }
-        model.addAttribute("allUsers", userRepo.findAll());
-
-        model.addAttribute("currentUser", currentUser);
-        model.addAttribute("userFriends", userFriends);
-        return "user/search";
     }
 }
 
