@@ -62,16 +62,9 @@ public class UserFriendController {
         userFriend.setStatus(Status.PENDING);
         userFriendRepo.save(userFriend);
 
-
-//        UserFriend userFriend2 = new UserFriend();
-//        userFriend2.setFriend(userRepo.findByUsername(username));
-//        userFriend2.setUser(userRepo.findByUsername(friendName));
-//        userFriend2.setStatus(Status.PENDING);
-//        userFriendRepo.save(userFriend2);
-
-        emailService.prepareAndSend(userRepo.findByUsername(friendName), friendName + ", someone wants to be your friend :)",
-                "Looks like you're popular! You might have a friend in " + username + " . Head to the friend request page on your" +
-                        " justfriends.online profile to let them know if you'd like to be friends!");
+//        emailService.prepareAndSend(userRepo.findByUsername(friendName), friendName + ", someone wants to be your friend :)",
+//                "Looks like you're popular! You might have a friend in " + username + " . Head to the friend request page on your" +
+//                        " justfriends.online profile to let them know if you'd like to be friends!");
 
         return "redirect:/";
     }
@@ -232,7 +225,9 @@ public class UserFriendController {
         model.addAttribute("friend", friend);
         model.addAttribute("userFriendList" , userFriends);
         model.addAttribute("currentUser", currentUser);
-        model.addAttribute("galleries", friendGalleries);
+        if (!friendGalleries.isEmpty()){
+            model.addAttribute("galleries", friendGalleries);
+        }
         model.addAttribute("sessionUser", sessionUser);
 
         return "userFriend/friend-profile";
