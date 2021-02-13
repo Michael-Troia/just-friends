@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.json.Json;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Calendar;

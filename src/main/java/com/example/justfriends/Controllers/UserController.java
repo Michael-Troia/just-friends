@@ -71,28 +71,32 @@ public class UserController {
             return "user/register";
         }
         String hash = passwordEncoder.encode(user.getPassword());
-        Date date = new Date();
-        Gallery defaultGallery = new Gallery();
-        defaultGallery.setName("Photos");
-        defaultGallery.setUser(user);
-        defaultGallery.setCreatedDate(date);
+        Gallery newGallery = new Gallery();
+        newGallery.setName("Photos");
+        newGallery.setUser(user);
+        newGallery.setCreatedDate(new Date());
+
         Picture defaultPic = new Picture();
         defaultPic.setUser(user);
         defaultPic.setComment("Profile");
         defaultPic.setPictureUrl("/img/blank-profile-picture.png");
-        defaultPic.setGallery(defaultGallery);
+        defaultPic.setGallery(newGallery);
         user.setPassword(hash);
-        user.setCreatedDate(date);
+        user.setCreatedDate(new Date());
         user.setProfile_picture_url("/img/blank-profile-picture.png");
         User dbUser = userRepo.save(user);
+        galleryRepo.save(newGallery);
+        pictureRepo.save(defaultPic);
+
+
         model.addAttribute("user", dbUser);
 
-        emailService.prepareAndSend(user,"Welcome to JustFriends " + user.getUsername() + "!",
-                "We're glad to have you! You might notice that your newsfeed is a little quiet. We want to avoid the" +
-                        "drama that social media sites typically have of suggesting who you should be friends with or advertising" +
-                        "to you. You probably want to make that decision for yourself! Instead, why not invite invite your friends" +
-                        " to join, or send them a friend request if they " +
-                        "already have!");
+//        emailService.prepareAndSend(user,"Welcome to JustFriends " + user.getUsername() + "!",
+//                "We're glad to have you! You might notice that your newsfeed is a little quiet. We want to avoid the" +
+//                        "drama that social media sites typically have of suggesting who you should be friends with or advertising" +
+//                        "to you. You probably want to make that decision for yourself! Instead, why not invite invite your friends" +
+//                        " to join, or send them a friend request if they " +
+//                        "already have!");
 
         return "redirect:/login";
     }
@@ -123,9 +127,10 @@ public class UserController {
     public String showUser(Model model,
                            @PathVariable String username) {
         User user = userRepo.findByUsername(username);
+        User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         List<UserFriend> userFriends1 = userFriendRepo.findAllByUserAndStatus(user, Status.ACCEPTED);// lists friends who accepted you
         List<UserFriend> userFriends2 = userFriendRepo.findAllByFriendAndStatus(user, Status.ACCEPTED);// lists friends who you accepted
-        User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         //collects all accepted friendships involving the user
         ArrayList<User> displayUsers = new ArrayList<>();
@@ -162,6 +167,7 @@ public class UserController {
         model.addAttribute("posts", displayPosts);
         model.addAttribute("newPost", new Post());
         model.addAttribute("newComment", new Comment());
+        model.addAttribute("newGallery", new Gallery());
         return "user/profile-page";
     }
 
