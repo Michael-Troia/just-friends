@@ -2,160 +2,148 @@
     /*   border: 1px solid black; */
 }
 
-
-.template {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows:auto auto;
-    grid-gap: 0.5%;
-    margin: 0 auto;
-}
-
-footer {
-    grid-column: 1 / span 5;
-}
-
-aside {
-    grid-column: 1 / span 1;
-}
-
-main {
-    grid-column: span 3;
-}
-
-main,
-aside,
-footer {
-    background: lavender;
-    display: flex;
-    justify-content: center;
-    padding: 3%;
-}
-
-.tab-content {
-    background: white;
-    padding: 3%;
-}
-
-.square-gallery {
-    --items: 4;
-    --width: 40vw;
-    display: grid;
-    grid-template-columns: repeat(var(--items), 1fr);
-    grid-gap: 10px;
-    width: var(--width);
-    margin: 2vw auto;
-    border-radius: 4px;
-    overflow: visible;
-}
-.gallery-item {
-    display: flex;
-    justify-content: center;
-    width: calc(var(--width) / var(--items));
-    height: calc(var(--width) / var(--items));
-    background-position: center center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    object-fit: cover;
-    border-radius: 25px;
-    transition: all 0.2s ease-out;
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
-}
-
-.square-gallery-tiny {
-    --items: 1;
-    --width: 5vw;
-    display: grid;
-    grid-template-columns: repeat(var(--items), 1fr);
-    grid-gap: 10px;
-    width: var(--width);
-    /*margin: 2vw auto;*/
-    border-radius: 4px;
-    overflow: visible;
-}
-.gallery-item-tiny {
-    display: flex;
-    justify-content: center;
-    width: calc(var(--width) / var(--items));
-    height: calc(var(--width) / var(--items));
-    background-position: center center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    object-fit: cover;
-    border-radius: 25px;
-    transition: all 0.2s ease-out;
-    padding: 2%;
-    /*box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;*/
-}
-
-img {
-    width: calc(var(--width) / var(--items));
-    height: calc(var(--width) / var(--items));
-    object-fit: cover;
-}
-
-.image-text-container:hover {
-    transform: scale(1.1);
-}
-
-/* ----- Small screens ----- */
-@media (max-width: 850px) {
+/* Small mobile and larger */
+@media only screen and (Min-width: 320px) {
     .template {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        grid-template-rows:auto auto auto;
-        grid-gap: 1em;
+        max-width: 1776px;
+        margin: 0 auto;
     }
     main,
-    aside {
-        grid-column: 1 / span 5;
+    aside,
+    footer {
+        background: lavender;
+        display: flex;
+        justify-content: center;
+        padding: 3%;
     }
-
-    .square-gallery {
-        --items: 3;
-        --width: 70vw;
+    .tab-content {
+        background: white;
+        padding: 3%;
     }
-}
-
-/* ----- super small screens */
-@media (max-width: 610px) {
     .square-gallery {
         --items: 2;
-        --width: 70vw;
+        --width: 80vw;
+        display: grid;
+        grid-template-columns: repeat(var(--items), 1fr);
+        grid-gap: 10px;
+        width: var(--width);
+        margin: 2vw auto;
+        border-radius: 4px;
+        overflow: visible;
+    }
+    .gallery-item {
+        display: flex;
+        justify-content: center;
+        width: calc(var(--width) / var(--items));
+        height: calc(var(--width) / var(--items));
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        object-fit: cover;
+        border-radius: 25px;
+        transition: all 0.2s ease-out;
+        box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
+    }
+    .square-gallery-tiny {
+        --items: 1;
+        --width: 5vw;
+        display: grid;
+        grid-template-columns: repeat(var(--items), 1fr);
+        grid-gap: 10px;
+        width: var(--width);
+        /*margin: 2vw auto;*/
+        border-radius: 4px;
+        overflow: visible;
+    }
+    .gallery-item-tiny {
+        display: flex;
+        justify-content: center;
+        width: calc(var(--width) / var(--items));
+        height: calc(var(--width) / var(--items));
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        object-fit: cover;
+        border-radius: 25px;
+        transition: all 0.2s ease-out;
+        padding: 2%;
+    }
+    .image-text-container {
+        position: relative;
+        text-align: center;
+    }
+    .image-text {
+        position: absolute;
+        bottom: 0;
+        left: 16px;
+        color: black;
+    }
+    .image-text-container .image-text {
+        overflow: visible;
+        box-shadow: inset 5em 5em rgba(255, 255, 255, 0.7);
+        border-radius: .2em;
+        padding: .2em;
+    }
+    .caption {
+        position: absolute;
+        top: 10px;
+        left: 16px;
+        color: black;
+        overflow: visible;
+        box-shadow: inset 5em 5em rgba(255, 255, 255, 0.9);
+        border-radius: .2em;
+        padding: .2em;
+    }
+    .error-message {
+        color: red;
+    }
+    .friend-list-img {
+        width: 10em;
+        height: 10em;
+        object-fit: cover;
+        padding: 1em;
+    }
+    img {
+        width: calc(var(--width) / var(--items));
+        height: calc(var(--width) / var(--items));
+        object-fit: cover;
+    }
+    .image-text-container:hover {
+        transform: scale(1.1);
+    }
+    .error-message {
+        color: red;
+    }
+    .friend-list-img {
+        width: 10em;
+        height: 10em;
+        object-fit: cover;
+        padding: 1em;
+    }
+    .profile-pic {
+        max-width: 300px;
     }
 }
 
-
-.image-text-container {
-    position: relative;
-    text-align: center;
-}
-.image-text {
-    position: absolute;
-    bottom: 0;
-    left: 16px;
-    color: black;
-
+/* most phone sizes and larger */
+@media only screen and (Min-width: 540px) {
+    .square-gallery {
+        --items: 3;
+        --width: 80vw;
+    }
 }
 
-.image-text-container .image-text {
-    overflow: visible;
-    box-shadow: inset 5em 5em rgba(255,255,255,0.7);
-    border-radius: .2em;
-    padding: .2em;
+/* Small desktop */
+@media only screen and (Min-width: 960px) {
+    .square-gallery {
+        --items: 3;
+        --width: 80vw;
+    }
 }
 
-.caption {
-    position: absolute;
-    top: 10px;
-    left: 16px;
-    color: black;
-    overflow: visible;
-    box-shadow: inset 5em 5em rgba(255,255,255,0.9);
-    border-radius: .2em;
-    padding: .2em;
-}
-
-.error-message {
-    color: red;
+@media only screen and (min-width: 1200px) {
+    .square-gallery {
+        --items: 4;
+        --width: 40vw;
+    }
 }

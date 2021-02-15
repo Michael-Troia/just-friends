@@ -41,14 +41,7 @@ public class PostController {
         this.pictureRepo = pictureRepo;
     }
 
-//Create Post
-//    @GetMapping("/posts/create/{username}")
-//    public String showCreatePostForm(Model model, @PathVariable String username) {
-//        model.addAttribute("user", userRepo.findByUsername(username));
-//        model.addAttribute("post", new Post());
-//
-//        return "post/create";
-//    }
+    //Create Post
     @PostMapping("/posts/create/{username}")
     public String submitPostForm(@ModelAttribute Post post,
                                  @PathVariable String username,
@@ -65,26 +58,6 @@ public class PostController {
 
         return "redirect:/user/" + username;
     }
-
-    //Read User posts
-//    @GetMapping("/posts/view/{username}")
-//    public String showAllUserPosts(Model model,
-//                                   @PathVariable String username) {
-//        List<Post> postList = postRepo.findAllByUserUsername(username);
-//        ArrayList<String> displayPosts = new ArrayList<>();
-//        int i = 1;
-//        for (Post post : postList) {
-//            String body = "Body of post #" + (i++) + ": " + post.getBody();
-//            displayPosts.add(body);
-//            String date = " , that post was made: " + post.getCreatedDate() + " . ";
-//            displayPosts.add(date);
-//            String id = "Post Id #:" + post.getId() + " .";
-//        }
-//        model.addAttribute("userPosts", displayPosts);
-//        model.addAttribute("postList" , postList);
-//
-//        return "post/view";
-//    }
 
     //Update Post
     @GetMapping("/posts/edit/{username}/{id}")
@@ -128,18 +101,8 @@ public class PostController {
         return "redirect:/user/" + username;
     }
 
-////    Create Comment
-//    @GetMapping("/posts/create/{username}/{postId}/comment")
-//    public String showCommentForm(@PathVariable String username,
-//                                  @PathVariable long postId,
-//                                  Model model){
-//        model.addAttribute("user" , userRepo.findByUsername(username));
-//        model.addAttribute("comment", new Comment());
-//        model.addAttribute("post" , postRepo.findById(postId));
-//
-//        return "post/comment";
-//    }
-
+    //--- Comments ---//
+    //Create Comment
     @PostMapping("/posts/create/{username}/{postId}/comment")
     public String submitCommentForm(@ModelAttribute Comment comment,
                                  //@ModelAttribute Post post,
@@ -173,7 +136,6 @@ public class PostController {
 
         return "post/comment-edit";
     }
-    //Update Comment
     @PostMapping("/comments/edit/{username}/{commentId}")
     public String editComment(@ModelAttribute Comment commentToBeUpdated,
             @PathVariable String username,

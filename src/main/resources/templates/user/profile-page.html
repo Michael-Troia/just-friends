@@ -8,17 +8,19 @@
 <body>
 <header th:replace="partials/header :: header"></header>
 
-<div th:if="${sessionUser.getUsername() == user.getUsername()}" class="grid template">
-    <aside>
-        <div class="container-fluid">
-            <div class="card p-0">
-                <img class="card-img-top container-fluid" th:src="${user.getProfile_picture_url().toString()}" alt="Card image cap">
-                <div class="card-body">
+<!-- copy to all pages,  -->
+<div th:if="${sessionUser.getUsername() == user.getUsername()}" class="row template">
+    <aside class="col-xl-4">
+        <div class="container">
+            <div class="row p-3" style="background: white">
+                <div class="col">
+                    <img class="card-img-top p-3 profile-pic" th:src="${user.getProfile_picture_url().toString()}" alt="Card image cap">
                     <h5 class="card-title" th:text="${user.username}"></h5>
-                    <div class="card-text p-0">
+                    <p th:text="${user.aboutMe}"></p>
+                </div>
+                <div class="col">
+                    <div class="card-text">
                         <h6>About Me:</h6>
-                        <p th:text="${user.aboutMe}"></p>
-                        <br>
                         <p th:text="${user.firstName}"></p>
                         <p th:text="${user.lastName}"></p>
                         <p th:text="${user.createdDate}"></p>
@@ -29,15 +31,12 @@
                     <form  th:if="${sessionUser.getUsername() == user.username}" th:action="@{/edit/{username}(username=${#authentication.principal.username})}" class="card-link" method="get">
                         <button type="submit" class="btn btn-secondary">Edit Profile</button>
                     </form>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                        Launch demo modal
-                    </button>
                 </div>
             </div>
         </div>
     </aside>
-    <main>
-        <div style="width: 100%;">
+    <main class="col-xl-8">
+        <div style="width: 100%; background-color: white;">
             <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -194,8 +193,12 @@
                 <!--       tab 2 friends-->
                 <div class="tab-pane fade" id="nav-friends" role="tabpanel" aria-labelledby="nav-friends-tab">
                     <h1>Friends</h1>
-                    <form th:action="@{/{username}/friends (username=${#authentication.principal.username})}" method="GET" class="p-3">
-                        <button type="submit" class="btn btn-primary">Find friends</button>
+                    <form th:action="@{/users/search/{username} (username=${user.getUsername()})}" method="post">
+                        <input class="field" name="search" type="search" placeholder="Find Your Friends"/>
+                        <button class="btn btn-outline-success my-2 my-sm-0">search</button>
+                    </form>
+                    <form th:action="@{/users/search/{username} (username=${user.getUsername()})}" method="GET">
+                        <button type="submit" class="btn btn-primary">Discover</button>
                     </form>
                     <div class="square-gallery p-0">
                         <div class="image-text-container gallery-item" th:each="item : ${friends}">
@@ -245,7 +248,7 @@
             </div>
         </div>
     </main>
-    <footer>
+    <footer class="col-xl-12">
         JustFriends
     </footer>
 </div>

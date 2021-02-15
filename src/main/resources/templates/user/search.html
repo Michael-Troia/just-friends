@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="partials/head :: head('Edit')">
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="partials/head :: head('Friend Requests')">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
@@ -34,54 +34,53 @@
         </div>
     </aside>
     <main class="col-xl-8">
-        <div class="p-5" style="width: 100%; background-color: #b3add6;">
+        <div style="width: 100%; background-color: white;">
             <a th:href="@{/user/{username}(username=${#authentication.principal.username})}">
                 <h5>Go Home</h5>
             </a>
-            <form th:action="@{/edit/{username} (username=${user.getUsername()})}" method="POST" th:object="${user}">
-                <div class="mb-3">
-                    <label for="first-name-input">First Name</label>
-                    <input id="first-name-input" class="form-control" th:field="*{firstName}" />
+                <!--       tab 1 friends-->
+            <div style="background-color: white" class="row p-3">
+                <h1>Make New Friends!</h1>
+                <a th:href="@{/user/{username}(username=${#authentication.principal.username})}">
+                    <h5>Go Back</h5>
+                </a>
+                <div class="col-3 p-3" th:each="item : ${allUsers}">
+                    <div th:if="${item.username == user.username}">
+                        <a th:href="@{/user/{username} (username=${user.getUsername()})}">
+                            <img class="friend-list-img" th:src="${item.profile_picture_url.toString()}">
+                        </a>
+                        <h5 th:text="${item.username}"></h5>
+                        <p th:text="${item.firstName}"></p>
+                        <p th:text="${item.lastName}"></p>
+                    </div>
+                    <div th:if="${userFriends.contains(item) == true}">
+                        <a th:href="@{/{username}/friend/{friendName} (username=${user.getUsername()}, friendName=${item.getUsername()})}">
+                            <img class="friend-list-img" th:src="${item.profile_picture_url.toString()}">
+                        </a>
+                        <h5 th:text="${item.username}"></h5>
+                        <p th:text="${item.firstName}"></p>
+                        <p th:text="${item.lastName}"></p>
+                    </div>
+                    <div th:if="${userFriends.contains(item) == false && item.username != user.username}">
+                        <img class="friend-list-img" th:src="${item.profile_picture_url.toString()}">
+                        <h5 th:text="${item.username}"></h5>
+                        <p th:text="${item.firstName}"></p>
+                        <p th:text="${item.lastName}"></p>
+                        <form th:action="@{/request/{username}/{friendName} (username=${user.getUsername()}, friendName = ${item.getUsername()})}" th:method="POST">
+                            <button type="submit" name="befriend">Send Friend Request</button>
+                        </form>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="last-name-input" class="form-label">Last Name</label>
-                    <input type="text" class="form-control" id="last-name-input" th:field="*{lastName}">
-                </div>
-                <div class="mb-3">
-                    <label for="aboutMe-input" class="form-label">About Me</label>
-                    <input type="text" class="form-control" id="aboutMe-input" th:field="*{aboutMe}">
-                </div>
-                <div class="mb-3">
-                    <label for="birthday-input" class="form-label">Birthday</label>
-                    <input type="text" class="form-control" id="birthday-input" th:field="*{birthday}">
-                </div>
-                <div class="mb-3">
-                    <label for="job-input" class="form-label">Job</label>
-                    <input type="text" class="form-control" id="job-input" th:field="*{job}">
-                </div>
-                <div class="mb-3 p-5" id="uploadPhoto">
-                    <input type="hidden" id="photo" name="gallery_photo" th:field="*{profile_picture_url}" />
-                    <button class="btn btn-secondary" id="upload">Change Profile Photo</button>
-                </div>
-                <div class="error-message" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
-                <div class="error-message" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
-                <button type="submit" class="btn btn-primary">Save Changes</button>
-            </form>
-            <form style="float: right;" th:action="@{/{username}/delete (username=${#authentication.principal.username})}" method="POST" class="p-3" >
-                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?\nYou can\'t change your mind after clicking OK.')">Delete your account</button>
-            </form>
+            </div>
         </div>
     </main>
     <footer class="col-xl-12">
         JustFriends
     </footer>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<script src="//static.filestackapi.com/filestack-js/3.x.x/filestack.min.js" defer></script>
-<script type="text/javascript" th:src="@{/js/filestack.js}" defer></script>
 </body>
 </html>
