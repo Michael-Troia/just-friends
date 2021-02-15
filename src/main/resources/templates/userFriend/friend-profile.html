@@ -8,17 +8,18 @@
 <body>
 <header th:replace="partials/header :: header"></header>
 
-<div class="grid template">
-    <aside>
-        <div class="container-fluid">
-            <div class="card p-0">
-                <img class="card-img-top container-fluid" th:src="${friend.getProfile_picture_url().toString()}" alt="User profile image">
-                <div class="card-body">
+<div class="template row">
+    <aside class="col-xl-4">
+        <div class="container">
+            <div class="row p-3" style="background: white">
+                <div class="col">
+                    <img class="card-img-top p-3 profile-pic" th:src="${friend.getProfile_picture_url().toString()}" alt="Card image cap">
                     <h5 class="card-title" th:text="${friend.username}"></h5>
-                    <div class="card-text p-0">
+                    <p th:text="${friend.aboutMe}"></p>
+                </div>
+                <div class="col">
+                    <div class="card-text">
                         <h6>About Me:</h6>
-                        <p th:text="${friend.aboutMe}"></p>
-                        <br>
                         <p th:text="${friend.firstName}"></p>
                         <p th:text="${friend.lastName}"></p>
                         <p th:text="${friend.createdDate}"></p>
@@ -30,8 +31,8 @@
             </div>
         </div>
     </aside>
-    <main>
-        <div style="width: 100%;">
+    <main class="col-xl-8">
+        <div style="width: 100%; background-color: white;">
             <nav>
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -43,6 +44,9 @@
             <div class="tab-content" id="nav-tabContent">
                 <!--       tab 1 friends-->
                 <div class="tab-pane fade show active" id="nav-friends" role="tabpanel" aria-labelledby="nav-friends-tab">
+                    <a th:href="@{/user/{username}(username=${#authentication.principal.username})}">
+                        <h5>Go Home</h5>
+                    </a>
                     <div class="square-gallery p-0">
                         <div class="image-text-container gallery-item" th:each="item : ${friendFriends}">
                             <div th:if="${item.username == currentUser.username}">
@@ -71,20 +75,22 @@
                 </div>
                 <!--       tab 2 galleries-->
                 <div class="tab-pane fade" id="nav-photos" role="tabpanel" aria-labelledby="nav-photos-tab" >
+                    <a th:href="@{/user/{username}(username=${#authentication.principal.username})}">
+                        <h5>Go Home</h5>
+                    </a>
                     <div class="square-gallery p-0">
-                            <div class="image-text-container gallery-item" th:each="item : ${galleries}">
-                                <div th:if="${!item.getPictures().isEmpty()}" id="thumbnail-container">
-                                    <a th:href="@{/{username}/gallery/{id} (username=${item.getUser().getUsername()}, id=${item.getId()})}">
-                                        <img th:src="${item.getPictures().get(0).getPictureUrl().toString()}" alt="Gallery Thumbnail Image">
-                                        <p class="image-text" th:text="${item.getName()}"></p>
-                                    </a>
-                                </div>
-                                <div th:if="${item.getPictures().isEmpty()}">
-                                    <a th:href="@{/{username}/gallery/{id} (username=${item.getUser().getUsername()}, id=${item.getId()})}">
-                                        <img src="/img/thumbnailDefault.jpg" alt="Gallery Thumbnail Image">
-                                        <p class="image-text" th:text="${item.getName()}"></p>
-                                    </a>
-                                </div>
+                        <div class="image-text-container gallery-item" th:each="item : ${galleries}">
+                            <div th:if="${!item.getPictures().isEmpty()}" id="thumbnail-container">
+                                <a th:href="@{/{username}/gallery/{id} (username=${item.getUser().getUsername()}, id=${item.getId()})}">
+                                    <img th:src="${item.getPictures().get(0).getPictureUrl().toString()}" alt="Gallery Thumbnail Image">
+                                    <p class="image-text" th:text="${item.getName()}"></p>
+                                </a>
+                            </div>
+                            <div th:if="${item.getPictures().isEmpty()}">
+                                <a th:href="@{/{username}/gallery/{id} (username=${item.getUser().getUsername()}, id=${item.getId()})}">
+                                    <img src="/img/thumbnailDefault.jpg" alt="Gallery Thumbnail Image">
+                                    <p class="image-text" th:text="${item.getName()}"></p>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -92,7 +98,7 @@
             </div>
         </div>
     </main>
-    <footer>
+    <footer class="col-xl-12">
         JustFriends
     </footer>
 </div>

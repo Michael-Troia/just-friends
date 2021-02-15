@@ -7,71 +7,74 @@
 <body>
 <header th:replace="partials/header :: header"></header>
 
-<div class="grid template">
-    <aside>
-        <div class="container-fluid">
-            <div class="card p-0">
-                <img class="card-img-top container-fluid" th:src="${currentUser.getProfile_picture_url().toString()}" alt="User profile image">
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${currentUser.username}"></h5>
-                    <div class="card-text p-0">
+<div class="template row">
+    <aside class="col-xl-4">
+        <div class="container">
+            <div class="row p-3" style="background: white">
+                <div class="col">
+                    <img class="card-img-top p-3 profile-pic" th:src="${user.getProfile_picture_url().toString()}" alt="Card image cap">
+                    <h5 class="card-title" th:text="${user.username}"></h5>
+                    <p th:text="${user.aboutMe}"></p>
+                </div>
+                <div class="col">
+                    <div class="card-text">
                         <h6>About Me:</h6>
-                        <p th:text="${currentUser.aboutMe}"></p>
-                        <br>
-                        <p th:text="${currentUser.firstName}"></p>
-                        <p th:text="${currentUser.lastName}"></p>
-                        <p th:text="${currentUser.createdDate}"></p>
-                        <p th:text="${currentUser.birthday}"></p>
-                        <p th:text="${currentUser.email}"></p>
-                        <p th:text="${currentUser.job}"></p>
+                        <p th:text="${user.firstName}"></p>
+                        <p th:text="${user.lastName}"></p>
+                        <p th:text="${user.createdDate}"></p>
+                        <p th:text="${user.birthday}"></p>
+                        <p th:text="${user.email}"></p>
+                        <p th:text="${user.job}"></p>
                     </div>
-                    <form th:action="@{/edit/{username}(username=${#authentication.principal.username})}" class="card-link" method="get">
+                    <form  th:if="${#authentication.principal.username == user.username}" th:action="@{/edit/{username}(username=${#authentication.principal.username})}" class="card-link" method="get">
                         <button type="submit" class="btn btn-secondary">Edit Profile</button>
                     </form>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                        Launch demo modal
-                    </button>
                 </div>
             </div>
         </div>
     </aside>
-    <main>
-        <div style="width: 100%;">
+    <main class="col-xl-8">
+        <div style="width: 100%; background-color: white;">
+            <a th:href="@{/user/{username}(username=${#authentication.principal.username})}">
+                <h5>Go Home</h5>
+            </a>
                 <!--       tab 1 friends-->
-            <div style="background-color: white" class="p-3">
+            <div style="background-color: white" class="row p-3">
                 <h1>Make New Friends!</h1>
                 <a th:href="@{/user/{username}(username=${#authentication.principal.username})}">
                     <h5>Go Back</h5>
                 </a>
-                <div class="square-gallery p-0">
-                    <div class="image-text-container gallery-item" th:each="item : ${allUsers}">
-                        <div th:if="${item.username == currentUser.username}">
-                            <a th:href="@{/user/{username} (username=${currentUser.getUsername()})}">
-                                <img th:src="${item.profile_picture_url.toString()}">
-                                <p class="image-text" th:text="${item.username}"></p>
-                            </a>
-                        </div>
-                        <div th:if="${userFriends.contains(item) == true}">
-                            <a th:href="@{/{username}/friend/{friendName} (username=${currentUser.getUsername()}, friendName=${item.getUsername()})}">
-                                <img th:src="${item.profile_picture_url.toString()}">
-                                <p class="image-text" th:text="${item.username}"></p>
-                            </a>
-                        </div>
-                        <div th:if="${userFriends.contains(item) == false && item.username != currentUser.username}">
-                            <div>
-                                <img th:src="${item.profile_picture_url.toString()}">
-                                <p class="image-text" th:text="${item.username}"></p>
-                                <form th:action="@{/request/{username}/{friendName} (username=${currentUser.getUsername()}, friendName = ${item.getUsername()})}" th:method="POST">
-                                    <button type="submit" class="caption" name="befriend">Send Friend Request</button>
-                                </form>
-                            </div>
-                        </div>
+                <div class="col-3 p-3" th:each="item : ${allUsers}">
+                    <div th:if="${item.username == user.username}">
+                        <a th:href="@{/user/{username} (username=${user.getUsername()})}">
+                            <img class="friend-list-img" th:src="${item.profile_picture_url.toString()}">
+                        </a>
+                        <h5 th:text="${item.username}"></h5>
+                        <p th:text="${item.firstName}"></p>
+                        <p th:text="${item.lastName}"></p>
+                    </div>
+                    <div th:if="${userFriends.contains(item) == true}">
+                        <a th:href="@{/{username}/friend/{friendName} (username=${user.getUsername()}, friendName=${item.getUsername()})}">
+                            <img class="friend-list-img" th:src="${item.profile_picture_url.toString()}">
+                        </a>
+                        <h5 th:text="${item.username}"></h5>
+                        <p th:text="${item.firstName}"></p>
+                        <p th:text="${item.lastName}"></p>
+                    </div>
+                    <div th:if="${userFriends.contains(item) == false && item.username != user.username}">
+                        <img class="friend-list-img" th:src="${item.profile_picture_url.toString()}">
+                        <h5 th:text="${item.username}"></h5>
+                        <p th:text="${item.firstName}"></p>
+                        <p th:text="${item.lastName}"></p>
+                        <form th:action="@{/request/{username}/{friendName} (username=${user.getUsername()}, friendName = ${item.getUsername()})}" th:method="POST">
+                            <button type="submit" name="befriend">Send Friend Request</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-    <footer>
+    <footer class="col-xl-12">
         JustFriends
     </footer>
 </div>

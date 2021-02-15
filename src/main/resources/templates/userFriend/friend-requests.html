@@ -7,17 +7,18 @@
 <body>
 <header th:replace="partials/header :: header"></header>
 
-<div class="grid template">
-    <aside>
-        <div class="container-fluid">
-            <div class="card p-0">
-                <img class="card-img-top container-fluid" th:src="${user.getProfile_picture_url().toString()}" alt="Card image cap">
-                <div class="card-body">
+<div class="template row">
+    <aside class="col-xl-4">
+        <div class="container">
+            <div class="row p-3" style="background: white">
+                <div class="col">
+                    <img class="card-img-top p-3 profile-pic" th:src="${user.getProfile_picture_url().toString()}" alt="Card image cap">
                     <h5 class="card-title" th:text="${user.username}"></h5>
-                    <div class="card-text p-0">
+                    <p th:text="${user.aboutMe}"></p>
+                </div>
+                <div class="col">
+                    <div class="card-text">
                         <h6>About Me:</h6>
-                        <p th:text="${user.aboutMe}"></p>
-                        <br>
                         <p th:text="${user.firstName}"></p>
                         <p th:text="${user.lastName}"></p>
                         <p th:text="${user.createdDate}"></p>
@@ -25,16 +26,24 @@
                         <p th:text="${user.email}"></p>
                         <p th:text="${user.job}"></p>
                     </div>
-                    <form th:action="@{/edit/{username}(username=${#authentication.principal.username})}" class="card-link" method="get">
+                    <form  th:if="${#authentication.principal.username == user.username}" th:action="@{/edit/{username}(username=${#authentication.principal.username})}" class="card-link" method="get">
                         <button type="submit" class="btn btn-secondary">Edit Profile</button>
                     </form>
                 </div>
             </div>
         </div>
     </aside>
-    <main>
-        <div>
+    <main class="col-xl-8">
+        <div style="width: 100%; background-color: white;" class="p-5">
+            <a th:href="@{/user/{username}(username=${#authentication.principal.username})}">
+                <h5>Go Home</h5>
+            </a>
             <h1>Friend Requests</h1>
+
+
+<!--            background button-->
+
+
             <div th:each="item : ${friendRequests}">
                 <div class="card m-3" style="width: 18em;">
 
@@ -64,13 +73,13 @@
             </div>
         </div>
     </main>
-    <footer>
+    <footer class="col-xl-12">
         JustFriends
     </footer>
 </div>
-
-
-
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>

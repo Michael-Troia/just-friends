@@ -8,36 +8,34 @@
 <body>
 <header th:replace="partials/header :: header"></header>
 <div th:if="${#authentication.principal.username == displayUser.username}">
-    <div class="grid template">
-        <aside>
-            <div class="container-fluid">
-                <div class="card p-0">
-                    <img class="card-img-top container-fluid" th:src="${user.getProfile_picture_url().toString()}" alt="Card image cap">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${user.username}"></h5>
-                        <div class="card-text p-0">
+    <div class="template row">
+        <aside class="col-xl-4">
+            <div class="container">
+                <div class="row p-3" style="background: white">
+                    <div class="col">
+                        <img class="card-img-top p-3 profile-pic" th:src="${displayUser.getProfile_picture_url().toString()}" alt="Card image cap">
+                        <h5 class="card-title" th:text="${displayUser.username}"></h5>
+                        <p th:text="${displayUser.aboutMe}"></p>
+                    </div>
+                    <div class="col">
+                        <div class="card-text">
                             <h6>About Me:</h6>
-                            <p th:text="${user.aboutMe}"></p>
-                            <br>
-                            <p th:text="${user.firstName}"></p>
-                            <p th:text="${user.lastName}"></p>
-                            <p th:text="${user.createdDate}"></p>
-                            <p th:text="${user.birthday}"></p>
-                            <p th:text="${user.email}"></p>
-                            <p th:text="${user.job}"></p>
+                            <p th:text="${displayUser.firstName}"></p>
+                            <p th:text="${displayUser.lastName}"></p>
+                            <p th:text="${displayUser.createdDate}"></p>
+                            <p th:text="${displayUser.birthday}"></p>
+                            <p th:text="${displayUser.email}"></p>
+                            <p th:text="${displayUser.job}"></p>
                         </div>
                         <form  th:if="${sessionUser.getUsername() == user.username}" th:action="@{/edit/{username}(username=${#authentication.principal.username})}" class="card-link" method="get">
                             <button type="submit" class="btn btn-secondary">Edit Profile</button>
                         </form>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                            Launch demo modal
-                        </button>
                     </div>
                 </div>
             </div>
         </aside>
-        <main>
-            <div style="width: 100%;">
+        <main class="col-xl-8">
+            <div style="width: 100%; background-color: white;">
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <a class="nav-item nav-link active" id="nav-photos-tab" data-toggle="tab" href="#nav-photos" role="tab" aria-controls="nav-photos" aria-selected="true">Photos</a>
@@ -47,7 +45,7 @@
                     <div class="tab-pane fade show active" id="nav-photos" role="tabpanel" aria-labelledby="nav-photos-tab" >
                         <h2 th:text="${gallery.getName()}"></h2>
                         <a th:href="@{/user/{username}(username=${#authentication.principal.username})}">
-                            <h5>Go Back</h5>
+                            <h5>Go Home</h5>
                         </a>
                         <div class="square-gallery p-0">
                             <div th:each="item : ${photos}">
@@ -120,7 +118,7 @@
                     </div>
                 </div>
         </main>
-        <footer>
+        <footer class="col-xl-12">
             footer
         </footer>
     </div>
@@ -129,17 +127,18 @@
 
 <!--gallery view for non-gallery owners-->
 <div th:if="${sessionUser.getUsername() != displayUser.username}">
-    <div class="grid template">
-        <aside>
-            <div class="container-fluid">
-                <div class="card p-0">
-                    <img class="card-img-top container-fluid" th:src="${displayUser.getProfile_picture_url().toString()}" alt="Card image cap">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${user.username}"></h5>
-                        <div class="card-text p-0">
+    <div class="template row">
+        <aside class="col-xl-4">
+            <div class="container">
+                <div class="row p-3" style="background: white">
+                    <div class="col">
+                        <img class="card-img-top p-3 profile-pic" th:src="${displayUser.getProfile_picture_url().toString()}" alt="Card image cap">
+                        <h5 class="card-title" th:text="${displayUser.username}"></h5>
+                        <p th:text="${displayUser.aboutMe}"></p>
+                    </div>
+                    <div class="col">
+                        <div class="card-text">
                             <h6>About Me:</h6>
-                            <p th:text="${displayUser.aboutMe}"></p>
-                            <br>
                             <p th:text="${displayUser.firstName}"></p>
                             <p th:text="${displayUser.lastName}"></p>
                             <p th:text="${displayUser.createdDate}"></p>
@@ -151,7 +150,7 @@
                 </div>
             </div>
         </aside>
-        <main>
+        <main class="col-xl-8">
             <div style="width: 100%;">
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab2" role="tablist">
@@ -162,8 +161,8 @@
                     <!--            tab 2 photos    -->
                     <div class="tab-pane fade show active" id="nav-photos2" role="tabpanel" aria-labelledby="nav-photos-tab" >
                         <h2 th:text="${gallery.getName()}"></h2>
-                        <a href="javascript:window.history.back();">
-                            <h5>Go Back</h5>
+                        <a th:href="@{/user/{username}(username=${#authentication.principal.username})}">
+                            <h5>Go Home</h5>
                         </a>
                         <div class="square-gallery p-0">
                             <div th:each="item : ${photos}">
@@ -182,7 +181,7 @@
                 </div>
             </div>
         </main>
-        <footer>
+        <footer class="col-xl-12">
             footer
         </footer>
     </div>

@@ -28,7 +28,7 @@ public class UserFriendController {
 
     public UserFriendController(UserRepo userRepo, UserFriendRepo userFriendRepo,
                                 PostRepo postRepo, CommentRepo commentRepo,
-                          PictureRepo pictureRepo, GalleryRepo galleryRepo, EmailService emailService) {
+                                PictureRepo pictureRepo, GalleryRepo galleryRepo, EmailService emailService) {
         this.userRepo = userRepo;
         this.userFriendRepo = userFriendRepo;
         this.postRepo = postRepo;
@@ -41,8 +41,8 @@ public class UserFriendController {
     //Create UserFriend (Friend request)
     @PostMapping("/request/{username}/{friendName}")
     public String addFriend(@PathVariable String username,
-                            @PathVariable String friendName){
-        if (userFriendRepo.findByUserAndFriend(userRepo.findByUsername(username), userRepo.findByUsername(friendName)) != null){
+                            @PathVariable String friendName) {
+        if (userFriendRepo.findByUserAndFriend(userRepo.findByUsername(username), userRepo.findByUsername(friendName)) != null) {
             return "redirect:/";
         }
         UserFriend userFriend = new UserFriend();
@@ -61,7 +61,7 @@ public class UserFriendController {
     //Delete UserFriend (Unfriend)
     @PostMapping("/{username}/{friendName}/delete")
     public String deleteFriend(@PathVariable String username,
-                               @PathVariable String friendName){
+                               @PathVariable String friendName) {
         User user = userRepo.findByUsername(username);
         User friend = userRepo.findByUsername(friendName);
         UserFriend userUserFriend = userFriendRepo.findByUserAndFriend(user, friend);
@@ -76,12 +76,12 @@ public class UserFriendController {
     //Read Friend requests
     @GetMapping("/{username}/friends/requests")
     public String showFriendRequests(@PathVariable String username,
-                                     Model model){
+                                     Model model) {
         User user = userRepo.findByUsername(username);
         List<UserFriend> userFriendRequests = userFriendRepo.findAllByFriendAndStatus(user, Status.PENDING);//requests someone else sent
 
         model.addAttribute("friendRequests", userFriendRequests);
-        model.addAttribute("user",user);
+        model.addAttribute("user", user);
 
         return "userFriend/friend-requests";
     }
@@ -89,12 +89,12 @@ public class UserFriendController {
     //Reject Friend request
     @PostMapping("/request/{username}/{friendName}/reject")
     public String rejectFriend(@PathVariable String username,
-                               @PathVariable String friendName){
+                               @PathVariable String friendName) {
         User user = userRepo.findByUsername(username);
         User friend = userRepo.findByUsername(friendName);
 
         List<UserFriend> userFriends = userFriendRepo.findAllByFriendAndStatus(user, Status.PENDING);
-        for (UserFriend userFriend : userFriends){
+        for (UserFriend userFriend : userFriends) {
             userFriend.setStatus(Status.REJECTED);
             userFriendRepo.save(userFriend);
         }
@@ -111,10 +111,11 @@ public class UserFriendController {
 
         return "redirect:/user/" + username;
     }
+
     //Accept Friend request
     @PostMapping("/request/{username}/{friendName}/accept")
     public String acceptFriend(@PathVariable String username,
-                               @PathVariable String friendName){
+                               @PathVariable String friendName) {
         User user = userRepo.findByUsername(username);
         User friend = userRepo.findByUsername(friendName);
 
@@ -131,7 +132,7 @@ public class UserFriendController {
     @GetMapping("/{username}/friend/{friendName}")
     public String showFriendProfile(@PathVariable String username,
                                     @PathVariable String friendName,
-                                    Model model){
+                                    Model model) {
         User currentUser = userRepo.findByUsername(username);
         User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -159,11 +160,11 @@ public class UserFriendController {
 
         List<Gallery> friendGalleries = galleryRepo.findAllByUser(friend);
 
-        model.addAttribute("friendFriends" ,friendFriends);
+        model.addAttribute("friendFriends", friendFriends);
         model.addAttribute("friend", friend);
-        model.addAttribute("userFriendList" , userFriends);
+        model.addAttribute("userFriendList", userFriends);
         model.addAttribute("currentUser", currentUser);
-        if (!friendGalleries.isEmpty()){
+        if (!friendGalleries.isEmpty()) {
             model.addAttribute("galleries", friendGalleries);
         }
         model.addAttribute("sessionUser", sessionUser);
@@ -187,7 +188,7 @@ public class UserFriendController {
         }
         model.addAttribute("allUsers", userRepo.findAll());
 
-        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("user", currentUser);
         model.addAttribute("userFriends", userFriends);
         return "user/search";
     }
@@ -208,22 +209,22 @@ public class UserFriendController {
         }
 
         List<User> filteredList = new ArrayList<>();
-        List<String> nameFilter = userNameFilter();
-
-        for (User user : userFriends) {
-            for (String name : nameFilter) {
-                if (user.getUsername().equals(name)) {
-                    filteredList.add(user);
-                    // break;
-                }
+        for (User user : userRepo.findAll()) {
+            if (user.getUsername().toLowerCase().contains(search.toLowerCase())
+                    || user.getFirstName().toLowerCase().contains(search.toLowerCase())
+                    || user.getLastName().toLowerCase().contains(search.toLowerCase())) {
+                filteredList.add(user);
             }
         }
-        model.addAttribute("allUsers", userRepo.findAll());
-        model.addAttribute("currentUser", currentUser);
+
+        model.addAttribute("allUsers", filteredList);
+        model.addAttribute("user", currentUser);
         model.addAttribute("userFriends", userFriends);
         model.addAttribute("search", search);
-        return "";
+        return "user/search";
     }
+}
+
 
 //    @GetMapping("/users/search/{username}")
 //    public String viewAllAdsWithAjax(@PathVariable String username,
@@ -244,4 +245,4 @@ public class UserFriendController {
 //        model.addAttribute("userFriends", userFriends);
 //        return "user/search";
 //    }
-}
+//}
