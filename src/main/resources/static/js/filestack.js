@@ -1,4 +1,4 @@
-const client = filestack.init(filestackKey);
+const client = filestack.init(FileStackKey);
 
 const options = {
     fromSources: ["local_file_system"],

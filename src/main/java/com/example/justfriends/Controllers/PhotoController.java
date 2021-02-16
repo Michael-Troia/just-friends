@@ -2,14 +2,12 @@ package com.example.justfriends.Controllers;
 
 import com.example.justfriends.Models.*;
 import com.example.justfriends.Repositories.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -35,6 +33,17 @@ public class PhotoController {
         this.galleryRepo = galleryRepo;
         this.pictureRepo = pictureRepo;
     }
+
+    @Value("${filestack.key}")
+    private String fileStackKey;
+
+    @RequestMapping(path = "/keys.js", produces = "application/javascript")
+    @ResponseBody
+    public String apikey() {
+        System.out.println(fileStackKey);
+        return "const FileStackKey = `" + fileStackKey + "`";
+    }
+
 
     //Create Gallery
     @PostMapping("{username}/gallery/create")
