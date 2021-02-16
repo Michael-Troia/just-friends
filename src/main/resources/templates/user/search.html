@@ -14,37 +14,44 @@
                 <div class="col">
                     <img class="card-img-top p-3 profile-pic" th:src="${user.getProfile_picture_url().toString()}" alt="Card image cap">
                     <h5 class="card-title" th:text="${user.username}"></h5>
-                    <p th:text="${user.aboutMe}"></p>
                 </div>
                 <div class="col">
                     <div class="card-text">
-                        <h6>About Me:</h6>
                         <p th:text="${user.firstName}"></p>
                         <p th:text="${user.lastName}"></p>
+                        <p class="text-muted">Joined</p>
                         <p th:text="${user.createdDate}"></p>
+                        <p class="text-muted">Birthday</p>
                         <p th:text="${user.birthday}"></p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-text">
+                        <p class="text-muted">Email</p>
                         <p th:text="${user.email}"></p>
+                        <p class="text-muted">Works at</p>
                         <p th:text="${user.job}"></p>
                     </div>
                     <form  th:if="${#authentication.principal.username == user.username}" th:action="@{/edit/{username}(username=${#authentication.principal.username})}" class="card-link" method="get">
                         <button type="submit" class="btn btn-secondary">Edit Profile</button>
                     </form>
                 </div>
+                <div class="col-12">
+                    <p th:text="${user.aboutMe}"></p>
+                </div>
             </div>
         </div>
     </aside>
     <main class="col-xl-8">
-        <div style="width: 100%; background-color: white;">
+        <div class="container p-5" style="width: 100%; background-color: white;">
             <a th:href="@{/user/{username}(username=${#authentication.principal.username})}">
-                <h5>Go Home</h5>
+                <h5>Home</h5>
             </a>
                 <!--       tab 1 friends-->
-            <div style="background-color: white" class="row p-3">
+            <div style="background-color: #faf3dd;" class="row p-3">
                 <h1>Make New Friends!</h1>
-                <a th:href="@{/user/{username}(username=${#authentication.principal.username})}">
-                    <h5>Go Back</h5>
-                </a>
-                <div class="col-3 p-3" th:each="item : ${allUsers}">
+
+                <div class="col-4 card m-3 p-3" th:each="item : ${allUsers}">
                     <div th:if="${item.username == user.username}">
                         <a th:href="@{/user/{username} (username=${user.getUsername()})}">
                             <img class="friend-list-img" th:src="${item.profile_picture_url.toString()}">
@@ -61,13 +68,23 @@
                         <p th:text="${item.firstName}"></p>
                         <p th:text="${item.lastName}"></p>
                     </div>
-                    <div th:if="${userFriends.contains(item) == false && item.username != user.username}">
+                    <div th:if="${userFriends.contains(item) == false && pendingFriends.contains(item) == false && item.username != user.username}">
                         <img class="friend-list-img" th:src="${item.profile_picture_url.toString()}">
                         <h5 th:text="${item.username}"></h5>
                         <p th:text="${item.firstName}"></p>
                         <p th:text="${item.lastName}"></p>
                         <form th:action="@{/request/{username}/{friendName} (username=${user.getUsername()}, friendName = ${item.getUsername()})}" th:method="POST">
-                            <button type="submit" name="befriend">Send Friend Request</button>
+                            <button class="btn btn-primary" type="submit" name="Friend Request">Friend Request</button>
+                        </form>
+                    </div>
+                    <div th:if="${pendingFriends.contains(item) == true && item.username != user.username}">
+                        <img class="friend-list-img" th:src="${item.profile_picture_url.toString()}">
+                        <h5 th:text="${item.username}"></h5>
+                        <p th:text="${item.firstName}"></p>
+                        <p th:text="${item.lastName}"></p>
+                        <form th:action="@{/request/{username}/{friendName}/reject (username=${#authentication.principal.username}, friendName = ${item.getUsername()})}" th:method="POST">
+                            <input type="hidden" class="field" name="reject" th:value="${item.getUsername()}"/>
+                            <button class="btn btn-secondary">Remove Request</button>
                         </form>
                     </div>
                 </div>

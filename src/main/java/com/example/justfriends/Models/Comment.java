@@ -17,6 +17,9 @@ public class Comment {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
 
+    @Column(nullable = false)
+    private String dateString;
+
     @Column(nullable = true)
     private String photo_url;
 
@@ -37,8 +40,9 @@ public class Comment {
 
     public Comment(){}
 
-    public Comment(String body, Date createdDate, String photo_url, User user, Post parentPost, Date editDate){
+    public Comment(String body, Date createdDate, String photo_url, User user, Post parentPost, Date editDate, String dateString){
         this.body = body;
+        this.dateString = dateString;
         this.editDate = editDate;
         this.createdDate = createdDate;
         this.photo_url = photo_url;
@@ -46,8 +50,9 @@ public class Comment {
         this.parentPost = parentPost;
     }
 
-    public Comment(long id, String body, Date createdDate, String photo_url, User user, Post parentPost, Date editDate){
+    public Comment(long id, String body, Date createdDate, String photo_url, User user, Post parentPost, Date editDate, String dateString){
         this.body = body;
+        this.dateString = dateString;
         this.editDate = editDate;
         this.createdDate = createdDate;
         this.photo_url = photo_url;
@@ -63,7 +68,9 @@ public class Comment {
     public long getId(){return id;}
     public Post getParentPost(){return parentPost;}
     public Date getEditDate(){return editDate;}
+    public String getDateString(){return dateString;}
 
+    public void setDateString(String dateString){this.dateString = dateString;}
     public void setBody(String body){ this.body = body;}
     public void setEditDate(Date editDate){this.editDate = editDate;}
     public void setCreatedDate(Date createdDate){this.createdDate = createdDate;}

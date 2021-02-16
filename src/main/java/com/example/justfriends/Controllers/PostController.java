@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,8 +51,20 @@ public class PostController {
         Post newPost = new Post();
         User user = userRepo.findByUsername(username);
         newPost.setUser(user);
+
+        LocalDate currentdate = LocalDate.now();
+        int currentDay = currentdate.getDayOfMonth();
+        Month currentMonth = currentdate.getMonth();
+        String monthString = currentMonth.toString();
+        String formatMonth = Character.toUpperCase(monthString.charAt(0)) + monthString.substring(1).toLowerCase();
+        int currentYear = currentdate.getYear();
+
+        newPost.setDateString(formatMonth + " " + currentDay + ", " + currentYear);
         newPost.setCreatedDate(new Date());
         newPost.setBody(post.getBody());
+        if (!post.getPhoto_url().isEmpty()) {
+            newPost.setPhoto_url(post.getPhoto_url());
+        }
         Post dbPost = postRepo.save(newPost);
         model.addAttribute("user", user);
         model.addAttribute("post", dbPost);
@@ -83,6 +97,7 @@ public class PostController {
         postToBeUpdated.setId(post.getId());
         postToBeUpdated.setComments(post.getComments());
         postToBeUpdated.setCreatedDate(post.getCreatedDate());
+        postToBeUpdated.setDateString(post.getDateString());
         postToBeUpdated.setUser(user);
         postToBeUpdated.setPhoto_url(post.getPhoto_url());
         System.out.println(postToBeUpdated.getId());
@@ -114,6 +129,14 @@ public class PostController {
         User newUser = userRepo.findByUsername(username);
         newComment.setUser(newUser);
         newComment.setCreatedDate(new Date());
+        LocalDate currentdate = LocalDate.now();
+        int currentDay = currentdate.getDayOfMonth();
+        Month currentMonth = currentdate.getMonth();
+        String monthString = currentMonth.toString();
+        String formatMonth = Character.toUpperCase(monthString.charAt(0)) + monthString.substring(1).toLowerCase();
+        int currentYear = currentdate.getYear();
+
+        newComment.setDateString(formatMonth + " " + currentDay + ", " + currentYear);
         newComment.setBody(comment.getBody());
         newComment.setParentPost(parentPost);
         Comment dbComment = commentRepo.save(newComment);
@@ -148,6 +171,7 @@ public class PostController {
         commentToBeUpdated.setParentPost(comment.getParentPost());
         commentToBeUpdated.setId(comment.getId());
         commentToBeUpdated.setCreatedDate(comment.getCreatedDate());
+        commentToBeUpdated.setDateString(comment.getDateString());
         commentToBeUpdated.setBody(commentToBeUpdated.getBody());
         commentToBeUpdated.setUser(user);
         commentToBeUpdated.setPhoto_url(comment.getPhoto_url());

@@ -93,24 +93,27 @@ public class UserFriendController {
         User user = userRepo.findByUsername(username);
         User friend = userRepo.findByUsername(friendName);
 
-        List<UserFriend> userFriends = userFriendRepo.findAllByFriendAndStatus(user, Status.PENDING);
-        for (UserFriend userFriend : userFriends) {
-            userFriend.setStatus(Status.REJECTED);
-            userFriendRepo.save(userFriend);
-        }
-
-//        UserFriend userUserFriend = userFriendRepo.findByUserAndFriend(user, friend);
-//        userUserFriend.setStatus(Status.REJECTED);
-//        userFriendRepo.save(userUserFriend);
-//
-//        UserFriend friendUserFriend = userFriendRepo.findByUserAndFriend(friend, user);
-//        friendUserFriend.setStatus(Status.REJECTED);
-//
-//        userFriendRepo.save(userUserFriend);
-//        userFriendRepo.save(friendUserFriend);
+//        UserFriend updatedUserFriend = userFriendRepo.findByUserAndFriend(friend, user);
+//        updatedUserFriend.setStatus(Status.REJECTED);
+//        userFriendRepo.save(updatedUserFriend);
+        UserFriend updatedUserFriend = userFriendRepo.findByUserAndFriend(friend, user);
+        userFriendRepo.delete(updatedUserFriend);
 
         return "redirect:/user/" + username;
     }
+
+////    Block User
+//    @PostMapping("/request/{username}/{friendName}/block")
+//    public String blockFriend(@PathVariable String username,
+//                               @PathVariable String friendName) {
+//        User user = userRepo.findByUsername(username);
+//        User friend = userRepo.findByUsername(friendName);
+//        UserFriend updatedUserFriend = userFriendRepo.findByUserAndFriend(friend, user);
+//        updatedUserFriend.setStatus(Status.REJECTED);
+//        userFriendRepo.save(updatedUserFriend);
+//
+//        return "redirect:/user/" + username;
+//    }
 
     //Accept Friend request
     @PostMapping("/request/{username}/{friendName}/accept")
@@ -119,11 +122,9 @@ public class UserFriendController {
         User user = userRepo.findByUsername(username);
         User friend = userRepo.findByUsername(friendName);
 
-        List<UserFriend> userFriends = userFriendRepo.findAllByFriendAndStatus(user, Status.PENDING);
-        for (UserFriend userFriend : userFriends) {
-            userFriend.setStatus(Status.ACCEPTED);
-            userFriendRepo.save(userFriend);
-        }
+        UserFriend updatedUserFriend = userFriendRepo.findByUserAndFriend(friend, user);
+        updatedUserFriend.setStatus(Status.ACCEPTED);
+        userFriendRepo.save(updatedUserFriend);
 
         return "redirect:/user/" + username;
     }
@@ -135,9 +136,7 @@ public class UserFriendController {
                                     Model model) {
         User currentUser = userRepo.findByUsername(username);
         User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         User friend = userRepo.findByUsername(friendName);
-
         List<UserFriend> friendUserFriends1 = userFriendRepo.findAllByUserAndStatus(friend, Status.ACCEPTED);
         List<UserFriend> friendUserFriends2 = userFriendRepo.findAllByFriendAndStatus(friend, Status.ACCEPTED);
         ArrayList<User> friendFriends = new ArrayList<>();// lists User objects of friend's userFriends
@@ -157,9 +156,19 @@ public class UserFriendController {
         for (UserFriend userFriend : userUserFriends2) {
             userFriends.add(userFriend.getUser());
         }
-
         List<Gallery> friendGalleries = galleryRepo.findAllByUser(friend);
 
+        List<UserFriend> pendingUserFriends1 = userFriendRepo.findAllByUserAndStatus(currentUser, Status.PENDING);// user pending friends
+        List<UserFriend> pendingUserFriends2 = userFriendRepo.findAllByFriendAndStatus(currentUser, Status.PENDING);
+        ArrayList<User> pendingFriends = new ArrayList<>();
+        for (UserFriend userFriend : pendingUserFriends1) {
+            pendingFriends.add(userFriend.getFriend());
+        }
+        for (UserFriend userFriend : pendingUserFriends2) {
+            pendingFriends.add(userFriend.getUser());
+        }
+
+        model.addAttribute("pendingFriends", pendingFriends);
         model.addAttribute("friendFriends", friendFriends);
         model.addAttribute("friend", friend);
         model.addAttribute("userFriendList", userFriends);
@@ -186,13 +195,22 @@ public class UserFriendController {
         for (UserFriend userFriend : userUserFriends2) {
             userFriends.add(userFriend.getUser());
         }
-        model.addAttribute("allUsers", userRepo.findAll());
+        List<UserFriend> pendingUserFriends1 = userFriendRepo.findAllByUserAndStatus(currentUser, Status.PENDING);// user pending friends
+        List<UserFriend> pendingUserFriends2 = userFriendRepo.findAllByFriendAndStatus(currentUser, Status.PENDING);
+        ArrayList<User> pendingFriends = new ArrayList<>();
+        for (UserFriend userFriend : pendingUserFriends1) {
+            pendingFriends.add(userFriend.getFriend());
+        }
+        for (UserFriend userFriend : pendingUserFriends2) {
+            pendingFriends.add(userFriend.getUser());
+        }
 
+        model.addAttribute("pendingFriends", pendingFriends);
+        model.addAttribute("allUsers", userRepo.findAll());
         model.addAttribute("user", currentUser);
         model.addAttribute("userFriends", userFriends);
         return "user/search";
     }
-
     @PostMapping("/users/search/{username}")
     public String joinCohort(@RequestParam(name = "search") String search,
                              Model model,
@@ -217,6 +235,17 @@ public class UserFriendController {
             }
         }
 
+        List<UserFriend> pendingUserFriends1 = userFriendRepo.findAllByUserAndStatus(currentUser, Status.PENDING);// pending friends
+        List<UserFriend> pendingUserFriends2 = userFriendRepo.findAllByFriendAndStatus(currentUser, Status.PENDING);
+        ArrayList<User> pendingFriends = new ArrayList<>();
+        for (UserFriend userFriend : pendingUserFriends1) {
+            pendingFriends.add(userFriend.getFriend());
+        }
+        for (UserFriend userFriend : pendingUserFriends2) {
+            pendingFriends.add(userFriend.getUser());
+        }
+
+        model.addAttribute("pendingFriends", pendingFriends);
         model.addAttribute("allUsers", filteredList);
         model.addAttribute("user", currentUser);
         model.addAttribute("userFriends", userFriends);

@@ -10,25 +10,34 @@
 <div class="template row">
     <aside class="col-xl-4">
         <div class="container">
-            <div class="row p-3" style="background: white">
+            <div class="row p-2" style="background: white">
                 <div class="col">
                     <img class="card-img-top p-3 profile-pic" th:src="${user.getProfile_picture_url().toString()}" alt="Card image cap">
                     <h5 class="card-title" th:text="${user.username}"></h5>
-                    <p th:text="${user.aboutMe}"></p>
                 </div>
                 <div class="col">
                     <div class="card-text">
-                        <h6>About Me:</h6>
                         <p th:text="${user.firstName}"></p>
                         <p th:text="${user.lastName}"></p>
+                        <p class="text-muted">Joined</p>
                         <p th:text="${user.createdDate}"></p>
+                        <p class="text-muted">Birthday</p>
                         <p th:text="${user.birthday}"></p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-text">
+                        <p class="text-muted">Email</p>
                         <p th:text="${user.email}"></p>
+                        <p class="text-muted">Works at</p>
                         <p th:text="${user.job}"></p>
                     </div>
                     <form  th:if="${#authentication.principal.username == user.username}" th:action="@{/edit/{username}(username=${#authentication.principal.username})}" class="card-link" method="get">
                         <button type="submit" class="btn btn-secondary">Edit Profile</button>
                     </form>
+                </div>
+                <div class="col-12">
+                    <p th:text="${user.aboutMe}"></p>
                 </div>
             </div>
         </div>
@@ -36,7 +45,7 @@
     <main class="col-xl-8">
         <div style="width: 100%; background-color: white;">
             <a th:href="@{/user/{username}(username=${#authentication.principal.username})}">
-                <h5>Go Home</h5>
+                <h5>Home</h5>
             </a>
             <form th:action="@{/comments/edit/{username}/{commentId} (username = ${user.username}, commentId = ${comment.id} )}" th:object="${comment}" method="POST" class="p-5">
                 <h1>Edit Comment</h1>
