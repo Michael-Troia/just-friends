@@ -6,6 +6,7 @@ const options = {
     onFileUploadFinished: callback => {
         const filestackUrl = callback.url;
         $('#photo').val(filestackUrl);
+        alert("Upload Success!")
     }
 };
 $('#upload').click(function (event){

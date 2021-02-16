@@ -10,33 +10,42 @@
 <div class="template row">
     <aside class="col-xl-4">
         <div class="container">
-            <div class="row p-3" style="background: white">
+            <div class="row p-2" style="background: white">
                 <div class="col">
                     <img class="card-img-top p-3 profile-pic" th:src="${user.getProfile_picture_url().toString()}" alt="Card image cap">
                     <h5 class="card-title" th:text="${user.username}"></h5>
-                    <p th:text="${user.aboutMe}"></p>
                 </div>
                 <div class="col">
                     <div class="card-text">
-                        <h6>About Me:</h6>
                         <p th:text="${user.firstName}"></p>
                         <p th:text="${user.lastName}"></p>
+                        <p class="text-muted">Joined</p>
                         <p th:text="${user.createdDate}"></p>
+                        <p class="text-muted">Birthday</p>
                         <p th:text="${user.birthday}"></p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-text">
+                        <p class="text-muted">Email</p>
                         <p th:text="${user.email}"></p>
+                        <p class="text-muted">Works at</p>
                         <p th:text="${user.job}"></p>
                     </div>
                     <form  th:if="${#authentication.principal.username == user.username}" th:action="@{/edit/{username}(username=${#authentication.principal.username})}" class="card-link" method="get">
                         <button type="submit" class="btn btn-secondary">Edit Profile</button>
                     </form>
                 </div>
+                <div class="col-12">
+                    <p th:text="${user.aboutMe}"></p>
+                </div>
             </div>
         </div>
     </aside>
     <main class="col-xl-8">
-        <div class="p-5" style="width: 100%; background-color: #b3add6;">
+        <div class="p-5" style="width: 100%; background-color: white; border: 5px solid #bde0fe">
             <a th:href="@{/user/{username}(username=${#authentication.principal.username})}">
-                <h5>Go Home</h5>
+                <h5>Home</h5>
             </a>
             <form th:action="@{/edit/{username} (username=${user.getUsername()})}" method="POST" th:object="${user}">
                 <div class="mb-3">
@@ -52,8 +61,8 @@
                     <input type="text" class="form-control" id="aboutMe-input" th:field="*{aboutMe}">
                 </div>
                 <div class="mb-3">
-                    <label for="birthday-input" class="form-label">Birthday</label>
-                    <input type="text" class="form-control" id="birthday-input" th:field="*{birthday}">
+                    <label for="birthday-input" class="col-2 col-form-label">Birthday</label>
+                    <input class="form-control" type="date" value="2000-01-01" id="birthday-input" th:field="*{birthday}">
                 </div>
                 <div class="mb-3">
                     <label for="job-input" class="form-label">Job</label>
@@ -70,6 +79,56 @@
             <form style="float: right;" th:action="@{/{username}/delete (username=${#authentication.principal.username})}" method="POST" class="p-3" >
                 <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?\nYou can\'t change your mind after clicking OK.')">Delete your account</button>
             </form>
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Friend Requests</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" style="width: 100%">
+                            <div class="p-5" style="background-color: lavender;" th:each="item : ${friendRequests}">
+                                <div class="row m-3 p-3 border border-dark" style="background-color: white;">
+                                    <div class="col-6">
+                                        <img th:src="${item.getUser().getProfile_picture_url().toString()}" class="gallery-item-tiny" alt="...">
+                                        <a th:if="${item.getStatus().ACCEPTED}" th:href="@{/{username}/friend/{friendName} (friendName=${item.getUser().getUsername()}, username=${user.getUsername()})}">
+                                            <h5 class="p-3" th:text="${item.getUser().getUsername()}"></h5>
+                                        </a>
+                                        <div th:if="${item.getStatus().PENDING}" th:href="@{/user/{username} (username=${user.getUsername()})}">
+                                            <h5 class="p-3" th:text="${item.getUser().getUsername()}"></h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted">Username: </small>
+                                        <p class="card-text" th:text="${item.getUser().getUsername()}"></p>
+                                        <small class="text-muted">First Name: </small>
+                                        <p class="card-text" th:text="${item.getUser().getFirstName()}"></p>
+                                        <small class="text-muted">Last Name: </small>
+                                        <p class="card-text" th:text="${item.getUser().getLastName()}"></p>
+                                        <form th:action="@{/request/{username}/{friendName}/accept (username=${#authentication.principal.username}, friendName = ${item.getUser().getUsername()})}" th:method="POST">
+                                            <input class="field" name="accept" type="hidden" th:value="${item.getUser().getUsername()}"/>
+                                            <button class="btn btn-primary">Accept</button>
+                                        </form>
+                                        <form th:action="@{/request/{username}/{friendName}/reject (username=${#authentication.principal.username}, friendName = ${item.getUser().getUsername()})}" th:method="POST">
+                                            <input type="hidden" class="field" name="reject" th:value="${item.getUser().getUsername()}"/>
+                                            <button class="btn btn-danger">Reject</button>
+                                        </form>
+                                        <form th:action="@{/request/{username}/{friendName}/block (username=${#authentication.principal.username}, friendName = ${item.getUser().getUsername()})}" th:method="POST">
+                                            <input type="hidden" class="field" name="block" th:value="${item.getUser().getUsername()}"/>
+                                            <button class="btn btn-danger">Block</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
     <footer class="col-xl-12">

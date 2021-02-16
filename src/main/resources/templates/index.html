@@ -7,44 +7,12 @@
 </head>
 <body>
 <header th:replace="partials/header :: header"></header>
-<h1>Home page</h1>
-<div sec:authorize="isAuthenticated()">
-    Username:
-    <p th:text="${#authentication.principal.username}"></p>
-    This content is only shown to authenticated users.
+<form class="m-2 p-3" action="/sign-up">
+    <button type="submit" class="btn btn-primary">Sign up</button>
+</form>
 
-    <form th:action="@{/posts/create/{username}(username=${#authentication.principal.username})}" method="GET" class="p-3">
-        <button type="submit" class="btn btn-primary">Create a post</button>
-    </form>
+    <img class="center" th:src="@{/img/icons.png/}" style="max-width: 35vw;" alt="">
 
-    <form th:action="@{/edit/{username}(username=${#authentication.principal.username})}" method="GET" class="p-3">
-        <button type="submit" class="btn btn-primary">Update profile details</button>
-    </form>
-
-    <form th:action="@{/posts/view/{username}(username=${#authentication.principal.username})}" method="GET" class="p-3">
-        <button type="submit" class="btn btn-primary">View your posts</button>
-    </form>
-
-    <form th:action="@{/{username}/delete (username=${#authentication.principal.username})}" method="POST" class="p-3" >
-        <button type="submit" class="btn btn-warning">Delete your account</button>
-    </form>
-
-    <form th:action="@{/{username}/friends (username=${#authentication.principal.username})}" method="GET" class="p-3">
-        <button type="submit" class="btn btn-primary">Find friends</button>
-    </form>
-
-    <form th:action="@{/{username}/friends/view (username=${#authentication.principal.username})}" method="GET" class="p-3">
-        <button type="submit" class="btn btn-primary">View your friends</button>
-    </form>
-
-    <form th:action="@{/{username}/stories (username=${#authentication.principal.username})}" method="GET" class="p-3">
-        <button type="submit" class="btn btn-primary">View your friend's posts</button>
-    </form>
-
-    <a th:href="@{/{username}/my-photos (username=${#authentication.principal.username})}" class="btn btn-primary p-3">View Photos</a>
-
-</div>
-<footer th:replace="partials/footer :: footer"></footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

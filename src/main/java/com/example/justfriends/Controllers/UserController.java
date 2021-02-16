@@ -6,12 +6,15 @@ import com.example.justfriends.Services.EmailService;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import static javax.swing.JOptionPane.showMessageDialog;
 
+import javax.swing.*;
 import javax.validation.Valid;
 import java.util.*;
 
@@ -96,7 +99,6 @@ public class UserController {
 //                        "to you. You probably want to make that decision for yourself! Instead, why not invite invite your friends" +
 //                        " to join, or send them a friend request if they " +
 //                        "already have!");
-
         return "redirect:/login";
     }
 
@@ -153,6 +155,24 @@ public class UserController {
             }
         }
 
+        List<Comment> friendlyComments = new ArrayList<>(); //only show comments made by mutual friends
+        for (Comment comment : displayComments) {
+            if (userFriendRepo.findByUserAndFriendAndStatus(user, comment.getUser(), Status.ACCEPTED) != null){
+                friendlyComments.add(comment);
+            }
+            if (userFriendRepo.findByFriendAndUserAndStatus(user, comment.getUser(), Status.ACCEPTED) != null){
+                friendlyComments.add(comment);
+            }
+            if (comment.getUser() == user) {
+                friendlyComments.add(comment);
+            }
+        }
+
+        Collections.sort(displayPosts, (p1, p2) -> {//sort posts by date
+            if (p1.getCreatedDate().after(p2.getCreatedDate())) return -1;
+            else return 1;
+        });
+
         List<UserFriend> userFriendRequests = userFriendRepo.findAllByFriendAndStatus(user, Status.PENDING);
         model.addAttribute("friendRequests", userFriendRequests);
         model.addAttribute("galleries", galleryRepo.findAllByUser(user));
@@ -160,7 +180,7 @@ public class UserController {
         model.addAttribute("user", user);
         model.addAttribute("sessionUser", sessionUser);
         model.addAttribute("friends",myFriends);
-        model.addAttribute("comments", displayComments);
+        model.addAttribute("comments", friendlyComments);
         model.addAttribute("posts", displayPosts);
         model.addAttribute("newPost", new Post());
         model.addAttribute("newComment", new Comment());
@@ -219,6 +239,9 @@ public class UserController {
         return "index";
     }
 
-
+    @GetMapping("/randomUsers/ajax")
+    public String viewAllAdsWithAjax() {
+        return "user/random";
+    }
 }
 
