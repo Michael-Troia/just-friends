@@ -6,8 +6,8 @@
     <title>Navbar</title>
 </head>
 <body>
-<nav th:fragment="navbar" class="navbar navbar-light bg-light">
-    <a class="navbar-brand" href="/">justfriends</a>
+<nav th:fragment="navbar" class="fixed-top navbar-light bg-light">
+    <a class="navbar-brand p-3" href="/">justfriends</a>
         <div class="navbar-nav">
             <div sec:authorize="isAnonymous()" class="d-flex navbar-nav">
                 <div class="nav-item">

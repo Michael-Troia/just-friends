@@ -3,15 +3,19 @@ package com.example.justfriends.Controllers;
 import com.example.justfriends.Models.*;
 import com.example.justfriends.Repositories.*;
 import com.example.justfriends.Services.EmailService;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import static javax.swing.JOptionPane.showMessageDialog;
 
+import javax.swing.*;
 import javax.validation.Valid;
-import java.lang.reflect.Array;
 import java.util.*;
 
 @Controller
@@ -87,8 +91,6 @@ public class UserController {
         User dbUser = userRepo.save(user);
         galleryRepo.save(newGallery);
         pictureRepo.save(defaultPic);
-
-
         model.addAttribute("user", dbUser);
 
 //        emailService.prepareAndSend(user,"Welcome to JustFriends " + user.getUsername() + "!",
@@ -97,7 +99,6 @@ public class UserController {
 //                        "to you. You probably want to make that decision for yourself! Instead, why not invite invite your friends" +
 //                        " to join, or send them a friend request if they " +
 //                        "already have!");
-
         return "redirect:/login";
     }
 
@@ -154,16 +155,32 @@ public class UserController {
             }
         }
 
+        List<Comment> friendlyComments = new ArrayList<>(); //only show comments made by mutual friends
+        for (Comment comment : displayComments) {
+            if (userFriendRepo.findByUserAndFriendAndStatus(user, comment.getUser(), Status.ACCEPTED) != null){
+                friendlyComments.add(comment);
+            }
+            if (userFriendRepo.findByFriendAndUserAndStatus(user, comment.getUser(), Status.ACCEPTED) != null){
+                friendlyComments.add(comment);
+            }
+            if (comment.getUser() == user) {
+                friendlyComments.add(comment);
+            }
+        }
+
+        Collections.sort(displayPosts, (p1, p2) -> {//sort posts by date
+            if (p1.getCreatedDate().after(p2.getCreatedDate())) return -1;
+            else return 1;
+        });
+
         List<UserFriend> userFriendRequests = userFriendRepo.findAllByFriendAndStatus(user, Status.PENDING);
         model.addAttribute("friendRequests", userFriendRequests);
-
         model.addAttribute("galleries", galleryRepo.findAllByUser(user));
         model.addAttribute("all-galleries", galleryRepo.findAll());
-//        model.addAttribute("friendsList", userFriends1.addAll(userFriends2));
         model.addAttribute("user", user);
         model.addAttribute("sessionUser", sessionUser);
         model.addAttribute("friends",myFriends);
-        model.addAttribute("comments", displayComments);
+        model.addAttribute("comments", friendlyComments);
         model.addAttribute("posts", displayPosts);
         model.addAttribute("newPost", new Post());
         model.addAttribute("newComment", new Comment());
@@ -179,6 +196,18 @@ public class UserController {
         for (Post post : posts){
             postRepo.delete(post);
         }
+        List<Comment> comments = commentRepo.findAllByUser(user);
+        for (Comment comment : comments) {
+            commentRepo.delete(comment);
+        }
+        List<Picture> pictures = pictureRepo.findAllByUser(user);
+        for (Picture picture : pictures) {
+            pictureRepo.delete(picture);
+        }
+        List<Gallery> galleries = galleryRepo.findAllByUser(user);
+        for (Gallery gallery : galleries) {
+            galleryRepo.delete(gallery);
+        }
         List<UserFriend> userFriends1 = userFriendRepo.findAllByUser(user);
         List<UserFriend> userFriends2 = userFriendRepo.findAllByFriend(user);
         for (UserFriend userFriend : userFriends1){
@@ -187,16 +216,32 @@ public class UserController {
         for (UserFriend userFriend : userFriends2) {
             userFriendRepo.delete(userFriend);
         }
+
         userRepo.delete(user);
 
         return "redirect:/login?logout";
     }
 
-    //Show Home page
-    @GetMapping("/")
-    public String showTest(Model model, @ModelAttribute User user) {
-        model.addAttribute("currentUser", user);
+//    //Show Home page
+//    @GetMapping("/")
+//    public String showTest(Model model, @ModelAttribute User user) {
+//        model.addAttribute("currentUser", user);
+//        userRepo.findByUsername(user.getUsername());
+//        return "index";
+//    }
+
+    @RequestMapping("/")
+    public String index(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!(auth instanceof AnonymousAuthenticationToken))
+            return "redirect:/user/" + auth.getName();
 
         return "index";
     }
+
+    @GetMapping("/randomUsers/ajax")
+    public String viewAllAdsWithAjax() {
+        return "user/random";
+    }
 }
+

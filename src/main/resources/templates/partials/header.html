@@ -6,9 +6,9 @@
     <title>Navbar</title>
 </head>
 <body>
-<header th:fragment="header" class="container-fluid">
+<header th:fragment="header">
     <div sec:authorize="isAnonymous()">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
             <a class="navbar-brand" href="/">JustFriends</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -16,12 +16,12 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <form class="p-1" action="/login">
+                        <form class="p-2" action="/login">
                             <button type="submit" class="btn btn-light">Login</button>
                         </form>
                     </li>
                     <li class="nav-item">
-                        <form class="p-1" action="/sign-up">
+                        <form class="p-2" action="/sign-up">
                             <button type="submit" class="btn btn-light">Register</button>
                         </form>
                     </li>
@@ -31,31 +31,32 @@
     </div>
 
     <div sec:authorize="isAuthenticated()">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
             <a class="navbar-brand" href="/">JustFriends</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup2" aria-controls="navbarNavAltMarkup2" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup2">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <form th:action="@{/user/{username}(username=${#authentication.principal.username})}" method="get" class="p-1">
+                        <form th:action="@{/user/{username}(username=${#authentication.principal.username})}" method="get" class="p-2">
                             <button type="submit" class="btn btn-light">Profile Page</button>
                         </form>
                     </li>
                     <li class="nav-item">
-                        <form th:action="@{/{username}/friends/requests (username=${#authentication.principal.username})}" method="get" class="p-1">
+                        <form th:action="@{/{username}/friends/requests (username=${#authentication.principal.username})}" method="get" class="p-2">
                             <button type="submit" class="btn btn-light">Friend Requests</button>
                         </form>
                     </li>
-<!--                    <li class="nav-item">-->
-<!--                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">-->
-<!--                            Launch demo modal-->
-<!--                        </button>-->
-<!--                    </li>-->
-                    <li class="nav-item" style="float: right;">
-                        <form th:action="@{/logout}" th:method="post" class="p-1">
+                    <li class="nav-item">
+                        <form th:action="@{/logout}" th:method="post" class="p-2">
                             <button type="submit" class="btn btn-light">Logout</button>
+                        </form>
+                    </li>
+                    <li class="nav-item">
+                        <form th:action="@{/users/search/{username} (username=${#authentication.principal.username})}" method="post" class="p-2">
+                            <input class="field p-2" name="search" type="search" placeholder="Find Your Friends"/>
+                            <button class="btn btn-secondary">Search</button>
                         </form>
                     </li>
                 </ul>

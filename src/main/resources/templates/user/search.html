@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="partials/head :: head('Friend Requests')">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<header th:replace="partials/header :: header"></header>
+
+<div class="template row">
+    <aside class="col-xl-4">
+        <div class="container">
+            <div class="row p-3" style="background: white">
+                <div class="col">
+                    <img class="card-img-top p-3 profile-pic" th:src="${user.getProfile_picture_url().toString()}" alt="Card image cap">
+                    <h5 class="card-title" th:text="${user.username}"></h5>
+                </div>
+                <div class="col">
+                    <div class="card-text">
+                        <p th:text="${user.firstName}"></p>
+                        <p th:text="${user.lastName}"></p>
+                        <p class="text-muted">Joined</p>
+                        <p th:text="${user.createdDate}"></p>
+                        <p class="text-muted">Birthday</p>
+                        <p th:text="${user.birthday}"></p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card-text">
+                        <p class="text-muted">Email</p>
+                        <p th:text="${user.email}"></p>
+                        <p class="text-muted">Works at</p>
+                        <p th:text="${user.job}"></p>
+                    </div>
+                    <form  th:if="${#authentication.principal.username == user.username}" th:action="@{/edit/{username}(username=${#authentication.principal.username})}" class="card-link" method="get">
+                        <button type="submit" class="btn btn-secondary">Edit Profile</button>
+                    </form>
+                </div>
+                <div class="col-12">
+                    <p th:text="${user.aboutMe}"></p>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <main class="col-xl-8">
+        <div class="container p-5" style="width: 100%; background-color: white;">
+            <a th:href="@{/user/{username}(username=${#authentication.principal.username})}">
+                <h5>Home</h5>
+            </a>
+                <!--       tab 1 friends-->
+            <div style="background-color: #faf3dd;" class="row p-3">
+                <h1>Make New Friends!</h1>
+
+                <div class="col-4 card m-3 p-3" th:each="item : ${allUsers}">
+                    <div th:if="${item.username == user.username}">
+                        <a th:href="@{/user/{username} (username=${user.getUsername()})}">
+                            <img class="friend-list-img" th:src="${item.profile_picture_url.toString()}">
+                        </a>
+                        <h5 th:text="${item.username}"></h5>
+                        <p th:text="${item.firstName}"></p>
+                        <p th:text="${item.lastName}"></p>
+                    </div>
+                    <div th:if="${userFriends.contains(item) == true}">
+                        <a th:href="@{/{username}/friend/{friendName} (username=${user.getUsername()}, friendName=${item.getUsername()})}">
+                            <img class="friend-list-img" th:src="${item.profile_picture_url.toString()}">
+                        </a>
+                        <h5 th:text="${item.username}"></h5>
+                        <p th:text="${item.firstName}"></p>
+                        <p th:text="${item.lastName}"></p>
+                    </div>
+                    <div th:if="${userFriends.contains(item) == false && pendingFriends.contains(item) == false && item.username != user.username}">
+                        <img class="friend-list-img" th:src="${item.profile_picture_url.toString()}">
+                        <h5 th:text="${item.username}"></h5>
+                        <p th:text="${item.firstName}"></p>
+                        <p th:text="${item.lastName}"></p>
+                        <form th:action="@{/request/{username}/{friendName} (username=${user.getUsername()}, friendName = ${item.getUsername()})}" th:method="POST">
+                            <button class="btn btn-primary" type="submit" name="Friend Request">Friend Request</button>
+                        </form>
+                    </div>
+                    <div th:if="${pendingFriends.contains(item) == true && item.username != user.username}">
+                        <img class="friend-list-img" th:src="${item.profile_picture_url.toString()}">
+                        <h5 th:text="${item.username}"></h5>
+                        <p th:text="${item.firstName}"></p>
+                        <p th:text="${item.lastName}"></p>
+                        <form th:action="@{/request/{username}/{friendName}/reject (username=${#authentication.principal.username}, friendName = ${item.getUsername()})}" th:method="POST">
+                            <input type="hidden" class="field" name="reject" th:value="${item.getUsername()}"/>
+                            <button class="btn btn-secondary">Remove Request</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="col-xl-12">
+        JustFriends
+    </footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

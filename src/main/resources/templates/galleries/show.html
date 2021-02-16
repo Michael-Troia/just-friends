@@ -8,36 +8,43 @@
 <body>
 <header th:replace="partials/header :: header"></header>
 <div th:if="${#authentication.principal.username == displayUser.username}">
-    <div class="grid template">
-        <aside>
-            <div class="container-fluid">
-                <div class="card p-0">
-                    <img class="card-img-top container-fluid" th:src="${user.getProfile_picture_url().toString()}" alt="Card image cap">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${user.username}"></h5>
-                        <div class="card-text p-0">
-                            <h6>About Me:</h6>
-                            <p th:text="${user.aboutMe}"></p>
-                            <br>
-                            <p th:text="${user.firstName}"></p>
-                            <p th:text="${user.lastName}"></p>
-                            <p th:text="${user.createdDate}"></p>
+    <div class="template row">
+        <aside class="col-xl-4">
+            <div class="container">
+                <div class="row p-2" style="background: white">
+                    <div class="col">
+                        <img class="card-img-top p-3 profile-pic" th:src="${displayUser.getProfile_picture_url().toString()}" alt="Card image cap">
+                        <h5 class="card-title" th:text="${displayUser.username}"></h5>
+                    </div>
+                    <div class="col">
+                        <div class="card-text">
+                            <p th:text="${displayUser.firstName}"></p>
+                            <p th:text="${displayUser.lastName}"></p>
+                            <p class="text-muted">Joined</p>
+                            <p th:text="${displayUser.createdDate}"></p>
+                            <p class="text-muted">Birthday</p>
                             <p th:text="${user.birthday}"></p>
-                            <p th:text="${user.email}"></p>
-                            <p th:text="${user.job}"></p>
                         </div>
-                        <form  th:if="${sessionUser.getUsername() == user.username}" th:action="@{/edit/{username}(username=${#authentication.principal.username})}" class="card-link" method="get">
+                    </div>
+                    <div class="col">
+                        <div class="card-text">
+                            <p class="text-muted">Email</p>
+                            <p th:text="${displayUser.email}"></p>
+                            <p class="text-muted">Works at</p>
+                            <p th:text="${displayUser.job}"></p>
+                        </div>
+                        <form  th:if="${#authentication.principal.username == displayUser.username}" th:action="@{/edit/{username}(username=${#authentication.principal.username})}" class="card-link" method="get">
                             <button type="submit" class="btn btn-secondary">Edit Profile</button>
                         </form>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                            Launch demo modal
-                        </button>
+                    </div>
+                    <div class="col-12">
+                        <p th:text="${displayUser.aboutMe}"></p>
                     </div>
                 </div>
             </div>
         </aside>
-        <main>
-            <div style="width: 100%;">
+        <main class="col-xl-8">
+            <div style="width: 100%; background-color: white;">
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <a class="nav-item nav-link active" id="nav-photos-tab" data-toggle="tab" href="#nav-photos" role="tab" aria-controls="nav-photos" aria-selected="true">Photos</a>
@@ -47,27 +54,24 @@
                     <div class="tab-pane fade show active" id="nav-photos" role="tabpanel" aria-labelledby="nav-photos-tab" >
                         <h2 th:text="${gallery.getName()}"></h2>
                         <a th:href="@{/user/{username}(username=${#authentication.principal.username})}">
-                            <h5>Go Back</h5>
+                            <h5>Go Home</h5>
                         </a>
                         <div class="square-gallery p-0">
-                            <div th:each="item : ${photos}">
+                            <div class="gallery-spacer" th:each="item : ${photos}">
                                 <div class="image-text-container gallery-item">
                                     <div id="thumbnail-container">
                                         <!--                                    todo need create zoom on click-->
-                                        <a  href="#" data-toggle="modal">
-                                            <img id="galleryPhoto" th:src="${item.pictureUrl}" alt="User uploaded image"/>
-                                        </a>
+                                        <img id="galleryPhoto" th:src="${item.pictureUrl}" alt="User uploaded image"/>
                                         <div class="caption" th:text="${item.getComment()}"></div>
                                         <div th:if="${#authentication.principal.username} == ${displayUser.getUsername()}">
-                                            <div class="pic-btn-container">
-                                                <form th:action="@{/{username}/photo/{id}/edit (username=${#authentication.principal.username}, id=${item.getId()})}" th:object="${displayPhoto}" method="POST" class="gallery-btn p-0">
-                                                    <textarea id="caption" class="form-control" rows="1" cols="5" th:field="*{comment}"></textarea>
-                                                    <button type="submit" class="btn btn-primary">Change Picture Caption</button>
-                                                </form>
+                                            <form th:action="@{/{username}/photo/{id}/edit (username=${#authentication.principal.username}, id=${item.getId()})}" th:object="${displayPhoto}" method="POST" class="p-3">
+                                                <input id="caption" class="form-control" th:field="*{comment}"/>
+                                                <button type="submit" class="btn btn-primary">Save</button>
                                                 <form th:action="@{/{username}/photo/{id}/delete (username=${#authentication.principal.username}, id=${item.getId()})}" method="post" th:object="${displayPhoto}" class="gallery-btn">
-                                                    <input type="submit" name="delete" VALUE="DELETE"/>
+                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?\nYou can\'t change your mind after clicking OK.')">Delete</button>
                                                 </form>
-                                            </div>
+                                                <div class="error-message" th:if="${#fields.hasErrors('pictureUrl')}" th:errors="*{pictureUrl}"></div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -77,16 +81,15 @@
                         <!--                    redesign this-->
                         <div th:if="${#authentication.principal.username} == ${displayUser.getUsername()}">
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addPhotoModal">Add Photo</button>
-
-                            <div style="border: coral solid 1px;">
+                            <div class="card">
                                 <form th:action="@{/{username}/gallery/{id}/edit (username=${#authentication.principal.username}, id=${gallery.getId()})}" th:object="${gallery}" method="POST" class="p-3">
                                     <label for="galleryName">Gallery Name</label>
-                                    <textarea id="galleryName" class="form-control" rows="1" cols="5" th:field="*{name}"></textarea>
+                                    <input id="galleryName" class="form-control" th:field="*{name}" required>
                                     <button type="submit" class="btn btn-primary">Change Gallery Name</button>
                                     <div class="error-message" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
                                 </form>
                                 <form th:action="@{/{username}/gallery/{id}/delete (username=${#authentication.principal.username}, id=${gallery.getId()})}" th:object="${gallery}" method="post" class="p-3">
-                                    <input type="submit" name="delete" VALUE="DELETE"/>
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?\nYou can\'t change your mind after clicking OK.')">Delete Gallery</button>
                                 </form>
                             </div>
                         </div>
@@ -94,7 +97,7 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title">Modal title</h5>
+                                        <h5 class="modal-title">Upload Photo</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -120,7 +123,7 @@
                     </div>
                 </div>
         </main>
-        <footer>
+        <footer class="col-xl-12">
             footer
         </footer>
     </div>
@@ -129,29 +132,39 @@
 
 <!--gallery view for non-gallery owners-->
 <div th:if="${sessionUser.getUsername() != displayUser.username}">
-    <div class="grid template">
-        <aside>
-            <div class="container-fluid">
-                <div class="card p-0">
-                    <img class="card-img-top container-fluid" th:src="${displayUser.getProfile_picture_url().toString()}" alt="Card image cap">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${user.username}"></h5>
-                        <div class="card-text p-0">
-                            <h6>About Me:</h6>
-                            <p th:text="${displayUser.aboutMe}"></p>
-                            <br>
+    <div class="template row">
+        <aside class="col-xl-4">
+            <div class="container">
+                <div class="row p-2" style="background: white">
+                    <div class="col">
+                        <img class="card-img-top p-3 profile-pic" th:src="${displayUser.getProfile_picture_url().toString()}" alt="Card image cap">
+                        <h5 class="card-title" th:text="${displayUser.username}"></h5>
+                    </div>
+                    <div class="col">
+                        <div class="card-text">
                             <p th:text="${displayUser.firstName}"></p>
                             <p th:text="${displayUser.lastName}"></p>
+                            <p class="text-muted">Joined</p>
                             <p th:text="${displayUser.createdDate}"></p>
+                            <p class="text-muted">Birthday</p>
                             <p th:text="${displayUser.birthday}"></p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card-text">
+                            <p class="text-muted">Email</p>
                             <p th:text="${displayUser.email}"></p>
+                            <p class="text-muted">Works at</p>
                             <p th:text="${displayUser.job}"></p>
                         </div>
+                    </div>
+                    <div class="col-12">
+                        <p th:text="${displayUser.aboutMe}"></p>
                     </div>
                 </div>
             </div>
         </aside>
-        <main>
+        <main class="col-xl-8">
             <div style="width: 100%;">
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab2" role="tablist">
@@ -162,8 +175,8 @@
                     <!--            tab 2 photos    -->
                     <div class="tab-pane fade show active" id="nav-photos2" role="tabpanel" aria-labelledby="nav-photos-tab" >
                         <h2 th:text="${gallery.getName()}"></h2>
-                        <a href="javascript:window.history.back();">
-                            <h5>Go Back</h5>
+                        <a th:href="@{/user/{username}(username=${#authentication.principal.username})}">
+                            <h5>Go Home</h5>
                         </a>
                         <div class="square-gallery p-0">
                             <div th:each="item : ${photos}">
@@ -182,7 +195,7 @@
                 </div>
             </div>
         </main>
-        <footer>
+        <footer class="col-xl-12">
             footer
         </footer>
     </div>

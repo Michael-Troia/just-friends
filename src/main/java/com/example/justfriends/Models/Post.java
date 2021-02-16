@@ -1,5 +1,7 @@
 package com.example.justfriends.Models;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +18,11 @@ public class Post {
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createdDate;
+
+    @Column(nullable = false)
+    private String dateString;
 
     @Column(nullable = true)
     private Date editDate;
@@ -33,8 +39,9 @@ public class Post {
 
     public Post(){}
 
-    public Post(String body, Date createdDate, String photo_url, User user, Date editDate, List<Comment> comments){
+    public Post(String body, Date createdDate, String photo_url, User user, Date editDate, List<Comment> comments, String dateString){
         this.body = body;
+        this.dateString = dateString;
         this.comments = comments;
         this.createdDate = createdDate;
         this.photo_url = photo_url;
@@ -42,8 +49,9 @@ public class Post {
         this.editDate = editDate;
     }
 
-    public Post(long id, String body, List<Comment> comments , Date editDate, Date createdDate, String photo_url, User user){
+    public Post(long id, String body, List<Comment> comments , Date editDate, Date createdDate, String photo_url, User user, String dateString){
         this.body = body;
+        this.dateString = dateString;
         this.comments = comments;
         this.editDate = editDate;
         this.createdDate = createdDate;
@@ -59,8 +67,10 @@ public class Post {
     public User getUser(){return user;}
     public long getId(){return id;}
     public Date getEditDate(){return editDate;}
+    public String getDateString(){return dateString;}
 
     public void setBody(String body){ this.body = body;}
+    public void setDateString(String dateString){this.dateString = dateString;}
     public void setComments(List<Comment> comments){this.comments = comments;}
     public void setEditDate(Date editDate){this.editDate = editDate;}
     public void setCreatedDate(Date createdDate){this.createdDate = createdDate;}

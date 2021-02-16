@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,14 +43,7 @@ public class PostController {
         this.pictureRepo = pictureRepo;
     }
 
-//Create Post
-//    @GetMapping("/posts/create/{username}")
-//    public String showCreatePostForm(Model model, @PathVariable String username) {
-//        model.addAttribute("user", userRepo.findByUsername(username));
-//        model.addAttribute("post", new Post());
-//
-//        return "post/create";
-//    }
+    //Create Post
     @PostMapping("/posts/create/{username}")
     public String submitPostForm(@ModelAttribute Post post,
                                  @PathVariable String username,
@@ -56,8 +51,20 @@ public class PostController {
         Post newPost = new Post();
         User user = userRepo.findByUsername(username);
         newPost.setUser(user);
+
+        LocalDate currentdate = LocalDate.now();
+        int currentDay = currentdate.getDayOfMonth();
+        Month currentMonth = currentdate.getMonth();
+        String monthString = currentMonth.toString();
+        String formatMonth = Character.toUpperCase(monthString.charAt(0)) + monthString.substring(1).toLowerCase();
+        int currentYear = currentdate.getYear();
+
+        newPost.setDateString(formatMonth + " " + currentDay + ", " + currentYear);
         newPost.setCreatedDate(new Date());
         newPost.setBody(post.getBody());
+        if (!post.getPhoto_url().isEmpty()) {
+            newPost.setPhoto_url(post.getPhoto_url());
+        }
         Post dbPost = postRepo.save(newPost);
         model.addAttribute("user", user);
         model.addAttribute("post", dbPost);
@@ -65,26 +72,6 @@ public class PostController {
 
         return "redirect:/user/" + username;
     }
-
-    //Read User posts
-//    @GetMapping("/posts/view/{username}")
-//    public String showAllUserPosts(Model model,
-//                                   @PathVariable String username) {
-//        List<Post> postList = postRepo.findAllByUserUsername(username);
-//        ArrayList<String> displayPosts = new ArrayList<>();
-//        int i = 1;
-//        for (Post post : postList) {
-//            String body = "Body of post #" + (i++) + ": " + post.getBody();
-//            displayPosts.add(body);
-//            String date = " , that post was made: " + post.getCreatedDate() + " . ";
-//            displayPosts.add(date);
-//            String id = "Post Id #:" + post.getId() + " .";
-//        }
-//        model.addAttribute("userPosts", displayPosts);
-//        model.addAttribute("postList" , postList);
-//
-//        return "post/view";
-//    }
 
     //Update Post
     @GetMapping("/posts/edit/{username}/{id}")
@@ -110,6 +97,7 @@ public class PostController {
         postToBeUpdated.setId(post.getId());
         postToBeUpdated.setComments(post.getComments());
         postToBeUpdated.setCreatedDate(post.getCreatedDate());
+        postToBeUpdated.setDateString(post.getDateString());
         postToBeUpdated.setUser(user);
         postToBeUpdated.setPhoto_url(post.getPhoto_url());
         System.out.println(postToBeUpdated.getId());
@@ -128,18 +116,8 @@ public class PostController {
         return "redirect:/user/" + username;
     }
 
-////    Create Comment
-//    @GetMapping("/posts/create/{username}/{postId}/comment")
-//    public String showCommentForm(@PathVariable String username,
-//                                  @PathVariable long postId,
-//                                  Model model){
-//        model.addAttribute("user" , userRepo.findByUsername(username));
-//        model.addAttribute("comment", new Comment());
-//        model.addAttribute("post" , postRepo.findById(postId));
-//
-//        return "post/comment";
-//    }
-
+    //--- Comments ---//
+    //Create Comment
     @PostMapping("/posts/create/{username}/{postId}/comment")
     public String submitCommentForm(@ModelAttribute Comment comment,
                                  //@ModelAttribute Post post,
@@ -151,6 +129,14 @@ public class PostController {
         User newUser = userRepo.findByUsername(username);
         newComment.setUser(newUser);
         newComment.setCreatedDate(new Date());
+        LocalDate currentdate = LocalDate.now();
+        int currentDay = currentdate.getDayOfMonth();
+        Month currentMonth = currentdate.getMonth();
+        String monthString = currentMonth.toString();
+        String formatMonth = Character.toUpperCase(monthString.charAt(0)) + monthString.substring(1).toLowerCase();
+        int currentYear = currentdate.getYear();
+
+        newComment.setDateString(formatMonth + " " + currentDay + ", " + currentYear);
         newComment.setBody(comment.getBody());
         newComment.setParentPost(parentPost);
         Comment dbComment = commentRepo.save(newComment);
@@ -173,7 +159,6 @@ public class PostController {
 
         return "post/comment-edit";
     }
-    //Update Comment
     @PostMapping("/comments/edit/{username}/{commentId}")
     public String editComment(@ModelAttribute Comment commentToBeUpdated,
             @PathVariable String username,
@@ -186,6 +171,7 @@ public class PostController {
         commentToBeUpdated.setParentPost(comment.getParentPost());
         commentToBeUpdated.setId(comment.getId());
         commentToBeUpdated.setCreatedDate(comment.getCreatedDate());
+        commentToBeUpdated.setDateString(comment.getDateString());
         commentToBeUpdated.setBody(commentToBeUpdated.getBody());
         commentToBeUpdated.setUser(user);
         commentToBeUpdated.setPhoto_url(comment.getPhoto_url());

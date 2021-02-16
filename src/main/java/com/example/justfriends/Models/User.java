@@ -21,7 +21,8 @@ public class User {
     private long id;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createdDate;
 
     @NotBlank(message = "Please include your first name.")
