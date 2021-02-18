@@ -16,6 +16,15 @@ aside, main {
     background-color: var(--jlightblue);
 }
 
+.userInfo {
+    background-color: white;
+    border-radius: 30px;
+    padding: 15px;
+}
+
+.searchGallery-items-container {
+    margin: 100px auto;
+}
 .btn-primary {
     box-shadow:inset 0px 1px 0px 0px #bbdaf7;
     background: #79bbff linear-gradient(to bottom, #79bbff 5%, #378de5 100%);
@@ -117,6 +126,16 @@ aside, main {
         grid-gap: 10px;
         width: var(--width);
         margin: 2vw auto;
+        border-radius: 4px;
+        overflow: visible;
+    }
+    .square-gallery-search {
+        --items: 2;
+        --width: 40vw;
+        display: grid;
+        grid-template-columns: repeat(var(--items), 1fr);
+        grid-gap: 10px;
+        width: var(--width);
         border-radius: 4px;
         overflow: visible;
     }
@@ -225,7 +244,7 @@ aside, main {
         object-fit: cover;
     }
     .image-text-container:hover {
-        transform: scale(1.1);
+        transform: scale(1.05);
     }
     .error-message {
         color: red;
@@ -256,13 +275,21 @@ aside, main {
     html {
         font-size: 1.1rem;
     }
+    .square-gallery-search {
+        --items: 2;
+        --width: 60vw;
+    }
 }
 
 /* Small desktop */
 @media only screen and (Min-width: 960px) {
     .square-gallery {
-        --items: 3;
+        --items: 2;
         --width: 80vw;
+    }
+    .square-gallery-search {
+        --items: 2;
+        --width: 60vw;
     }
     html {
         font-size: 1.2rem;
@@ -273,6 +300,10 @@ aside, main {
     .square-gallery {
         --items: 4;
         --width: 40vw;
+    }
+    .square-gallery-search {
+        --items: 3;
+        --width: 35vw;
     }
     html {
         font-size: 1.3rem;
