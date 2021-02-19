@@ -58,19 +58,19 @@
                     <a th:href="@{/user/{username}(username=${#authentication.principal.username})}">
                         <h5>Home</h5>
                     </a>
-                    <div class="square-gallery p-0">
-                        <div class="image-text-container gallery-item" th:each="item : ${friendFriends}">
-                            <div th:if="${item.username == currentUser.username}">
+                    <div style="background-color: #faf3dd;" class="row my-3">
+                        <div class="col-4 my-2" th:each="item : ${friendFriends}">
+                            <div th:if="${item.username == currentUser.username}" class="search-card">
                                 <a th:href="@{/user/{username} (username=${currentUser.getUsername()})}">
                                     <img th:src="${item.profile_picture_url.toString()}">
-                                    <p class="image-text" th:text="${item.username}"></p>
                                 </a>
+                                <p class="my-1" th:text="${item.username}"></p>
                             </div>
-                            <div th:if="${userFriendList.contains(item) == true}">
+                            <div th:if="${userFriendList.contains(item) == true}" class="search-card">
                                 <a th:href="@{/{username}/friend/{friendName} (username=${sessionUser.getUsername()}, friendName=${item.getUsername()})}">
                                     <img th:src="${item.profile_picture_url.toString()}">
-                                    <p class="image-text" th:text="${item.username}"></p>
                                 </a>
+                                <p class="my-1" th:text="${item.username}"></p>
                             </div>
 <!--                            <div th:if="${userFriendList.contains(item) == false && item.username != currentUser.username}">-->
 <!--                                <div>-->
@@ -81,19 +81,19 @@
 <!--                                    </form>-->
 <!--                                </div>-->
 <!--                            </div>-->
-                            <div th:if="${userFriendList.contains(item) == false && pendingFriends.contains(item) == false && item.username != sessionUser.username}">
+                            <div th:if="${userFriendList.contains(item) == false && pendingFriends.contains(item) == false && item.username != sessionUser.username}" class="search-card">
                                 <img th:src="${item.profile_picture_url.toString()}">
-                                <p class="image-text" th:text="${item.username}"></p>
+                                <p class="my-1" th:text="${item.username}"></p>
                                 <form th:action="@{/request/{username}/{friendName} (username=${currentUser.getUsername()}, friendName = ${item.getUsername()})}" th:method="POST">
-                                    <button class="btn btn-primary caption" type="submit" name="Friend Request">Friend Request</button>
+                                    <button class="btn btn-primary" type="submit" name="Friend Request">Friend Request</button>
                                 </form>
                             </div>
-                            <div th:if="${pendingFriends.contains(item) == true && item.username != sessionUser.username}">
+                            <div th:if="${pendingFriends.contains(item) == true && item.username != sessionUser.username}" class="search-card">
                                 <img th:src="${item.profile_picture_url.toString()}">
-                                <p class="image-text" th:text="${item.username}"></p>
+                                <p class="my-1" th:text="${item.username}"></p>
                                 <form th:action="@{/request/{username}/{friendName}/reject (username=${#authentication.principal.username}, friendName = ${item.getUsername()})}" th:method="POST">
                                     <input type="hidden" class="field" name="reject" th:value="${item.getUsername()}"/>
-                                    <button class="btn btn-secondary caption">Remove Request</button>
+                                    <button class="btn btn-secondary">Remove Request</button>
                                 </form>
                             </div>
                         </div>
@@ -104,19 +104,19 @@
                     <a th:href="@{/user/{username}(username=${#authentication.principal.username})}">
                         <h5>Go Home</h5>
                     </a>
-                    <div class="square-gallery p-0">
-                        <div class="image-text-container gallery-item" th:each="item : ${galleries}">
-                            <div th:if="${!item.getPictures().isEmpty()}" id="thumbnail-container">
+                    <div style="background-color: #faf3dd;" class="row my-3">
+                        <div class="col-6 col-xl-4" th:each="item : ${galleries}">
+                            <div th:if="${!item.getPictures().isEmpty()}" class="search-card">
                                 <a th:href="@{/{username}/gallery/{id} (username=${item.getUser().getUsername()}, id=${item.getId()})}">
                                     <img th:src="${item.getPictures().get(0).getPictureUrl().toString()}" alt="Gallery Thumbnail Image">
-                                    <p class="image-text" th:text="${item.getName()}"></p>
                                 </a>
+                                <p class="my-1" th:text="${item.getName()}"></p>
                             </div>
-                            <div th:if="${item.getPictures().isEmpty()}">
+                            <div th:if="${item.getPictures().isEmpty()}" class="search-card">
                                 <a th:href="@{/{username}/gallery/{id} (username=${item.getUser().getUsername()}, id=${item.getId()})}">
                                     <img src="/img/thumbnailDefault.jpg" alt="Gallery Thumbnail Image">
-                                    <p class="image-text" th:text="${item.getName()}"></p>
                                 </a>
+                                <p class="my-1" th:text="${item.getName()}"></p>
                             </div>
                         </div>
                     </div>
