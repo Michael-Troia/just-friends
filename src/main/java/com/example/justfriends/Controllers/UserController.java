@@ -68,6 +68,20 @@ public class UserController {
                     "This username is taken."
             );
         }
+        if (user.getUsername().length() > 17 || user.getUsername().length() < 6) {
+            validation.rejectValue(
+                    "username",
+                    "user.username",
+                    "Please enter a username between 6 and 17 characters long."
+            );
+        }
+        if (user.getFirstName().length() > 15 || user.getLastName().length() > 15) {
+            validation.rejectValue(
+                    "firstName",
+                    "user.firstName",
+                    "Please shorten the given name to less than 16 characters."
+            );
+        }
         if (validation.hasErrors()){
             model.addAttribute("user", user);
             model.addAttribute("errors", validation);
