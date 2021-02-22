@@ -29,7 +29,7 @@
                     <div class="card-text">
                         <p class="text-muted">Email</p>
                         <p th:text="${user.email}"></p>
-                        <p class="text-muted">Works at</p>
+                        <p class="text-muted">Job</p>
                         <p th:text="${user.job}"></p>
                     </div>
                     <form  th:if="${#authentication.principal.username == user.username}" th:action="@{/edit/{username}(username=${#authentication.principal.username})}" class="card-link" method="get">
@@ -66,7 +66,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="job-input" class="form-label">Job</label>
-                    <input type="text" class="form-control" id="job-input" th:field="*{job}">
+                    <input type="text" class="form-control" id="job-input" th:field="*{job}" maxlength="30">
                 </div>
                 <div class="mb-3 p-5" id="uploadPhoto">
                     <input type="hidden" id="photo" name="gallery_photo" th:field="*{profile_picture_url}" />
