@@ -15,7 +15,6 @@ body {
 aside, main {
     background-color: var(--jlightblue);
 }
-
 .btn-primary {
     box-shadow:inset 0px 1px 0px 0px #bbdaf7;
     background: #79bbff linear-gradient(to bottom, #79bbff 5%, #378de5 100%);
@@ -105,7 +104,10 @@ aside, main {
 }
 
 /* Small mobile and larger */
-@media only screen and (Min-width: 320px) {
+@media screen and (min-width: 320px) {
+    html {
+        font-size: 2.5em;
+    }
     .template {
         max-width: 1776px;
         margin: 5px auto;
@@ -115,11 +117,11 @@ aside, main {
     footer {
         display: flex;
         justify-content: center;
-        padding: 5%;
+        padding: 3%;
     }
     .tab-content {
         background: white;
-        padding: 5%;
+        padding: 3%;
         border: 1px solid lightgray;
     }
     .square-gallery {
@@ -160,8 +162,8 @@ aside, main {
     .gallery-item-tiny {
         display: flex;
         justify-content: center;
-        width: 8vw;
-        height: 8vw;
+        width: 15vw;
+        height: 15vw;
         background-position: center center;
         background-size: cover;
         background-repeat: no-repeat;
@@ -173,8 +175,8 @@ aside, main {
     .gallery-item-teeny-tiny {
         display: flex;
         justify-content: center;
-        width: 5vw;
-        height: 5vw;
+        width: 15vw;
+        height: 15vw;
         background-position: center center;
         background-size: cover;
         background-repeat: no-repeat;
@@ -243,8 +245,11 @@ aside, main {
         object-fit: cover;
         border-radius: 30px;
     }
-    .search-card h5,p {
+    .search-card h5 {
         width: 23vw;
+    }
+    .search-card p {
+        font-size: x-large;
     }
     .search-card:hover {
         transform: scale(1.05);
@@ -274,31 +279,52 @@ aside, main {
 }
 
 /* most phone sizes and larger */
-@media only screen and (Min-width: 540px) {
-    html {
-        font-size: 1.1rem;
-    }
+@media screen and (min-width: 540px) {
 
 }
 
 /* Small desktop */
-@media only screen and (Min-width: 960px) {
+@media screen and (min-width: 960px) {
+
     .square-gallery {
         --items: 2;
         --width: 80vw;
     }
-    html {
-        font-size: 1.2rem;
-    }
 }
 
-@media only screen and (min-width: 1200px) {
+@media screen and (min-width: 1200px) {
+    html {
+        font-size: 1em;
+    }
     .square-gallery {
         --items: 4;
         --width: 40vw;
     }
-    html {
-        font-size: 1.3rem;
+    .gallery-item-tiny {
+        display: flex;
+        justify-content: center;
+        width: 10vw;
+        height: 10vw;
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        object-fit: cover;
+        border-radius: 25px;
+        transition: all 0.2s ease-out;
+        padding: 2%;
+    }
+    .gallery-item-teeny-tiny {
+        display: flex;
+        justify-content: center;
+        width: 10vw;
+        height: 10vw;
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        object-fit: cover;
+        border-radius: 25px;
+        transition: all 0.2s ease-out;
+        padding: 2%;
     }
 }
 
