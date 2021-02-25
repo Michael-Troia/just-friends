@@ -32,7 +32,9 @@
                 <div class="navbar-nav mr-auto">
                     <a class="nav-item nav-link" th:href="@{/user/{username}(username=${#authentication.principal.username})}">Profile</a>
                     <a class="nav-item nav-link" th:href="@{/{username}/friends/requests (username=${#authentication.principal.username})}">Requests</a>
-                    <a class="nav-item nav-link" th:href="@{/logout}" th:method="post">Logout</a>
+                    <form th:action="@{/logout}" th:method="post" class="p-2 nav-item">
+                        <button type="submit" class="btn btn-link btn-anchor nav-link">Logout</button>
+                    </form>
 <!--                        <form th:action="@{/users/search/{username} (username=${#authentication.principal.username})}" method="post" class="p-2">-->
 <!--                            <input class="field p-2" name="search" type="search" placeholder="Find Your Friends"/>-->
 <!--                            <button class="btn btn-secondary">Search</button>-->
