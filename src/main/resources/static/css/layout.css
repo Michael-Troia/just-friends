@@ -106,7 +106,7 @@ aside, main {
 /* Small mobile and larger */
 @media screen and (min-width: 320px) {
     html {
-        font-size: 2.5em;
+        font-size: 2rem;
     }
     .template {
         max-width: 1776px;
@@ -294,7 +294,7 @@ aside, main {
 
 @media screen and (min-width: 1200px) {
     html {
-        font-size: 1em;
+        font-size: 1rem;
     }
     .square-gallery {
         --items: 4;
