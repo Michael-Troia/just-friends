@@ -40,8 +40,8 @@
 <!--                            <button class="btn btn-secondary">Search</button>-->
 <!--                        </form>-->
                     <form th:action="@{/users/search/{username} (username=${#authentication.principal.username})}" method="post" class="form-inline my-2 my-lg-0">
-                        <input class="form-control field mr-sm-2" type="search" name="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-secondary my-2 my-sm-0">Search</button>
+                        <input style="width: 70%; float: left;" class="form-control field" type="search" name="search" placeholder="Search" aria-label="Search">
+                        <button style="width: 30%; float: right;" class="btn btn-secondary my-1">Search</button>
                     </form>
                 </div>
             </div>
