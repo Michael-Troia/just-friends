@@ -14,18 +14,10 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <form class="p-2" action="/login">
-                            <button type="submit" class="btn btn-light">Login</button>
-                        </form>
-                    </li>
-                    <li class="nav-item">
-                        <form class="p-2" action="/sign-up">
-                            <button type="submit" class="btn btn-light">Register</button>
-                        </form>
-                    </li>
-                </ul>
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link" th:href="@{/login}">Login</a>
+                    <a class="nav-item nav-link" th:href="@{/sign-up}">Register</a>
+                </div>
             </div>
         </nav>
     </div>
@@ -37,29 +29,21 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup2">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <form th:action="@{/user/{username}(username=${#authentication.principal.username})}" method="get" class="p-2">
-                            <button type="submit" class="btn btn-light">Profile Page</button>
-                        </form>
-                    </li>
-                    <li class="nav-item">
-                        <form th:action="@{/{username}/friends/requests (username=${#authentication.principal.username})}" method="get" class="p-2">
-                            <button type="submit" class="btn btn-light">Friend Requests</button>
-                        </form>
-                    </li>
-                    <li class="nav-item">
-                        <form th:action="@{/logout}" th:method="post" class="p-2">
-                            <button type="submit" class="btn btn-light">Logout</button>
-                        </form>
-                    </li>
-                    <li class="nav-item">
-                        <form th:action="@{/users/search/{username} (username=${#authentication.principal.username})}" method="post" class="p-2">
-                            <input class="field p-2" name="search" type="search" placeholder="Find Your Friends"/>
-                            <button class="btn btn-secondary">Search</button>
-                        </form>
-                    </li>
-                </ul>
+                <div class="navbar-nav mr-auto">
+                    <a class="nav-item nav-link" th:href="@{/user/{username}(username=${#authentication.principal.username})}">Profile</a>
+                    <a class="nav-item nav-link" th:href="@{/{username}/friends/requests (username=${#authentication.principal.username})}">Requests</a>
+                    <form th:action="@{/logout}" th:method="post" class="p-2 nav-item">
+                        <button type="submit" class="btn btn-link btn-anchor nav-link">Logout</button>
+                    </form>
+<!--                        <form th:action="@{/users/search/{username} (username=${#authentication.principal.username})}" method="post" class="p-2">-->
+<!--                            <input class="field p-2" name="search" type="search" placeholder="Find Your Friends"/>-->
+<!--                            <button class="btn btn-secondary">Search</button>-->
+<!--                        </form>-->
+                    <form th:action="@{/users/search/{username} (username=${#authentication.principal.username})}" method="post" class="form-inline my-2 my-lg-0">
+                        <input style="width: 70%; float: left;" class="form-control field" type="search" name="search" placeholder="Search" aria-label="Search">
+                        <button style="width: 30%; float: right;" class="btn btn-secondary my-1">Search</button>
+                    </form>
+                </div>
             </div>
         </nav>
     </div>
