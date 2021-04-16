@@ -8,33 +8,32 @@
 <body>
 <nav th:fragment="navbar" class="fixed-top navbar-light bg-light">
     <a class="navbar-brand p-3" href="/">justfriends</a>
-        <div class="navbar-nav">
-            <div sec:authorize="isAnonymous()" class="d-flex navbar-nav">
-                <div class="nav-item">
-                    <a class="nav-link" href="/login">Login</a>
-                </div>
-                <div class="nav-item">
-                    <a class="nav-link" href="/sign-up">Register</a>
-                </div>
+    <div class="navbar-nav">
+        <div sec:authorize="isAnonymous()" class="d-flex navbar-nav">
+            <div class="nav-item">
+                <a class="nav-link" href="/login">Login</a>
             </div>
-            <div sec:authorize="isAuthenticated()" class="navbar-nav">
-                <div class="nav-item">
-                    <a class="nav-link" th:href="@{/profile-page/{username}(username=${#authentication.principal.username})}"></a>
-                </div>
-                <div class="nav-item">
-                    <a class="nav-link" th:href="@{/posts/create/{username}(username=${#authentication.principal.username})}">Create Post</a>
-                </div>
-                <form th:action="@{/user/{username}(username=${#authentication.principal.username})}" method="GET" class="p-3">
-                    <button type="submit" class="btn btn-primary">Profile Page</button>
+            <div class="nav-item">
+                <a class="nav-link" href="/sign-up">Register</a>
+            </div>
+        </div>
+        <div sec:authorize="isAuthenticated()" class="navbar-nav">
+            <div class="nav-item">
+                <a class="nav-link" th:href="@{/profile-page/{username}(username=${#authentication.principal.username})}"></a>
+            </div>
+            <div class="nav-item">
+                <a class="nav-link" th:href="@{/posts/create/{username}(username=${#authentication.principal.username})}">Create Post</a>
+            </div>
+            <form th:action="@{/user/{username}(username=${#authentication.principal.username})}" method="GET" class="p-3">
+                <button type="submit" class="btn btn-primary">Profile Page</button>
+            </form>
+            <form th:action="@{/{username}/friends/requests (username=${#authentication.principal.username})}" method="post" class="p-3">
+                <button type="submit" class="btn btn-primary">Friend Requests</button>
+            </form>
+            <div class="nav-item">
+                <form th:action="@{/logout}" th:method="post">
+                    <button class="nav-link">Logout</button>
                 </form>
-                <form th:action="@{/{username}/friends/requests (username=${#authentication.principal.username})}" method="post" class="p-3">
-                    <button type="submit" class="btn btn-primary">Friend Requests</button>
-                </form>
-                <div class="nav-item">
-                    <form th:action="@{/logout}" th:method="post">
-                        <button class="nav-link">Logout</button>
-                    </form>
-                </div>
             </div>
         </div>
     </div>

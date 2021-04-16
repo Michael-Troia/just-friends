@@ -35,10 +35,6 @@
                     <form th:action="@{/logout}" th:method="post" class="p-2 nav-item">
                         <button type="submit" class="btn btn-link btn-anchor nav-link">Logout</button>
                     </form>
-<!--                        <form th:action="@{/users/search/{username} (username=${#authentication.principal.username})}" method="post" class="p-2">-->
-<!--                            <input class="field p-2" name="search" type="search" placeholder="Find Your Friends"/>-->
-<!--                            <button class="btn btn-secondary">Search</button>-->
-<!--                        </form>-->
                     <form th:action="@{/users/search/{username} (username=${#authentication.principal.username})}" method="post" class="form-inline my-2 my-lg-0">
                         <input style="width: 70%; float: left;" class="form-control field" type="search" name="search" placeholder="Search" aria-label="Search">
                         <button style="width: 30%; float: right;" class="btn btn-secondary my-1">Search</button>

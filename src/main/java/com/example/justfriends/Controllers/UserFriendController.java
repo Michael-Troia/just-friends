@@ -93,27 +93,13 @@ public class UserFriendController {
         User user = userRepo.findByUsername(username);
         User friend = userRepo.findByUsername(friendName);
 
-//        UserFriend updatedUserFriend = userFriendRepo.findByUserAndFriend(friend, user);
-//        updatedUserFriend.setStatus(Status.REJECTED);
-//        userFriendRepo.save(updatedUserFriend);
         UserFriend updatedUserFriend = userFriendRepo.findByUserAndFriend(friend, user);
         userFriendRepo.delete(updatedUserFriend);
 
         return "redirect:/user/" + username;
     }
 
-////    Block User
-//    @PostMapping("/request/{username}/{friendName}/block")
-//    public String blockFriend(@PathVariable String username,
-//                               @PathVariable String friendName) {
-//        User user = userRepo.findByUsername(username);
-//        User friend = userRepo.findByUsername(friendName);
-//        UserFriend updatedUserFriend = userFriendRepo.findByUserAndFriend(friend, user);
-//        updatedUserFriend.setStatus(Status.REJECTED);
-//        userFriendRepo.save(updatedUserFriend);
-//
-//        return "redirect:/user/" + username;
-//    }
+// todo create blocked users page & mechanism
 
     //Accept Friend request
     @PostMapping("/request/{username}/{friendName}/accept")
@@ -253,25 +239,3 @@ public class UserFriendController {
         return "user/search";
     }
 }
-
-
-//    @GetMapping("/users/search/{username}")
-//    public String viewAllAdsWithAjax(@PathVariable String username,
-//                                     Model model) {
-//        User currentUser = userRepo.findByUsername(username);
-//        List<UserFriend> userUserFriends1 = userFriendRepo.findAllByUserAndStatus(currentUser, Status.ACCEPTED);// user's friend list
-//        List<UserFriend> userUserFriends2 = userFriendRepo.findAllByFriendAndStatus(currentUser, Status.ACCEPTED);
-//        ArrayList<User> userFriends = new ArrayList<>();
-//        for (UserFriend userFriend : userUserFriends1) {
-//            userFriends.add(userFriend.getFriend());
-//        }
-//        for (UserFriend userFriend : userUserFriends2) {
-//            userFriends.add(userFriend.getUser());
-//        }
-//        model.addAttribute("allUsers", userRepo.findAll());
-//
-//        model.addAttribute("currentUser", currentUser);
-//        model.addAttribute("userFriends", userFriends);
-//        return "user/search";
-//    }
-//}

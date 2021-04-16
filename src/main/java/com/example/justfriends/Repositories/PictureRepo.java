@@ -11,7 +11,6 @@ public interface PictureRepo extends JpaRepository <Picture, Long> {
 
     Picture findById(long id);
     List<Picture> findAllByUser(User user);
-    Picture findByPictureUrl(String pictureUrl);
     List<Picture> findAllByGallery(Gallery gallery);
     Picture findByComment(String comment);
 }

@@ -264,14 +264,6 @@ public class UserController {
         return "redirect:/login?logout";
     }
 
-//    //Show Home page
-//    @GetMapping("/")
-//    public String showTest(Model model, @ModelAttribute User user) {
-//        model.addAttribute("currentUser", user);
-//        userRepo.findByUsername(user.getUsername());
-//        return "index";
-//    }
-
     @RequestMapping("/")
     public String index(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

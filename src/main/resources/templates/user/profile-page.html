@@ -8,7 +8,6 @@
 <body>
 <header th:replace="partials/header :: header"></header>
 
-<!-- copy to all pages,  -->
 <div th:if="${sessionUser.getUsername() == user.getUsername()}" class="row template">
     <aside class="col-xl-4">
         <div class="container">
@@ -145,7 +144,6 @@
                                                         <button type="submit" name="delete" class="btn btn-light">Remove</button>
                                                     </form>
                                                 </div>
-                                                <!--                                            <a th:href="@{/posts/create/{username}/{postId}/comment (username=${user.username}, postId = ${item.getId()})}" class="card-link">Comment</a>-->
                                             </div>
                                         </div>
                                     </div>

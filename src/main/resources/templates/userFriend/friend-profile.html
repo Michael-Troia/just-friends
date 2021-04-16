@@ -72,15 +72,6 @@
                                 </a>
                                 <p class="my-1" th:text="${item.username}"></p>
                             </div>
-<!--                            <div th:if="${userFriendList.contains(item) == false && item.username != currentUser.username}">-->
-<!--                                <div>-->
-<!--                                    <img th:src="${item.profile_picture_url.toString()}">-->
-<!--                                    <p class="image-text" th:text="${item.username}"></p>-->
-<!--                                    <form th:action="@{/request/{username}/{friendName} (username=${sessionUser.getUsername()}, friendName = ${item.getUsername()})}" th:method="POST">-->
-<!--                                        <button type="submit" class="caption" name="befriend">Send Friend Request</button>-->
-<!--                                    </form>-->
-<!--                                </div>-->
-<!--                            </div>-->
                             <div th:if="${userFriendList.contains(item) == false && pendingFriends.contains(item) == false && item.username != sessionUser.username}" class="search-card">
                                 <img th:src="${item.profile_picture_url.toString()}">
                                 <p class="my-1" th:text="${item.username}"></p>
